@@ -20,7 +20,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="https://extranet.who.int/goarn/sites/default/files/go.data_.png" alt="Logo" width="80" height="80">
+    <img src="https://extranet.who.int/goarn/sites/default/files/go.data_.png" alt="Logo"  height="80">
   </a>
 
   <h3 align="center">Go.Data Guatemala</h3>
@@ -128,4 +128,4 @@ Repo Link: [https://github.com/Oliversinn/godata-guatemala](https://github.com/O
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [product-screenshot]: assets/dashboard.png
-[product-screenshot]: assets/log.png
+[log]: assets/log.png
