@@ -49,7 +49,12 @@
         <li><a href="#instalacion">Instalación</a></li>
       </ul>
     </li>
-    <li><a href="#uso">Uso</a></li>
+    <li><a href="#uso">Uso</a>
+      <ul>
+        <li><a href="#script-de-automatización">Script de automatización</a></li>
+        <li><a href="#dashboard">Dashboard</a></li>
+      </ul>
+    </li>
     <li><a href="#contacto">Contacto</a></li>
   </ol>
 </details>
@@ -107,6 +112,8 @@ Se debe tener un usuario en Go.Data sin restricciones de acceso para utilizar el
 <!-- USAGE EXAMPLES -->
 ## Uso
 
+### Script de automatización
+
 El unico script que hay que correr es el `rastreoConsolidation.R`. En el hay que configurar lo credenciales y los IDs de los brotes e idiomas que se quieran utilizar de la plataforma Go.Data. Dichos campos están representados con "xxxxxxxx" al clonar este repositorio por seguridad. Al correr este script este descarga las bases de datos y al transformarlas las guarda en `DashboardRastreo/data` para que el tablero las pueda usar.
 
 * Ejecutar el script
@@ -117,6 +124,14 @@ El unico script que hay que correr es el `rastreoConsolidation.R`. En el hay que
 Las ejecuciones del script generan un log en la carpeta `logs/` para tener registro del proceso de cada ejecución. Asi se ve una corrida exitosa:
 [![Log][log]]()
 
+### Tablero
+
+Para ver el funcionamiento del tablero se puede correr abriendolo desde RStudio o se puede correr el siguiente comando agregando la ruta al tablero `DashboardRastreo`
+
+* Correr el tablero
+   ```sh
+   R -e "shiny::runApp('ruta/a/DashboardRastreo')"
+   ```
 
 <!-- CONTACT -->
 ## Contacto
