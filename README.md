@@ -26,7 +26,7 @@
   <h3 align="center">Go.Data Guatemala</h3>
 
   <p align="center">
-    Transformación, manipulación y visualización de los datos de la implementación de GoData en Guatemala para el rastreo de casos y contactos COVID-19.
+    Transformation, manipulation and visualization of the data of the implementation of GoData in Guatemala for the tracking of COVID-19 cases and contacts.
   </p>
 </p>
 
@@ -34,45 +34,45 @@
 
 <!-- TABLE OF CONTENTS -->
 <details open="open">
-  <summary>Tabla de contenidos</summary>
+  <summary>Table of Contents</summary>
   <ol>
     <li>
-      <a href="#sobre-el-proyecto">Sobre el proyecto</a>
+      <a href="#about-the-project">About the project</a>
       <ul>
-        <li><a href="#desarrollado-con">Desarrollado con</a></li>
+        <li><a href="#developed-with">Developed with</a></li>
       </ul>
     </li>
     <li>
-      <a href="#antes-de-empezar">Antes de empezar</a>
+      <a href="#getting-started">Getting started</a>
       <ul>
-        <li><a href="#prerequisitos">Prerequisitos</a></li>
-        <li><a href="#instalacion">Instalación</a></li>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#uso">Uso</a>
+    <li><a href="#use">Use</a>
       <ul>
-        <li><a href="#script-de-automatización">Script de automatización</a></li>
+        <li><a href="#automation-script">Automation script</a></li>
         <li><a href="#dashboard">Dashboard</a></li>
       </ul>
     </li>
-    <li><a href="#contacto">Contacto</a></li>
+    <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
 
 
 
 <!-- ABOUT THE PROJECT -->
-## Sobre el proyecto
+## About the project
 
 [![Product Name Screen Shot][product-screenshot]]()
 
-En Guatemala se realizó un proyecto piloto para el rastreo y seguimiento domiciliar o teléfonico de casos y contactos COVID-19 utilizando [Go.Data](https://www.who.int/godata). Para el seguimiento de contactos se utilizo la sección de seguimiento de contactos de la plataforma. Mientras que para los casos se utilizó la flexibilidad de los cuestionarios para implementar la estrategía de seguimientos.
+In Guatemala, a pilot project was carried out to trace at home or by phone of COVID-19 cases and contacts using [Go.Data](https://www.who.int/godata). For contacts, the platform's contact follow-ups section was used. While for the cases, the flexibility of the questionnaires was used to implement the follow-ups strategy.
 
-Para analizar y reportar los resultados del proyecto se generó un tablero a partir de la informacion de los casos y contactos. En este tablero ademas se agrego una sección de informes para reportar los resultados del proyecto. Finalmente se agrego una herramienta que ayuda al personal a asignar los casos a seguir a los distintos reastreadores de manera automática y resume la información necesaria para realizar el mismo.
+To analyze and report the results of the project, a dashboard was generated from the information of the cases and contacts. In this dashboard, a reports section was also added to report the results of the project. Finally, a tool was added that helps personnel to assign the cases to follow to the different trackers automatically and summarizes the information necessary to carry out the tracing.
 
-Automatizar el proceso de obtención, transformación y actualización de datos en el tablero era una necesidad. Por lo que se genero un script con todo el flujo de trabajo necesario para correr el proceso de ETL completo.
+Automating the process of obtaining, transforming and updating data on the dashboard was a must. So a script was generated with all the necessary workflow to run the complete ETL process.
 
-### Desarrollado con
+### Developed with
 
 * [R](https://www.r-project.org/)
 * [ShinyApps](https://www.shinyapps.io/)
@@ -82,59 +82,59 @@ Automatizar el proceso de obtención, transformación y actualización de datos 
 
 
 <!-- GETTING STARTED -->
-## Antes de empezar
+## Getting started
 
-Se debe tener un usuario en Go.Data sin restricciones de acceso para utilizar el script `rastreoConsolidation.R` encargado de todo el proceso de ETL.
+You must have a Go.Data user with no access restrictions to use the `rastreoConsolidation.R` script in charge of the entire ETL process.
 
-### Prerequisitos
+### Prerequisites
 
 * R
   ```sh
   sudo apt-get install r-base
   ```
 
-### Instalación
+### Installation
 
-1. Clonar el repositorio
+1. Clone the repository
    ```sh
    git clone https://github.com/Oliversinn/godata-guatemala.git
    ```
-2. Instalar los paquetes de R
+2. Install R packages
    ```sh
    cd godata-guatemala
    Rscript scripts/installPackages.R
    ```
-3. Conectar con [ShinyApps](https://shiny.rstudio.com/articles/shinyapps.html)
+3. Connect with [ShinyApps](https://shiny.rstudio.com/articles/shinyapps.html)
    ```R
    rsconnect::setAccountInfo(name="<ACCOUNT>", token="<TOKEN>", secret="<SECRET>")
    ```
 
 <!-- USAGE EXAMPLES -->
-## Uso
+## Use
 
-### Script de automatización
+### Automation script
 
-El unico script que hay que correr es el `rastreoConsolidation.R`. En el hay que configurar lo credenciales y los IDs de los brotes e idiomas que se quieran utilizar de la plataforma Go.Data. Dichos campos están representados con "xxxxxxxx" al clonar este repositorio por seguridad. Al correr este script este descarga las bases de datos y al transformarlas las guarda en `DashboardRastreo/data` para que el tablero las pueda usar.
+The only script to run is the `rastreoConsolidation.R`. In it, you have to configure the IP or domain, user credentials and IDs of the outbreak and language that you want to use from the Go.Data platform. These fields are represented with "xxxxxxxx" when cloning this repository for security. When running this script it downloads the databases and when transforming them, it saves them in `DashboardRastreo/data` so that the dashboard can use them. At the end the scrip publishes the just updated version of the dashboard.
 
-* Ejecutar el script
+* Run the script
    ```sh
    Rscript scripts/rastreoConsolidation.R > logs/rastreoUpdate-$(date +\%F-\%T).log 2>&1
    ```
 
-Las ejecuciones del script generan un log en la carpeta `logs/` para tener registro del proceso de cada ejecución. Asi se ve una corrida exitosa:
+Executions of the script generate a log in the `logs/` folder to keep track of the process of each execution. Here's what a successful run looks like:
 [![Log][log]]()
 
-### Tablero
+### Dashboard
 
-Para ver el funcionamiento del tablero se puede correr abriendolo desde RStudio o se puede correr el siguiente comando agregando la ruta al tablero `DashboardRastreo`
+To see how the dashboard works, you can run it by opening it from RStudio or you can run the following command by adding the path to the dashboard `DashboardRastreo`
 
-* Correr el tablero
+* Run the dashboard
    ```sh
-   R -e "shiny::runApp('ruta/a/DashboardRastreo')"
+   R -e "shiny::runApp('path/to/DashboardRastreo')"
    ```
 
 <!-- CONTACT -->
-## Contacto
+## Contact
 
 [Oliver Mazariegos](https://mazariegos.gt/) - olivera@mazariegos.gt
 
