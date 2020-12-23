@@ -1102,7 +1102,7 @@ shinyServer(function(input, output, session) {
             filter(`Creado En` == input$fechaReporte[2])
 
         contactosPorLlamar = todayFollowUp %>%
-            filter(Estado != "Hoy no toca") %>%
+            filter(Estado != "Seguimiento/llamada  no programada") %>%
             nrow()
 
         contactosCuarentenaPorLlamar = contactosPorLlamar - nrow(contactosNuevos)
@@ -1151,7 +1151,7 @@ shinyServer(function(input, output, session) {
                 filter(`Creado En` == input$fechaReporte[2]-i)
 
             contactosPorLlamar = todayFollowUp %>%
-                filter(Estado != "Hoy no toca") %>%
+                filter(Estado != "Seguimiento/llamada  no programada") %>%
                 nrow()
 
             contactosCuarentenaPorLlamar = contactosPorLlamar - nrow(contactosNuevos)

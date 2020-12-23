@@ -3,6 +3,7 @@ url <- "https://godata.com/api/"                   # <--------------------- inse
 username <- "xxxxxxxx"                           # <--------------------- insert your username for signing into Go.Data webapp here
 password <- "xxxxxxxx"                           # <--------------------- insert your password for signing into Go.Data webapp here
 outbreak_id <- "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx"   # <--------------------- insert your outbreak ID here
+language_id = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'   # <--------------------- insert your language ID here
 ###################################################################################################
 
 setwd("~/Documents/MSPAS")
@@ -24,14 +25,6 @@ package.check = lapply(
 httr::set_config(config(ssl_verifypeer = FALSE))
 options(dplyr.summarise.inform = FALSE)
 options(warn=-1)
-#dirname(rstudioapi::getSourceEditorContext()$path)
-
-# languages IDs
-english = 'english_us'
-spanish = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'
-spanishGTRC = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'
-
-
 
 # Login para generar el token de autentificación
 loginURL = paste(url,'users/login', sep = '')
@@ -57,7 +50,7 @@ activateURL = paste(url,
 ## Set outbreak ID and language ID
 activeBody = list(
   activeOutbreakId = outbreak_id,
-  languageId = spanishGTRC
+  languageId = language_id
 )  
 write('Activando brote de rastreo...', stdout())
 ##  activate outbreak of cases to download and language
@@ -585,6 +578,9 @@ response_followups <- GET(paste0(
 
 followups = data.table(suppressMessages(content(response_followups, guess_max = 50000)))
 write('Seguimientos descargados!', stdout())
+followups = followups %>%
+  select(ID, `Creado En`, `Estado`)
+
 
 write('Guardando bases de datos...',stdout())
 write_excel_csv(cases_clean,'./DashboardRastreo/data/rastreo_cases.csv')
