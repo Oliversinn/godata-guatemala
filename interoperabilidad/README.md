@@ -79,10 +79,10 @@ Se debe tener un usuario en Go.Data con permiso de publicar casos y contactos en
 
 * Funcion del API: POST `users/login`
 * Modelo
-  ```json
+  ```python
   {
-    "email": "correo@correo.com", #asdf
-    "password": "contraseña" //asdf
+    "email": "correo@correo.com", #Correo del usuario que inicia sesión
+    "password": "contraseña" #Contraseña del usuario que inicia sesión
   }
   ```
 
