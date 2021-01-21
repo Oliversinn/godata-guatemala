@@ -38,9 +38,6 @@
   <ol>
     <li>
       <a href="#sobre-el-proyecto">Sobre el proyecto</a>
-      <ul>
-        <li><a href="#desarrollado-con">Desarrollado con</a></li>
-      </ul>
     </li>
     <li>
       <a href="#antes-de-empezar">Antes de empezar</a>
@@ -52,7 +49,7 @@
       <a href="#nuevo-caso">Nuevo caso</a>
     </li>
     <li>
-      <a href="#seguimiento-de-casos">Seguimientos de casos</a>
+      <a href="#seguimientos-de-casos">Seguimientos de casos</a>
     </li>
     <li>
       <a href="#modificar-un-caso">Modificar un caso</a>
@@ -66,7 +63,7 @@
     <li><a href="#seguimiento-de-contactos">Seguimiento de contactos</a>
       <ul>
         <li><a href="#agregar-un-seguimiento">Agregar un seguimiento</a></li>
-        <li><a href="#finalizar-seguimientos">Finalizar seguimientos (modificar un contacto)</a></li>
+        <li><a href="#finalizar-seguimientos-(modificar-un-contacto)">Finalizar seguimientos (modificar un contacto)</a></li>
       </ul>
     </li>
     <li><a href="#contacto">Contacto</a></li>
