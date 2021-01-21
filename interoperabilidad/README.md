@@ -99,8 +99,6 @@ Recomiendo hacer las pruebas individuales en https://godataguatemala.mspas.gob.g
 
 ## Nuevo Caso
 
-### Información personal
-
 No todos los sistemas son iguales por lo que es entendible que no recopilen la misma información que Go.Data para los casos. Aun así, hay variables mínimas que deben ser capturadas. Las variables opcionales tendran una tituto de "Opcionales" para que las puedan identificar y estarán hasta el final del modelo.
 
 * Funcion del API: POST `/outbreaks/{id}/cases`. Sustituir {id} con el ID del brote.
@@ -128,7 +126,9 @@ No todos los sistemas son iguales por lo que es entendible que no recopilen la m
     }],
 
 
-    #Los siguientes campos son OPCIONALES en caso de que sí sea información captada
+    #LOS SIGUIENTES CAMPOS SON OPCIONALES EN CASO DE QUE SÍ SEA INFORMACIÓN CAPTADA
+
+
     "pregnancyStatus": "LNG_REFERENCE_DATA_CATEGORY_PREGNANCY_STATUS_YES_TRIMESTER_UNKNOWN", #Estado de embarazo = Si (revisar diccionario de variables)
     'dateOfOnset': '2020-07-24T00:00:00.000Z', #Fecha de inicio de sintomas,
     'questionnaireAnswers': { # Dentro de esta variabla va la información de la ficha epidemiológica del MSPAS e información relacionada a los seguimientos de CASOS
@@ -161,6 +161,52 @@ No todos los sistemas son iguales por lo que es entendible que no recopilen la m
     ...
   }
   ```
+
+## Seguimientos de Casos
+
+Para el seguimiento de casos se  agregaran variables a la variable `questionnaireAnswers`. Los seguimiento pueden agregarse al mismo tiempo que se crea un nuevo caso (sección anterior) o modificando un caso ya existente.
+
+* Funcion del API: PUT `/outbreaks/{id}/cases/{fk}`. Cambiar {id} por el ID del brote y {fk} por el ID del Caso
+* Modelo: este modelo puede variar mucho por la forma en que Go.Data generó el modelo. En el diccionario de variables están todas las posibles variables pero aca está la explicación de como funcionan (la x en el nombre de las variables representa el número de seguimiento).
+  1. estado_de_seguimiento_1: Aca se especifica cual es el estado de seguimiento del caso ("1" = "Activo", "2" = "Recuperado", "3" = "Imposible de contactar", "4" = "Perdido", "5" = "No es posible dar seguimiento domiciliar", "6" = "Perdido por otra razón"). El caso permanecera en "1" ("Activo") hasta que se concluya el seguimiento. Cuando se concluya el seguimiento se pondra cualquier otro estado_de_seguimiento_1 segun el resultado del seguimiento.
+
+  2. seguimiento_x: Estas variables definen si el seguimiento sí se logró o si no ("1" = "Si", "2" = "No").
+
+  3. fecha_sx_s: Si el seguimiento_x resulta en <strong>Sí ("1")</strong> se utiliza esta variable para definir la fecha en la que se realizó el seguimiento.
+
+  4. fecha_sx_n: Si el seguimiento_x resulta en <strong>No ("2")</strong> se utiliza esta variable para definir la fecha en la que se intento el seguimiento pero no se logró. <strong>Ojo: en el listado de variables la fecha_s16 hace referencia a la de ese seguimiento aunque no tenga la "n" al final.</strong>
+
+  5. por_que_sx: En estas variables se especifica por qué no se logró hacer el seguimiento ("1" = "No respondió la llamada", "2" = "Respondió pero rechazo seguimiento", "3" = "No entró la llamada al número registrado", "4" = "Se inició seguimiento pero se perdió la comunicación", "5" = "No intentada/ no dió tiempo", "6" = "Número de telefono incorrecto", "7" = "Otro" ). En caso no se tienen implementadas las razones por las que no se realizo un seguimiento mandar el valor "7" = "Otro". <strong>Ojo. En el listado veras que para el seguimiento 1, 7, 9, 11 no se encuentra la "s" en la variable.</strong>
+
+  6. estado_de_seguimiento: Esta es una variable que se debe agregar por defecto con valor "6". Con que se agregue con el primer seguimiento es suficiente, no debe volver a agregarse.
+
+  En el JSON, todas estas variables se agregan dentro de `questionnaireAnswers`. 
+  Ejemplo: Primer seguimiento.
+  ```python
+  {
+    "estado_de_seguimiento": "6", #Default esta variable ASÍ se manda!
+    "estado_de_seguimiento_1": "1", #Estado de seguimiento del caso (Revisar diccionario de variables para ver el correlativo)
+    "seguimiento_1": "1", #Si se pudo o no realizar el seguimiento 1(Revisar diccionario de variables para ver el correlativo)
+    "fecha_s1_s": '2020-07-24T00:00:00.000Z' #Fecha en que se realizo el primer seguimiento (usar este formato para las fechas)
+  }
+  ```
+
+  Ejemplo: Segundo seguimiento el cual no pudo realizarse.
+  ```python
+  {
+    "seguimiento_2": "2",  #Si se pudo o no realizar el seguimiento 2 (Revisar diccionario de variables para ver el correlativo)
+    "por_que_s2": "3", #Por que no se pudo realizar el seguimiento 2 (Revisar diccionario de variables para ver el correlativo)
+    "fecha_s2_n": '2020-07-24T00:00:00.000Z' #Fecha en que se intento realizar el segundo seguimiento (usar este formato para las fechas)
+  }
+  ```
+
+  Ejemplo: Concluir el seguimiento
+  ```python
+  {
+    "estado_de_seguimiento_1": "2" #Estado de seguimiento del caso (Revisar diccionario de variables para ver el correlativo)
+  }
+  ```
+* Respuesta: La funcion responde con el modelo entero del caso con los campos ya agregados.
 
 
 <!-- CONTACT -->
