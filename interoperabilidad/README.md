@@ -66,9 +66,9 @@
 
 Los datos de instituciones o sistemas externos a Go.Data son muy valiosos para el país y el Ministerio de Salud de Guatemala. Por lo que la interoperabilidad con estos otros sistemas es de suma importancia para tener una rica base de datos. Esta interoperabilidad es posible gracias al API de Go.Data.
 
-Esta es una guía para que futuras organizaciones puedan interoperar en conjunto de Go.Data para reportar los resultados del rastreo de casos y contantos COVID-19. En esta guia se encuentran las funciones del API a utilizar, el modelo del JSON a enviar y un diccionario de variables que se utilizan para mandar los datos a Go.Data.
+Esta es una guía para que futuras organizaciones puedan interoperar en conjunto de Go.Data para reportar los resultados del rastreo de casos y contactos COVID-19. En esta guia se encuentran las funciones del API a utilizar, el modelo del JSON a enviar y un diccionario de variables que se utilizan para mandar los datos a Go.Data.
 
-<strong>Nota: la ruta al API está en `https://godataguatemala.mspas.gob.gt/api/`. Todas las funciones mencionadas en esta guia deben de agregarse a este <em>string</em>. En las respeustas del API solo se mencionarán los campos de utilidad e importante.</strong>
+<strong>Nota: la ruta al API está en `https://godataguatemala.mspas.gob.gt/api/`. Todas las funciones mencionadas en esta guia deben de agregarse a este <em>string</em>. En las respeustas del API solo se mencionarán los campos de utilidad e importantes.</strong>
 
 <!-- GETTING STARTED -->
 ## Antes de empezar
@@ -77,9 +77,9 @@ Se debe tener un usuario en Go.Data con permiso de publicar casos y contactos en
 
 Recomiendo hacer las pruebas individuales en https://godataguatemala.mspas.gob.gt/explorer el cual es un ambiente amigable para el debuging de los JSONs.
 
-### Iniciar sesión
+## Iniciar sesión
 
-* Funcion del API: POST `users/login`
+* Función del API: POST `users/login`
 * Modelo
   ```python
   {
@@ -87,7 +87,7 @@ Recomiendo hacer las pruebas individuales en https://godataguatemala.mspas.gob.g
     "password": "contraseña" #Contraseña del usuario que inicia sesión
   }
   ```
-* Respuesta: es importante guardar el token de identificación con el cual se llaman el resto de funciones del API.
+* Respuesta: es importante guardar el token de identificación para utilizar el resto de funciones del API.
   ```python
   {
     ...
@@ -99,9 +99,9 @@ Recomiendo hacer las pruebas individuales en https://godataguatemala.mspas.gob.g
 
 ## Nuevo caso
 
-No todos los sistemas son iguales por lo que es entendible que no recopilen la misma información que Go.Data para los casos. Aun así, hay variables mínimas que deben ser capturadas. Las variables opcionales tendran una tituto de "Opcionales" para que las puedan identificar y estarán hasta el final del modelo.
+No todos los sistemas son iguales por lo que es entendible que no recopilen la misma información que Go.Data. Aun así, hay variables mínimas que deben ser capturadas. Las variables opcionales tendran una titulación de "Opcionales" para que las puedan identificar y estarán hasta el final del modelo.
 
-* Funcion del API: POST `/outbreaks/{id}/cases`. Sustituir `{id}` con el ID del brote.
+* Función del API: POST `/outbreaks/{id}/cases`. Sustituir `{id}` con el ID del brote.
 * Modelo
   ```python
   {
@@ -131,10 +131,10 @@ No todos los sistemas son iguales por lo que es entendible que no recopilen la m
 
     "pregnancyStatus": "LNG_REFERENCE_DATA_CATEGORY_PREGNANCY_STATUS_YES_TRIMESTER_UNKNOWN", #Estado de embarazo (revisar diccionario de variables)
     'dateOfOnset': '2020-07-24T00:00:00.000Z', #Fecha de inicio de sintomas,
-    'questionnaireAnswers': { # Dentro de esta variabla va la información de la ficha epidemiológica del MSPAS e información relacionada a los seguimientos de CASOS
+    'questionnaireAnswers': { # Dentro de esta variable va la información de la ficha epidemiológica del MSPAS e información relacionada a los seguimientos de CASOS
       'Case_WhichForm': [{'value': 'Ficha Epidemiológica 1'}], #DEFAULT Esta variable ASÍ se manda! esta variable es necesaria para ingresar información en esta sección!
       'servicio_de_salud': [{'value': row['Servicio de salud']}], #El servicio de salud que captura el caso (e.g. Nombre del Hospital o Nombre de la institucion que interopera)
-      'FE103no_de_ficha_de_notificacion': [{'value': row['No. Ficha Epidemiológica']}], # ID ficha de notificacíon
+      'FE103no_de_ficha_de_notificacion': [{'value': 'COVID19-00000003203'}], # ID ficha epidemiologica
       "FE111grupo_cultural": [{"value": '1'}], #Grupo cultural (revisar diccionario de variables para ver correlativo)
       "FE112escolaridad": [{"value": "1"}], #Nivel escolar alcanzado (revisar diccionario de variabels para ver correlativo)
       "FE108documento_de_identificacion": [{"value": "1"}], #DEFAULT esta variable así se manda! Define que el documento de identificación es el DPI y el OBLIGATORIA para agregar DPI
@@ -147,9 +147,9 @@ No todos los sistemas son iguales por lo que es entendible que no recopilen la m
       'FE121se_tomo_una_muestra_respiratoria': [{"value": '1'}], #Si se tomo muestra respiratoria: SI/NO == 1/2. OBLIGATORIA para ingresar cualquier información relacionada a la prueba respiratoria (revisar diccionario de variables para ver correlativo)
       'FE12102fecha_y_hora_de_toma_de_la_muestra': [{"value": '2020-07-24T00:00:00.000Z'}],  #Fecha en que se tomo la muestra respiratorio (seguir el formato de fecha)
       'FE12101tipo_de_muestra': [{ "value": ['1']}], #Tipo de muestra respiratoria (revisar diccionario de variables)
-      "FE12102especifique": [{"value": 'Otro tipo de muestra' }], #Una de las opciones de muestra respiratoria (variable anterior) es "otro" la cual se especifica en esta variable
+      "FE12102especifique": [{"value": 'Otro tipo de muestra' }], #Una de las opciones de tipo de muestra respiratoria (variable anterior) es "otro" la cual se especifica en esta variable
       "FE12103resultado_de_la_muestra": [{"value": '1'}], #Virus que se detecto de la muestra respiratoria
-      "FE125la_persona_es_un_trabajador_de_salud": [{"value": '1'}] #Si el caso es un trabajador de salud (en caso no lo sea no agregar este campo)
+      "FE125la_persona_es_un_trabajador_de_salud": [{"value": '1'}] #Si el caso es un trabajador de salud (si no lo es no agregar este campo)
     }
   }
   ```
@@ -164,7 +164,7 @@ No todos los sistemas son iguales por lo que es entendible que no recopilen la m
 
 ## Seguimientos de casos
 
-Para el seguimiento de casos se  agregaran variables a la variable `questionnaireAnswers`. Los seguimiento pueden agregarse al mismo tiempo que se crea un nuevo caso (sección anterior) o modificando un caso ya existente.
+Para el seguimiento de casos se  agregarán variables a la variable `questionnaireAnswers`. Los seguimiento pueden agregarse al mismo tiempo que se crea un nuevo caso (sección anterior) o modificando un caso ya existente.
 
 * Funcion del API: PUT `/outbreaks/{id}/cases/{fk}`. Cambiar `{id}` por el ID del brote y `{fk}` por el ID del Caso.
 * Modelo: este modelo puede variar mucho por la forma en que Go.Data generó el modelo. En el diccionario de variables están todas las posibles variables pero aca está la explicación de como funcionan (la x en el nombre de las variables representa el número de seguimiento).
@@ -174,9 +174,9 @@ Para el seguimiento de casos se  agregaran variables a la variable `questionnair
 
   3. **fecha_sx_s**: Si el seguimiento_x resulta en <strong>Sí ("1")</strong> se utiliza esta variable para definir la fecha en la que se realizó el seguimiento.
 
-  4. **fecha_sx_n**: Si el seguimiento_x resulta en <strong>No ("2")</strong> se utiliza esta variable para definir la fecha en la que se intento el seguimiento pero no se logró. <strong>Ojo: en el listado de variables la fecha_s16 hace referencia a la de ese seguimiento aunque no tenga la "n" al final.</strong>
+  4. **fecha_sx_n**: Si el seguimiento_x resulta en <strong>No ("2")</strong> se utiliza esta variable para definir la fecha en la que se intento el seguimiento pero no se logró. <strong>Ojo: en el listado de variables, la fecha_s16 hace referencia a la de ese seguimiento aunque no tenga la "n" al final.</strong>
 
-  5. **por_que_sx**: En estas variables se especifica por qué no se logró hacer el seguimiento ("1" = "No respondió la llamada", "2" = "Respondió pero rechazo seguimiento", "3" = "No entró la llamada al número registrado", "4" = "Se inició seguimiento pero se perdió la comunicación", "5" = "No intentada/ no dió tiempo", "6" = "Número de telefono incorrecto", "7" = "Otro" ). En caso no se tienen implementadas las razones por las que no se realizo un seguimiento mandar el valor "7" = "Otro". <strong>Ojo. En el listado veras que para el seguimiento 1, 7, 9, 11 no se encuentra la "s" en la variable.</strong>
+  5. **por_que_sx**: En estas variables se especifica por qué no se logró hacer el seguimiento ("1" = "No respondió la llamada", "2" = "Respondió pero rechazo seguimiento", "3" = "No entró la llamada al número registrado", "4" = "Se inició seguimiento pero se perdió la comunicación", "5" = "No intentada/ no dió tiempo", "6" = "Número de telefono incorrecto", "7" = "Otro" ). En caso no se tienen implementadas las razones por las que no se realizo un seguimiento mandar el valor "7" = "Otro". <strong>Ojo. En el de variables, el seguimiento 1, 7, 9, 11 no se encuentra la "s" en la variable.</strong>
 
   6. **estado_de_seguimiento**: Esta es una variable que se debe agregar por defecto con valor "6". Con que se agregue con el primer seguimiento es suficiente, no debe volver a agregarse.
 
@@ -186,7 +186,7 @@ Para el seguimiento de casos se  agregaran variables a la variable `questionnair
     'questionnaireAnswers': { # Dentro de esta variabla va la información de la ficha epidemiológica del MSPAS e información relacionada a los seguimientos de CASOS
       "estado_de_seguimiento": "6", #Default esta variable ASÍ se manda!
       "estado_de_seguimiento_1": "1", #Estado de seguimiento del caso (Revisar diccionario de variables para ver el correlativo)
-      "seguimiento_1": "1", #Si se pudo o no realizar el seguimiento 1(Revisar diccionario de variables para ver el correlativo)
+      "seguimiento_1": "1", #Si se pudo o no realizar el seguimiento #1 (Revisar diccionario de variables para ver el correlativo)
       "fecha_s1_s": '2020-07-24T00:00:00.000Z' #Fecha en que se realizo el primer seguimiento (usar este formato para las fechas)
     }
   }
@@ -196,8 +196,8 @@ Para el seguimiento de casos se  agregaran variables a la variable `questionnair
   ```python
   {
     'questionnaireAnswers': { # Dentro de esta variabla va la información de la ficha epidemiológica del MSPAS e información relacionada a los seguimientos de CASOS
-      "seguimiento_2": "2",  #Si se pudo o no realizar el seguimiento 2 (Revisar diccionario de variables para ver el correlativo)
-      "por_que_s2": "3", #Por que no se pudo realizar el seguimiento 2 (Revisar diccionario de variables para ver el correlativo)
+      "seguimiento_2": "2",  #Si se pudo o no realizar el seguimiento #2 (Revisar diccionario de variables para ver el correlativo)
+      "por_que_s2": "3", #Por que no se pudo realizar el seguimiento #2 (Revisar diccionario de variables para ver el correlativo)
       "fecha_s2_n": '2020-07-24T00:00:00.000Z' #Fecha en que se intento realizar el segundo seguimiento (usar este formato para las fechas)
     }
   }
@@ -211,7 +211,7 @@ Para el seguimiento de casos se  agregaran variables a la variable `questionnair
     }
   }
   ```
-* Respuesta: La funcion responde con el modelo entero del caso con los campos ya agregados.
+* Respuesta: La funcion responde con el modelo entero del caso con los campos ya agregados o modificados.
 
 ## Modificar un Caso
 
@@ -231,7 +231,7 @@ Puede que algún campo haya sido modificado o agregado, por lo que tambien hay q
 
 ## Nuevo Contacto
 
-Agregar un nuevo contacto es muy similar a agregar un caso. La unica diferencia es que todo contacto proviene de un caso. Por lo que a los contactos, luego de agregarlos hay que relacionarlos con el caso con el que tuvo contacto.
+Agregar un nuevo contacto es muy similar que agregar un caso. La unica diferencia es que todo contacto proviene de un caso. Por lo que a los contactos, luego de agregarlos, hay que relacionarlos al caso con el que tuvo contacto.
 
 ### Agregar el contacto
 
@@ -306,7 +306,7 @@ Para los seguimientos de contactos, a diferencia que los casos, sí hay una secc
   ```python
   {
     "date":"2020-12-15T00:00:00.000Z", #Fecha del seguimiento
-    "targeted":true, #DEFAULT ests variable ASÍ se manda!
+    "targeted":true, #DEFAULT esta variable ASÍ se manda!
     "statusId":"LNG_REFERENCE_DATA_CONTACT_DAILY_FOLLOW_UP_STATUS_TYPE_SEEN_OK" #Resultado del seguimiento (revisar diccionario de variables)
   }
   ```
@@ -314,7 +314,7 @@ Para los seguimientos de contactos, a diferencia que los casos, sí hay una secc
 
 ### Finalizar seguimientos (modificar un contacto)
 
-Cuando al contacto terminó sus seguimientos o se le dara de baja debemos modificarle su estado de seguimiento. Al crear un contacto instanciamos a todos los contactos como "Bajo seguimiento" y ahora es momento de modificarlo a "Seguimiento completado". Esta función puede utilizarse para modificar cualquier variable de un contacto.
+Cuando al contacto terminó sus seguimientos o se le dará de baja debemos modificarle su estado de seguimiento. Al crear un contacto instanciamos a todos los contactos como "Bajo seguimiento" y ahora es momento de modificarlo a "Seguimiento completado". Esta función puede utilizarse para modificar cualquier otra variable de un contacto.
 
 * Función del API: PUT `/outbreaks/{id}/contacts/{fk}`. Cambiar `{id}` por el ID del brote y `{nk}` por el ID del contacto.
 * Modelo:
