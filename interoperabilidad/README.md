@@ -180,30 +180,36 @@ Para el seguimiento de casos se  agregaran variables a la variable `questionnair
 
   6. estado_de_seguimiento: Esta es una variable que se debe agregar por defecto con valor "6". Con que se agregue con el primer seguimiento es suficiente, no debe volver a agregarse.
 
-  En el JSON, todas estas variables se agregan dentro de `questionnaireAnswers`. 
+  En el JSON, todas estas variables se agregan dentro de `questionnaireAnswers`.  
   Ejemplo: Primer seguimiento.
   ```python
   {
-    "estado_de_seguimiento": "6", #Default esta variable ASÍ se manda!
-    "estado_de_seguimiento_1": "1", #Estado de seguimiento del caso (Revisar diccionario de variables para ver el correlativo)
-    "seguimiento_1": "1", #Si se pudo o no realizar el seguimiento 1(Revisar diccionario de variables para ver el correlativo)
-    "fecha_s1_s": '2020-07-24T00:00:00.000Z' #Fecha en que se realizo el primer seguimiento (usar este formato para las fechas)
+    'questionnaireAnswers': { # Dentro de esta variabla va la información de la ficha epidemiológica del MSPAS e información relacionada a los seguimientos de CASOS
+      "estado_de_seguimiento": "6", #Default esta variable ASÍ se manda!
+      "estado_de_seguimiento_1": "1", #Estado de seguimiento del caso (Revisar diccionario de variables para ver el correlativo)
+      "seguimiento_1": "1", #Si se pudo o no realizar el seguimiento 1(Revisar diccionario de variables para ver el correlativo)
+      "fecha_s1_s": '2020-07-24T00:00:00.000Z' #Fecha en que se realizo el primer seguimiento (usar este formato para las fechas)
+    }
   }
   ```
 
   Ejemplo: Segundo seguimiento el cual no pudo realizarse.
   ```python
   {
-    "seguimiento_2": "2",  #Si se pudo o no realizar el seguimiento 2 (Revisar diccionario de variables para ver el correlativo)
-    "por_que_s2": "3", #Por que no se pudo realizar el seguimiento 2 (Revisar diccionario de variables para ver el correlativo)
-    "fecha_s2_n": '2020-07-24T00:00:00.000Z' #Fecha en que se intento realizar el segundo seguimiento (usar este formato para las fechas)
+    'questionnaireAnswers': { # Dentro de esta variabla va la información de la ficha epidemiológica del MSPAS e información relacionada a los seguimientos de CASOS
+      "seguimiento_2": "2",  #Si se pudo o no realizar el seguimiento 2 (Revisar diccionario de variables para ver el correlativo)
+      "por_que_s2": "3", #Por que no se pudo realizar el seguimiento 2 (Revisar diccionario de variables para ver el correlativo)
+      "fecha_s2_n": '2020-07-24T00:00:00.000Z' #Fecha en que se intento realizar el segundo seguimiento (usar este formato para las fechas)
+    }
   }
   ```
 
   Ejemplo: Concluir el seguimiento
   ```python
   {
-    "estado_de_seguimiento_1": "2" #Estado de seguimiento del caso (Revisar diccionario de variables para ver el correlativo)
+    'questionnaireAnswers': { # Dentro de esta variabla va la información de la ficha epidemiológica del MSPAS e información relacionada a los seguimientos de CASOS
+      "estado_de_seguimiento_1": "2" #Estado de seguimiento del caso (Revisar diccionario de variables para ver el correlativo)
+    }
   }
   ```
 * Respuesta: La funcion responde con el modelo entero del caso con los campos ya agregados.
