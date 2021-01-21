@@ -63,7 +63,7 @@
     <li><a href="#seguimiento-de-contactos">Seguimiento de contactos</a>
       <ul>
         <li><a href="#agregar-un-seguimiento">Agregar un seguimiento</a></li>
-        <li><a href="#finalizar-seguimientos-(modificar-un-contacto)">Finalizar seguimientos (modificar un contacto)</a></li>
+        <li><a href="#finalizar-seguimientos-o-modificar-un-contacto">Finalizar seguimientos (modificar un contacto)</a></li>
       </ul>
     </li>
     <li><a href="#contacto">Contacto</a></li>
@@ -323,7 +323,7 @@ Para los seguimientos de contactos, a diferencia que los casos, sí hay una secc
   ```
 * Respuesta: La función responde con el modelo ya guardado en la base de datos.
 
-### Finalizar seguimientos (modificar un contacto)
+### Finalizar seguimientos o modificar un contacto
 
 Cuando al contacto terminó sus seguimientos o se le dará de baja debemos modificarle su estado de seguimiento. Al crear un contacto instanciamos a todos los contactos como "Bajo seguimiento" y ahora es momento de modificarlo a "Seguimiento completado". Esta función puede utilizarse para modificar cualquier otra variable de un contacto.
 
