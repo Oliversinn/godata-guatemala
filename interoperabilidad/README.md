@@ -44,15 +44,29 @@
     </li>
     <li>
       <a href="#antes-de-empezar">Antes de empezar</a>
+    </li>
+    <li>
+      <a href="#iniciar-sesión">Iniciar sesión</a>
+    </li>
+    <li>
+      <a href="#nuevo-caso">Nuevo caso</a>
+    </li>
+    <li>
+      <a href="#seguimiento-de-casos">Seguimientos de casos</a>
+    </li>
+    <li>
+      <a href="#modificar-un-caso">Modificar un caso</a>
+    </li>
+    <li><a href="#nuevo-contacto">Nuevo Contacto</a>
       <ul>
-        <li><a href="#prerequisitos">Prerequisitos</a></li>
-        <li><a href="#instalacion">Instalación</a></li>
+        <li><a href="#agregar-el-contacto">Agregar el contacto</a></li>
+        <li><a href="#relacionar-un-contacto-a-un-caso">Relacionar un contacto a un caso</a></li>
       </ul>
     </li>
-    <li><a href="#uso">Uso</a>
+    <li><a href="#seguimiento-de-contactos">Seguimiento de contactos</a>
       <ul>
-        <li><a href="#script-de-automatización">Script de automatización</a></li>
-        <li><a href="#dashboard">Dashboard</a></li>
+        <li><a href="#agregar-un-seguimiento">Agregar un seguimiento</a></li>
+        <li><a href="#finalizar-seguimientos">Finalizar seguimientos (modificar un contacto)</a></li>
       </ul>
     </li>
     <li><a href="#contacto">Contacto</a></li>
