@@ -168,19 +168,19 @@ Para el seguimiento de casos se  agregaran variables a la variable `questionnair
 
 * Funcion del API: PUT `/outbreaks/{id}/cases/{fk}`. Cambiar {id} por el ID del brote y {fk} por el ID del Caso
 * Modelo: este modelo puede variar mucho por la forma en que Go.Data generó el modelo. En el diccionario de variables están todas las posibles variables pero aca está la explicación de como funcionan (la x en el nombre de las variables representa el número de seguimiento).
-  1. estado_de_seguimiento_1: Aca se especifica cual es el estado de seguimiento del caso ("1" = "Activo", "2" = "Recuperado", "3" = "Imposible de contactar", "4" = "Perdido", "5" = "No es posible dar seguimiento domiciliar", "6" = "Perdido por otra razón"). El caso permanecera en "1" ("Activo") hasta que se concluya el seguimiento. Cuando se concluya el seguimiento se pondra cualquier otro estado_de_seguimiento_1 segun el resultado del seguimiento.
+  1. **estado_de_seguimiento_1**: Aca se especifica cual es el estado de seguimiento del caso ("1" = "Activo", "2" = "Recuperado", "3" = "Imposible de contactar", "4" = "Perdido", "5" = "No es posible dar seguimiento domiciliar", "6" = "Perdido por otra razón"). El caso permanecera en "1" ("Activo") hasta que se concluya el seguimiento. Cuando se concluya el seguimiento se pondra cualquier otro estado_de_seguimiento_1 segun el resultado del seguimiento.
 
-  2. seguimiento_x: Estas variables definen si el seguimiento sí se logró o si no ("1" = "Si", "2" = "No").
+  2. **seguimiento_x**: Estas variables definen si el seguimiento sí se logró o si no ("1" = "Si", "2" = "No").
 
-  3. fecha_sx_s: Si el seguimiento_x resulta en <strong>Sí ("1")</strong> se utiliza esta variable para definir la fecha en la que se realizó el seguimiento.
+  3. **fecha_sx_s**: Si el seguimiento_x resulta en <strong>Sí ("1")</strong> se utiliza esta variable para definir la fecha en la que se realizó el seguimiento.
 
-  4. fecha_sx_n: Si el seguimiento_x resulta en <strong>No ("2")</strong> se utiliza esta variable para definir la fecha en la que se intento el seguimiento pero no se logró. <strong>Ojo: en el listado de variables la fecha_s16 hace referencia a la de ese seguimiento aunque no tenga la "n" al final.</strong>
+  4. **fecha_sx_n**: Si el seguimiento_x resulta en <strong>No ("2")</strong> se utiliza esta variable para definir la fecha en la que se intento el seguimiento pero no se logró. <strong>Ojo: en el listado de variables la fecha_s16 hace referencia a la de ese seguimiento aunque no tenga la "n" al final.</strong>
 
-  5. por_que_sx: En estas variables se especifica por qué no se logró hacer el seguimiento ("1" = "No respondió la llamada", "2" = "Respondió pero rechazo seguimiento", "3" = "No entró la llamada al número registrado", "4" = "Se inició seguimiento pero se perdió la comunicación", "5" = "No intentada/ no dió tiempo", "6" = "Número de telefono incorrecto", "7" = "Otro" ). En caso no se tienen implementadas las razones por las que no se realizo un seguimiento mandar el valor "7" = "Otro". <strong>Ojo. En el listado veras que para el seguimiento 1, 7, 9, 11 no se encuentra la "s" en la variable.</strong>
+  5. **por_que_sx**: En estas variables se especifica por qué no se logró hacer el seguimiento ("1" = "No respondió la llamada", "2" = "Respondió pero rechazo seguimiento", "3" = "No entró la llamada al número registrado", "4" = "Se inició seguimiento pero se perdió la comunicación", "5" = "No intentada/ no dió tiempo", "6" = "Número de telefono incorrecto", "7" = "Otro" ). En caso no se tienen implementadas las razones por las que no se realizo un seguimiento mandar el valor "7" = "Otro". <strong>Ojo. En el listado veras que para el seguimiento 1, 7, 9, 11 no se encuentra la "s" en la variable.</strong>
 
-  6. estado_de_seguimiento: Esta es una variable que se debe agregar por defecto con valor "6". Con que se agregue con el primer seguimiento es suficiente, no debe volver a agregarse.
+  6. **estado_de_seguimiento**: Esta es una variable que se debe agregar por defecto con valor "6". Con que se agregue con el primer seguimiento es suficiente, no debe volver a agregarse.
 
-  En el JSON, todas estas variables se agregan dentro de `questionnaireAnswers`.  
+  En el JSON, todas estas variables se agregan dentro de `questionnaireAnswers`.<br>
   Ejemplo: Primer seguimiento.
   ```python
   {
