@@ -41,6 +41,9 @@
     </li>
     <li>
       <a href="#antes-de-empezar">Antes de empezar</a>
+      <ul>
+        <li><a href="#diccionario-de-variables">Diccionario de variables</a></li>
+      </ul>
     </li>
     <li>
       <a href="#iniciar-sesión">Iniciar sesión</a>
@@ -91,6 +94,12 @@ Esta es una guía para que futuras organizaciones puedan interoperar en conjunto
 Se debe tener un usuario en Go.Data con permiso de publicar casos y contactos en Go.Data con acceso a un brote de pruebas. Esto se debe solicitar al administrador de Go.Data Guatemala al igual que el ID del brote de pruebas. Al finalizar las pruebas se dara acceso al brote en producción y su ID.
 
 Recomiendo hacer las pruebas individuales en https://godataguatemala.mspas.gob.gt/explorer el cual es un ambiente amigable para el debuging de los JSONs.
+
+### Diccionario de variables
+
+A lo largo de este manual se utilizarán varias variables para los JSONs que se mandarán al API de Go.Data. La descripción de estas variables y sus posibles valores se encuentran en el archivo `diccionario-de-variables.xlsx`. En este archivo Excel se encuentran cuatro hojas, una por modelo, donde estan las variables, su definición, sus posibles valores y observaciones/comentarios de cada una. En la quinta hoja del Excel están los posibles valores para las variables. Estos posibles valores tambien se pueden accesar dando click en el valor descrito en cada una de las variables en las cuatro hojas anteriores.
+
+Ádemas se agrego un listado de IDs para las DAS o DMS. Estas se encuentran en los archivos `das_godata_id.csv` y `dms_godata_id.csv`. De preferencia utilizar las DMS, ya que si se utiliza una DMS por ende tambien se esta utilizando la DAS. En caso no haya una DMS utilizar la DAS. Mas adelante, cuando ingresen la ubicación de los casos y contactos, les seran utiles estos archivos para llenar la variable `locationId`.
 
 ## Iniciar sesión
 
@@ -222,7 +231,7 @@ Para el seguimiento de casos se  agregarán variables a la variable `questionnai
   }
   ```
 
-  ### Finalizar seguimientos
+  ### Finalizar seguimiento
 
   Ejemplo de como actualizar el estado de seguimiento y finalizar el seguimiento.
   ```python
