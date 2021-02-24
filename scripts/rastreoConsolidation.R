@@ -47,29 +47,33 @@ activateURL = paste(url,
                     userID,
                     sep=""
 )
-## Set outbreak ID and language ID
+## Set outbreak ID
 activeBody = list(
   activeOutbreakId = outbreak_id,
   languageId = language_id
 )  
 write('Activando brote de rastreo...', stdout())
-##  activate outbreak of cases to download and language
-activeOutbreak = PATCH(activateURL,body = activeBody, add_headers(Authorization =token) ,encode = 'json')
+##  activate outbreak of cases to download
+activeOutbreak = PATCH(activateURL,body = activeBody, add_headers(Authorization=token) ,encode = 'json')
 write('Brote activado!',stdout())
 
 # Downloading outbreak cases
 ## Setting months to download
-meses = seq(from=as.Date("2020-08-12"), to=Sys.Date(), by='month')
-meses_inicio = seq(from=as.Date("2020-08-01"), to=Sys.Date(), by='month')
-meses_final = seq(as.Date('2020-09-01'), by='month', length = length(meses))-1
-meses_inicio[1] = as.Date("2020-08-12")
-meses_final[length(meses)] = Sys.Date()
+#meses = seq(from=as.Date("2020-08-12"), to=Sys.Date(), by='month')
+#meses_inicio = seq(from=as.Date("2020-08-01"), to=Sys.Date(), by='month')
+#meses_final = seq(as.Date('2020-09-01'), by='month', length = length(meses))-1
+#meses_inicio[1] = as.Date("2020-08-12")
+#meses_final[length(meses)] = Sys.Date()
+meses_inicio = seq(from=as.Date("2020-08-12"), to=as.Date("2020-12-31"), by='month')
+meses_final = c(seq(from=as.Date("2020-09-11"), to=as.Date("2020-12-31"), by='month'),as.Date("2020-12-31"))
+meses_inicio = c(meses_inicio, seq(from=as.Date("2021-01-01"), to=Sys.Date(), by=15))
+meses_final = c(meses_final, c(seq(from=as.Date("2021-01-15"), to=Sys.Date(), by=15), Sys.Date()))
 meses_inicio = format(meses_inicio, '%Y-%m-%dT00:00:00.000Z')
 meses_inicio = gsub(":","%3A",meses_inicio)
 meses_final = format(meses_final, '%Y-%m-%dT23:59:59.999Z')
 meses_final = gsub(":","%3A",meses_final)
 
-## Set URL of outbreak cases using question variable names
+## Set URL of outbreak cases
 caseURL = paste(url,
                 'outbreaks/',
                 outbreak_id,
@@ -86,7 +90,7 @@ write(paste0('Descargando casos creados desde el ',format(as.Date(meses_inicio[1
 outbreakCases = GET(caseURL)
 cases = data.table(suppressMessages(content(outbreakCases, guess_max = 50000)))
 
-# Base data transformation
+
 cases_clean = cases %>%
   select(`Date of reporting` = `Fecha de notificación`, 
          Sexo, 
@@ -139,12 +143,12 @@ cases_clean = cases %>%
          `Fecha de condición` = as.Date(`Fecha de condición`),
          `Direcciones Número De Teléfono [1]` = ifelse(is.na(`Direcciones Número De Teléfono [1]`),'NO CONTACTABLE','CONTACTABLE'),
          area_salud = case_when(area_salud == "DAS Alta Verapáz" ~ "DAS Alta Verapaz",
-                           area_salud %like% 'DAS' ~ area_salud,
-                           area_salud %like% 'SIN DATO' ~ area_salud,
-                           T ~ 'SIN DATO'),
+                                area_salud %like% 'DAS' ~ area_salud,
+                                area_salud %like% 'SIN DATO' ~ area_salud,
+                                T ~ 'SIN DATO'),
          area_salud = toupper(area_salud),
          dms = case_when(dms %like% 'DMS' ~ dms,
-                    T ~ "SIN DATO"),
+                         T ~ "SIN DATO"),
          dms = toupper(dms),
          Clasificación = toupper(Clasificación),
          `Creado En` = as.Date(`Creado En`),
@@ -265,8 +269,8 @@ reportCases = reportCases %>%
 
 write('Casos descargados!',stdout())
 
-# Data transformation for all months
-for (i in c(2:length(meses))) {
+
+for (i in c(2:length(meses_inicio))) {
   mesi = meses_inicio[i]
   mesf = meses_final[i]
   caseURL = paste(url,
@@ -278,6 +282,7 @@ for (i in c(2:length(meses))) {
                   '&type=csv&access_token=',
                   token,
                   sep="")
+  write(caseURL)
   write(paste0('Descargando casos creados desde el ',format(as.Date(mesi),'%d-%m-%Y'),' al ',format(as.Date(mesf),'%d-%m-%Y'),'...'),stdout())
   
   
@@ -479,6 +484,10 @@ for (i in c(2:length(meses))) {
   
 }
 
+
+
+
+
 # Downloading outbreak contacts
 ## Set URL of of outbreak contacts
 contactsURL = paste(url,
@@ -581,14 +590,18 @@ write('Seguimientos descargados!', stdout())
 followups = followups %>%
   select(ID, `Creado En`, `Estado`)
 
-
 write('Guardando bases de datos...',stdout())
+write_excel_csv(cases_clean,'./databases/rastreo_cases.csv')
 write_excel_csv(cases_clean,'./DashboardRastreo/data/rastreo_cases.csv')
 
+write_excel_csv(reportCases,'./databases/report_cases.csv')
 write_excel_csv(reportCases,'./DashboardRastreo/data/report_cases.csv')
 
+
+write_excel_csv(contacts_clean,'./databases/rastreo_contacts.csv')
 write_excel_csv(contacts_clean,'./DashboardRastreo/data/rastreo_contacts.csv')
 
+write_excel_csv(followups,'./databases/rastreo_followups.csv')
 write_excel_csv(followups,'./DashboardRastreo/data/rastreo_followups.csv')
 write('Bases de datos guardadas!',stdout())
 

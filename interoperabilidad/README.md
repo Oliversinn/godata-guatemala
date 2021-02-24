@@ -48,8 +48,12 @@
     <li>
       <a href="#nuevo-caso">Nuevo caso</a>
     </li>
-    <li>
-      <a href="#seguimientos-de-casos">Seguimientos de casos</a>
+    <li><a href="#seguimientos-de-casos">Seguimientos de casos</a>
+      <ul>
+        <li><a href="#primer-seguimiento">Primer seguimiento (seguimiento exitoso)</a></li>
+        <li><a href="#segundo-seguimiento">Segundo seguimiento (seguimiento no exitoso)</a></li>
+        <li><a href="#finalizar-seguimiento">Finalizar seguimientos</a></li>
+      </ul>
     </li>
     <li>
       <a href="#modificar-un-caso">Modificar un caso</a>
@@ -191,7 +195,9 @@ Para el seguimiento de casos se  agregarán variables a la variable `questionnai
 
   6. **estado_de_seguimiento**: Esta es una variable que se debe agregar por defecto con valor "6". Con que se agregue con el primer seguimiento es suficiente, no debe volver a agregarse.
 
-  Ejemplo: Primer seguimiento.
+  ### Primer seguimiento
+
+  Ejemplo de un seguimiento exitoso.
   ```python
   {
     'questionnaireAnswers': { # Dentro de esta variabla va la información de la ficha epidemiológica del MSPAS e información relacionada a los seguimientos de CASOS
@@ -203,7 +209,9 @@ Para el seguimiento de casos se  agregarán variables a la variable `questionnai
   }
   ```
 
-  Ejemplo: Segundo seguimiento el cual no pudo realizarse.
+  ### Segundo seguimiento
+
+  Ejemplo de un seguimiento no exitoso.
   ```python
   {
     'questionnaireAnswers': { # Dentro de esta variabla va la información de la ficha epidemiológica del MSPAS e información relacionada a los seguimientos de CASOS
@@ -214,7 +222,9 @@ Para el seguimiento de casos se  agregarán variables a la variable `questionnai
   }
   ```
 
-  Ejemplo: Concluir el seguimiento
+  ### Finalizar seguimientos
+
+  Ejemplo de como actualizar el estado de seguimiento y finalizar el seguimiento.
   ```python
   {
     'questionnaireAnswers': { # Dentro de esta variabla va la información de la ficha epidemiológica del MSPAS e información relacionada a los seguimientos de CASOS
