@@ -167,7 +167,8 @@ cases_clean = cases %>%
          `Clínicas Temporales` = case_when(`Clínicas Temporales` == 1 ~ "CBR ZONA 7",
                                            `Clínicas Temporales` == 5 ~ "CBR ZONA 6",
                                            `Clínicas Temporales` == 4 ~ "CBR ZONA 12",
-                                           `Clínicas Temporales` == 2 ~ "CBR ZONA 18")) %>%
+                                           `Clínicas Temporales` == 2 ~ "CBR ZONA 18"),
+         `Direcciones Comunidad, aldea o zona [1]` = as.character(`Direcciones Comunidad, aldea o zona [1]`)) %>%
   rename(`Fecha de notificación` = `Date of reporting`,
          Edad = `Años Años De Edad`,
          Teléfono = `Direcciones Número De Teléfono [1]`,
@@ -365,7 +366,8 @@ for (i in c(2:length(meses_inicio))) {
            `Clínicas Temporales` = case_when(`Clínicas Temporales` == 1 ~ "CBR ZONA 7",
                                              `Clínicas Temporales` == 5 ~ "CBR ZONA 6",
                                              `Clínicas Temporales` == 4 ~ "CBR ZONA 12",
-                                             `Clínicas Temporales` == 2 ~ "CBR ZONA 18")) %>%
+                                             `Clínicas Temporales` == 2 ~ "CBR ZONA 18"),
+           `Direcciones Comunidad, aldea o zona [1]` = as.character(`Direcciones Comunidad, aldea o zona [1]`)) %>%
     rename(`Fecha de notificación` = `Date of reporting`,
            Edad = `Años Años De Edad`,
            Teléfono = `Direcciones Número De Teléfono [1]`,
