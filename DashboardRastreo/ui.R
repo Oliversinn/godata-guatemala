@@ -70,6 +70,14 @@ shinyUI(dashboardPage(skin = 'blue',
                                                   'SOSPECHOSO',
                                                   'CONFIRMADO POR NEXO EPIDEMIOLÓGICO')
                           ),
+                          # selectInput("unidadNotificadoraFilter",
+                          #             "Unidad notificadora",
+                          #             choices = c("TODOS",
+                          #                         'CBR ZONA 6',
+                          #                         'CBR ZONA 7',
+                          #                         'CBR ZONA 12',
+                          #                         'CBR ZONA 18')
+                          # ),
                           sidebarMenu(
                               menuItem("Casos", tabName = "rastreoCase", icon=icon("head-side-virus")),
                               menuItem("Contactos", tabName = "rastreoContact", icon=icon("shield-virus")),
@@ -119,8 +127,16 @@ shinyUI(dashboardPage(skin = 'blue',
                                           withLoader(plotlyOutput('rastreoCasesFechaDeNotificacion'), type = 'html', loader = 'loader5')
                                         ),
                                         tabPanel(
-                                          title = 'Casos contactables acumulados por fecha de ingreso a Go.Data',
+                                          title = 'Acumulados - Cuadro de Datos',
+                                          withLoader(dataTableOutput("rastreoCasesFechaDeNotificacionDB"), type = 'html', loader = 'loader5')
+                                        ),
+                                        tabPanel(
+                                          title = 'Casos acumulados contactables por fecha de ingreso a Go.Data',
                                           withLoader(plotlyOutput('rastreoCasesContactableFechaDeNotificacion'), type = 'html', loader = 'loader5')
+                                        ),
+                                        tabPanel(
+                                          title = 'Acumulados Contactables - Cuadro de Datos',
+                                          withLoader(dataTableOutput("rastreoCasesContactableFechaDeNotificacionDB"), type = 'html', loader = 'loader5')
                                         )
                                       )
                                     ),
@@ -132,8 +148,16 @@ shinyUI(dashboardPage(skin = 'blue',
                                                 withLoader(plotlyOutput("rastreoCasesSexo"), type = 'html', loader = 'loader5')
                                             ),
                                             tabPanel(
+                                              title = 'Acumulados - Cuadro de Datos',
+                                              withLoader(dataTableOutput("rastreoCasesSexoDB"), type = 'html', loader = 'loader5')
+                                            ),
+                                            tabPanel(
                                                 title = 'Casos Activos por Sexo',
                                                 withLoader(plotlyOutput("rastreoCasesActiveSexo"), type = 'html', loader = 'loader5')
+                                            ),
+                                            tabPanel(
+                                              title = 'Activos - Cuadro de Datos',
+                                              withLoader(dataTableOutput("rastreoCasesActiveSexoDB"), type = 'html', loader = 'loader5')
                                             )
                                         ),
                                         tabBox(
@@ -143,8 +167,16 @@ shinyUI(dashboardPage(skin = 'blue',
                                                 withLoader(plotlyOutput("rastreoCasesEdad"), type = 'html', loader = 'loader5')
                                             ),
                                             tabPanel(
+                                              title = 'Acumulados - Cuadro de Datos',
+                                              withLoader(dataTableOutput("rastreoCasesEdadDB"), type = 'html', loader = 'loader5')
+                                            ),
+                                            tabPanel(
                                                 title = 'Casos Activos por Edad',
                                                 withLoader(plotlyOutput("rastreoCasesActiveEdad"), type = 'html', loader = 'loader5')
+                                            ),
+                                            tabPanel(
+                                              title = 'Activos - Cuadro de Datos',
+                                              withLoader(dataTableOutput("rastreoCasesActiveEdadDB"), type = 'html', loader = 'loader5')
                                             )
                                         )
                                     ),
@@ -167,6 +199,14 @@ shinyUI(dashboardPage(skin = 'blue',
                                         tabPanel(
                                           title = 'Casos contactables según su estado de seguimiento',
                                           withLoader(plotlyOutput('rastreoCasesContactableEstadoDeSeguimiento'), type = 'html', loader = 'loader5')
+                                        ),
+                                        tabPanel(
+                                          title = 'Acumulados - Cuadro de Datos',
+                                          withLoader(dataTableOutput("rastreoCasesEstadoDeSeguimientoDB"), type = 'html', loader = 'loader5')
+                                        ),
+                                        tabPanel(
+                                          title = 'Acumulados Contactables - Cuadro de Datos',
+                                          withLoader(dataTableOutput("rastreoCasesContactableEstadoDeSeguimientoDB"), type = 'html', loader = 'loader5')
                                         )
                                       )
                                     )
@@ -186,6 +226,10 @@ shinyUI(dashboardPage(skin = 'blue',
                                           tabPanel(
                                             title = 'Contactos Acumulados por fecha de notificación',
                                             withLoader(plotlyOutput('rastreoContactsFechaDeNotificacion'), type = 'html', loader = 'loader5')
+                                          ),
+                                          tabPanel(
+                                            title = 'Cuadro de Datos',
+                                            withLoader(dataTableOutput("rastreoContactsFechaDeNotificacionDB"), type = 'html', loader = 'loader5')
                                           )
                                         )
                                       ),
@@ -197,8 +241,16 @@ shinyUI(dashboardPage(skin = 'blue',
                                             withLoader(plotlyOutput("rastreoContactsSexo"), type = 'html', loader = 'loader5')
                                           ),
                                           tabPanel(
+                                            title = 'Acumulados - Cuadro de Datos',
+                                            withLoader(dataTableOutput("rastreoContactsSexoDB"), type = 'html', loader = 'loader5')
+                                          ),
+                                          tabPanel(
                                             title = 'Contactos Activos por Sexo',
                                             withLoader(plotlyOutput("rastreoContactsActiveSexo"), type = 'html', loader = 'loader5')
+                                          ),
+                                          tabPanel(
+                                            title = 'Activos - Cuadro de Datos',
+                                            withLoader(dataTableOutput("rastreoContactsActiveSexoDB"), type = 'html', loader = 'loader5')
                                           )
                                         ),
                                         tabBox(
@@ -208,8 +260,16 @@ shinyUI(dashboardPage(skin = 'blue',
                                             withLoader(plotlyOutput("rastreoContactsEdad"), type = 'html', loader = 'loader5')
                                           ),
                                           tabPanel(
+                                            title = 'Acumulados - Cuadro de Datos',
+                                            withLoader(dataTableOutput("rastreoContactsEdadDB"), type = 'html', loader = 'loader5')
+                                          ),
+                                          tabPanel(
                                             title = 'Contactos Activos por Edad',
                                             withLoader(plotlyOutput("rastreoContactsActiveEdad"), type = 'html', loader = 'loader5')
+                                          ),
+                                          tabPanel(
+                                            title = 'Activos - Cuadro de Datos',
+                                            withLoader(dataTableOutput("rastreoContactsActiveEdadDB"), type = 'html', loader = 'loader5')
                                           )
                                         ),
                                         tabBox(
@@ -217,6 +277,10 @@ shinyUI(dashboardPage(skin = 'blue',
                                           tabPanel(
                                             title = 'Nivel de Riesgo en Contactos',
                                             withLoader(plotlyOutput('rastreoContactsRiesgo'), type = 'html', loader = 'loader5')
+                                          ),
+                                          tabPanel(
+                                            title = 'Cuadro de Datos',
+                                            withLoader(dataTableOutput("rastreoContactsRiesgoDB"), type = 'html', loader = 'loader5')
                                           )
                                         )
                                       )
@@ -276,6 +340,8 @@ shinyUI(dashboardPage(skin = 'blue',
                               #NEXT TAB CONTENT STARTS HERE
                           )
                       ),
-                    
+                      
+                      
+                      
 ))
 

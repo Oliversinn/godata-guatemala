@@ -25,5 +25,6 @@ library(data.table)
 
 
 Sys.setenv(TZ='America/Guatemala')
+Sys.setlocale("LC_ALL","es_ES")
 options(shiny.maxRequestSize = 30*1024^2)
 
