@@ -1,12 +1,12 @@
 ###################################################################################################
-url <- "https://godata.com/api/"                   # <--------------------- insert instance url here, don't forget the slash at end !
+url <- "https://godataguatemala.mspas.gob.gt/api/"                   # <--------------------- insert instance url here, don't forget the slash at end !
 username <- "xxxxxxxx"                           # <--------------------- insert your username for signing into Go.Data webapp here
 password <- "xxxxxxxx"                           # <--------------------- insert your password for signing into Go.Data webapp here
 outbreak_id <- "a44faf32-bf27-4b39-a4fb-b9fcf29ac2d7"   # <--------------------- insert your outbreak ID here
 language_id = 'd86b2070-fad9-4699-8be9-a8ae5cc0edd2'   # <--------------------- insert your language ID here
 ###################################################################################################
 
-setwd("~/Documents/MSPAS")
+setwd("~/Documentos/godata-guatemala")
 
 # packages for this script
 packages = c("httr","xml2","readr","data.table","dplyr","jsonlite","magrittr","sqldf",'tidyr','rsconnect')
@@ -22,7 +22,7 @@ package.check = lapply(
   }
 )
 
-httr::set_config(config(ssl_verifypeer = FALSE))
+httr::sconfig(ssl_verifypeer = FALSE)
 options(dplyr.summarise.inform = FALSE)
 options(warn=-1)
 
