@@ -2,8 +2,8 @@
 url <- "https://godata.com/api/"                   # <--------------------- insert instance url here, don't forget the slash at end !
 username <- "xxxxxxxx"                           # <--------------------- insert your username for signing into Go.Data webapp here
 password <- "xxxxxxxx"                           # <--------------------- insert your password for signing into Go.Data webapp here
-outbreak_id <- "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx"   # <--------------------- insert your outbreak ID here
-language_id = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxxx'   # <--------------------- insert your language ID here
+outbreak_id <- "a44faf32-bf27-4b39-a4fb-b9fcf29ac2d7"   # <--------------------- insert your outbreak ID here
+language_id = 'd86b2070-fad9-4699-8be9-a8ae5cc0edd2'   # <--------------------- insert your language ID here
 ###################################################################################################
 
 setwd("~/Documents/MSPAS")
@@ -64,10 +64,16 @@ write('Brote activado!',stdout())
 #meses_final = seq(as.Date('2020-09-01'), by='month', length = length(meses))-1
 #meses_inicio[1] = as.Date("2020-08-12")
 #meses_final[length(meses)] = Sys.Date()
-meses_inicio = seq(from=as.Date("2020-08-12"), to=as.Date("2020-12-31"), by='month')
-meses_final = c(seq(from=as.Date("2020-09-11"), to=as.Date("2020-12-31"), by='month'),as.Date("2020-12-31"))
-meses_inicio = c(meses_inicio, seq(from=as.Date("2021-01-01"), to=Sys.Date(), by=15))
-meses_final = c(meses_final, c(seq(from=as.Date("2021-01-15"), to=Sys.Date(), by=15), Sys.Date()))
+
+#meses_inicio = seq(from=as.Date("2020-08-12"), to=as.Date("2020-12-31"), by='month')
+meses_inicio = seq(from=as.Date("2021-04-15"), to=Sys.Date(), by=15)
+
+#meses_final = c(seq(from=as.Date("2020-09-11"), to=as.Date("2020-12-31"), by='month'),as.Date("2020-12-31"))
+meses_final = c(seq(from=as.Date("2021-04-29"), to=Sys.Date(), by=15),Sys.Date())
+
+#meses_inicio = c(meses_inicio, seq(from=as.Date("2021-01-01"), to=Sys.Date(), by=15))
+#meses_final = c(meses_final, c(seq(from=as.Date("2021-01-15"), to=Sys.Date(), by=15), Sys.Date()))
+
 meses_inicio = format(meses_inicio, '%Y-%m-%dT00:00:00.000Z')
 meses_inicio = gsub(":","%3A",meses_inicio)
 meses_final = format(meses_final, '%Y-%m-%dT23:59:59.999Z')
@@ -109,6 +115,7 @@ cases_clean = cases %>%
          `Direcciones Número De Teléfono [1]`,
          `Direcciones Comunidad, aldea o zona [1]`, 
          `Creado En`, 
+         `Creado Por`,
          `Estado de seguimiento` = estado_de_seguimiento_1,
          `Resultado de la muestra.` = FE12103resultado_de_la_muestra, 
          `¿Se tomó una muestra respiratoria?` = FE121se_tomo_una_muestra_respiratoria,
@@ -179,6 +186,7 @@ reportCases = cases %>%
   select(
     `Carné De Identidad` = ID,
     `Creado En`,
+    `Creado Por`,
     Clasificación,
     edad = `Edad Años De Edad`,
     `Teléfono` = `Direcciones Número De Teléfono [1]`,
@@ -308,6 +316,7 @@ for (i in c(2:length(meses_inicio))) {
            `Direcciones Número De Teléfono [1]`,
            `Direcciones Comunidad, aldea o zona [1]`, 
            `Creado En`, 
+           `Creado Por`,
            `Estado de seguimiento` = estado_de_seguimiento_1,
            `Resultado de la muestra.` = FE12103resultado_de_la_muestra, 
            `¿Se tomó una muestra respiratoria?` = FE121se_tomo_una_muestra_respiratoria,
@@ -380,6 +389,7 @@ for (i in c(2:length(meses_inicio))) {
       dms = `Direcciones Ubicación [1]  Nivel De Localización Geográfica [5]`, 
       area_salud = `Direcciones Ubicación [1]  Nivel De Localización Geográfica [3]`,
       `Creado En`,
+      `Creado Por`,
       Clasificación,
       `¿Se tomó una muestra respiratoria?` = FE121se_tomo_una_muestra_respiratoria,
       edad = `Edad Años De Edad`,
@@ -485,10 +495,30 @@ for (i in c(2:length(meses_inicio))) {
   
   
 }
+rastreo_cases20210414 = read_csv("databases/rastreo_cases20210414.csv",guess_max = 50000)
+reportCases20210414 = read_csv("databases/report_cases20210414.csv", guess_max = 50000)
 
+write('Uniendo bases de datos nueva con base de datos anterior',stdout())
+cases_clean = rbind(rastreo_cases20210414, cases_clean)
+reportCases = rbind(reportCases20210414, reportCases)
+write('Exito!',stdout())
+cases_clean = cases_clean %>%
+  rename(`Fecha de notificacion` = `Fecha de notificación`,
+         Clasificacion = Clasificación,
+         Ocupacion = Ocupación,
+         `Fecha de condicion` = `Fecha de condición`,
+         `Direcciones Ubicacion [1]` = `Direcciones Ubicación [1]`,
+         `Direcciones Ubicacion [1] Localizacion Geografica De Nivel [3]` = `Direcciones Ubicación [1] Localización Geográfica De Nivel [3]`,
+         `Telefono` = `Teléfono`,
+         `¿Se tomo una muestra respiratoria?` = `¿Se tomó una muestra respiratoria?`,
+         `Clinicas Temporales` = `Clínicas Temporales`,
+         `Carne De Identidad` = `Carné De Identidad`)
 
-
-
+reportCases = reportCases %>%
+  rename(`¿Se tomo una muestra respiratoria?` =  `¿Se tomó una muestra respiratoria?`,
+         Telefono = Teléfono,
+         `Carne De Identidad` = `Carné De Identidad`,
+         Clasificacion = Clasificación)
 
 # Downloading outbreak contacts
 ## Set URL of of outbreak contacts
@@ -566,6 +596,14 @@ contacts_clean = contacts %>%
 
 write('Contactos descargados!', stdout())
 
+contacts_clean = contacts_clean %>%
+  rename(`Fecha de notificacion` = `Fecha de notificación`,
+         Ocupacion = Ocupación,
+         `Direcciones Ubicacion [1]` = `Direcciones Ubicación [1]`,
+         `Direcciones Ubicacion [1] Localizacion Geografica De Nivel [1]` = `Direcciones Ubicación [1] Localización Geográfica De Nivel [1]`,
+         `Direcciones Ubicacion [1] Localizacion Geografica De Nivel [2]` = `Direcciones Ubicación [1] Localización Geográfica De Nivel [2]`,
+         `Telefono` = `Teléfono`)
+
 ## Dwnload Followups
 #specify date ranges, for follow up filters
 date_now <- format(Sys.time(), "%Y-%m-%dT23:59:59.999Z")                  
@@ -609,6 +647,3 @@ write('Bases de datos guardadas!',stdout())
 
 write('Actualizando tablero...',stdout())
 deployApp(paste(getwd(),'/DashboardRastreo', sep = ''), forceUpdate = TRUE, launch.browser = FALSE)
-
-
-
