@@ -1,7 +1,7 @@
 ###################################################################################################
 url <- "https://godataguatemala.mspas.gob.gt/api/"                   # <--------------------- insert instance url here, don't forget the slash at end !
-username <- "xxxxxxxx"                           # <--------------------- insert your username for signing into Go.Data webapp here
-password <- "xxxxxxxx"                           # <--------------------- insert your password for signing into Go.Data webapp here
+username <- ""                           # <--------------------- insert your username for signing into Go.Data webapp here
+password <- ""                           # <--------------------- insert your password for signing into Go.Data webapp here
 outbreak_id <- "a44faf32-bf27-4b39-a4fb-b9fcf29ac2d7"   # <--------------------- insert your outbreak ID here
 language_id = 'd86b2070-fad9-4699-8be9-a8ae5cc0edd2'   # <--------------------- insert your language ID here
 ###################################################################################################
@@ -22,7 +22,7 @@ package.check = lapply(
   }
 )
 
-httr::sconfig(ssl_verifypeer = FALSE)
+httr::config(ssl_verifypeer = FALSE)
 options(dplyr.summarise.inform = FALSE)
 options(warn=-1)
 
@@ -66,13 +66,13 @@ write('Brote activado!',stdout())
 #meses_final[length(meses)] = Sys.Date()
 
 #meses_inicio = seq(from=as.Date("2020-08-12"), to=as.Date("2020-12-31"), by='month')
-meses_inicio = seq(from=as.Date("2021-04-15"), to=Sys.Date(), by=15)
+meses_inicio = seq(from=as.Date("2021-05-12"), to=Sys.Date(), by=15)
 
 #meses_final = c(seq(from=as.Date("2020-09-11"), to=as.Date("2020-12-31"), by='month'),as.Date("2020-12-31"))
-meses_final = c(seq(from=as.Date("2021-04-29"), to=Sys.Date(), by=15),Sys.Date())
+meses_final = c(seq(from=as.Date("2021-05-26"), to=Sys.Date(), by=15),Sys.Date())
 
-#meses_inicio = c(meses_inicio, seq(from=as.Date("2021-01-01"), to=Sys.Date(), by=15))
-#meses_final = c(meses_final, c(seq(from=as.Date("2021-01-15"), to=Sys.Date(), by=15), Sys.Date()))
+#meses_inicio = c(meses_inicio, seq(from=as.Date("2021-01-01"), to=as.Date("2021-05-11"), by=15))
+#meses_final = c(meses_final, c(seq(from=as.Date("2021-01-15"), to=as.Date("2021-05-11"), by=15), as.Date("2021-05-11")))
 
 meses_inicio = format(meses_inicio, '%Y-%m-%dT00:00:00.000Z')
 meses_inicio = gsub(":","%3A",meses_inicio)
@@ -159,17 +159,17 @@ cases_clean = cases %>%
          dms = toupper(dms),
          Clasificación = toupper(Clasificación),
          `Creado En` = as.Date(`Creado En`),
-         `Estado de seguimiento` = case_when(`Estado de seguimiento` == 1 ~ "Activo",
+         `Estado de seguimiento` = case_when(`Estado de seguimiento` == 1 ~ "Bajo seguimiento",
                                              `Estado de seguimiento` == 2 ~ "Recuperado",
                                              `Estado de seguimiento` == 3 ~ "Imposible de contactar",
                                              `Estado de seguimiento` == 4 ~ "Perdido",
                                              `Estado de seguimiento` == 5 ~ case_when(Clasificación == "PROBABLE" ~ 'Fallecido',
                                                                                       hospitalizado == 1 ~ 'Hospitalizado',
-                                                                                      T ~ "Hospitalizados/Fallecidos"),
+                                                                                      T ~ "Hospitalizado"),
                                              `Estado de seguimiento` == 6 ~ "Concluído por otra razón",
                                              is.na(`Estado de seguimiento`) ~ "Sin estado de seguimiento"),
          `Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Activo","Recuperado","Imposible de contactar",
-                                                                              'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos","Concluído por otra razón",
+                                                                              'Perdido',"Fallecido", "Hospitalizado","Concluído por otra razón",
                                                                               "Sin estado de seguimiento")),
          `Clínicas Temporales` = case_when(`Clínicas Temporales` == 1 ~ "CBR ZONA 7",
                                            `Clínicas Temporales` == 5 ~ "CBR ZONA 6",
@@ -219,6 +219,12 @@ reportCases = cases %>%
     fecha_s12 = case_when(is.na(fecha_s12_s) ~ as.Date(fecha_s12_n), T ~ as.Date(fecha_s12_s)),
     fecha_s13 = case_when(is.na(fecha_s13_s) ~ as.Date(fecha_s13_n), T ~ as.Date(fecha_s13_s)),
     fecha_s14 = case_when(is.na(fecha_s14_s) ~ as.Date(fecha_s14_n), T ~ as.Date(fecha_s14_s)),
+    fecha_s15 = case_when(is.na(fecha_s15_s) ~ as.Date(fecha_s15_n), T ~ as.Date(fecha_s15_s)),
+    fecha_s16 = case_when(is.na(fecha_s16_s) ~ as.Date(fecha_s16), T ~ as.Date(fecha_s16_s)),
+    fecha_s17 = case_when(is.na(fecha_s17_s) ~ as.Date(fecha_s17_n), T ~ as.Date(fecha_s17_s)),
+    fecha_s18 = case_when(is.na(fecha_s18_s) ~ as.Date(fecha_s18_n), T ~ as.Date(fecha_s18_s)),
+    fecha_s19 = case_when(is.na(fecha_s19_s) ~ as.Date(fecha_s19_n), T ~ as.Date(fecha_s19_s)),
+    fecha_s20 = case_when(is.na(fecha_s20_s) ~ as.Date(fecha_s20_n), T ~ as.Date(fecha_s20_s)),
     maxDate = apply(across(starts_with('fecha_s')),1,max, na.rm = T),
     comorbilidades = gsub('14', 'Otro', comorbilidades),
     comorbilidades = gsub('11', 'Obesidad', comorbilidades),
@@ -241,11 +247,11 @@ reportCases = cases %>%
                                         `Estado de seguimiento` == 4 ~ "Perdido",
                                         `Estado de seguimiento` == 5 ~ case_when(Clasificación == "PROBABLE" ~ 'Fallecido',
                                                                                  hospitalizado == 1 ~ 'Hospitalizado',
-                                                                                 T ~ "Hospitalizados/Fallecidos"),
+                                                                                 T ~ "Hospitalizado"),
                                         `Estado de seguimiento` == 6 ~ "Concluído por otra razón",
                                         is.na(`Estado de seguimiento`) ~ "Sin estado de seguimiento"),
     `Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Activo","Recuperado","Imposible de contactar",
-                                                                         'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos","Concluído por otra razón",
+                                                                         'Perdido',"Fallecido", "Hospitalizado","Concluído por otra razón",
                                                                          "Sin estado de seguimiento"))
   ) %>%
   select(!ends_with('_s')) %>%
@@ -366,11 +372,11 @@ for (i in c(2:length(meses_inicio))) {
                                                `Estado de seguimiento` == 4 ~ "Perdido",
                                                `Estado de seguimiento` == 5 ~ case_when(Clasificación == "PROBABLE" ~ 'Fallecido',
                                                                                         hospitalizado == 1 ~ 'Hospitalizado',
-                                                                                        T ~ "Hospitalizados/Fallecidos"),
+                                                                                        T ~ "Hospitalizado"),
                                                `Estado de seguimiento` == 6 ~ "Concluído por otra razón",
                                                is.na(`Estado de seguimiento`) ~ "Sin estado de seguimiento"),
            `Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Activo","Recuperado","Imposible de contactar",
-                                                                                'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos","Concluído por otra razón",
+                                                                                'Perdido',"Fallecido", "Hospitalizado","Concluído por otra razón",
                                                                                 "Sin estado de seguimiento")),
            `Clínicas Temporales` = case_when(`Clínicas Temporales` == 1 ~ "CBR ZONA 7",
                                              `Clínicas Temporales` == 5 ~ "CBR ZONA 6",
@@ -423,6 +429,12 @@ for (i in c(2:length(meses_inicio))) {
       fecha_s12 = case_when(is.na(fecha_s12_s) ~ as.Date(fecha_s12_n), T ~ as.Date(fecha_s12_s)),
       fecha_s13 = case_when(is.na(fecha_s13_s) ~ as.Date(fecha_s13_n), T ~ as.Date(fecha_s13_s)),
       fecha_s14 = case_when(is.na(fecha_s14_s) ~ as.Date(fecha_s14_n), T ~ as.Date(fecha_s14_s)),
+      fecha_s15 = case_when(is.na(fecha_s15_s) ~ as.Date(fecha_s15_n), T ~ as.Date(fecha_s15_s)),
+      fecha_s16 = case_when(is.na(fecha_s16_s) ~ as.Date(fecha_s16), T ~ as.Date(fecha_s16_s)),
+      fecha_s17 = case_when(is.na(fecha_s17_s) ~ as.Date(fecha_s17_n), T ~ as.Date(fecha_s17_s)),
+      fecha_s18 = case_when(is.na(fecha_s18_s) ~ as.Date(fecha_s18_n), T ~ as.Date(fecha_s18_s)),
+      fecha_s19 = case_when(is.na(fecha_s19_s) ~ as.Date(fecha_s19_n), T ~ as.Date(fecha_s19_s)),
+      fecha_s20 = case_when(is.na(fecha_s20_s) ~ as.Date(fecha_s20_n), T ~ as.Date(fecha_s20_s)),
       maxDate = apply(across(starts_with('fecha_s')),1,max, na.rm = T),
       comorbilidades = gsub('14', 'Otro', comorbilidades),
       comorbilidades = gsub('11', 'Obesidad', comorbilidades),
@@ -453,11 +465,11 @@ for (i in c(2:length(meses_inicio))) {
                                           `Estado de seguimiento` == 4 ~ "Perdido",
                                           `Estado de seguimiento` == 5 ~ case_when(Clasificación == "PROBABLE" ~ 'Fallecido',
                                                                                    hospitalizado == 1 ~ 'Hospitalizado',
-                                                                                   T ~ "Hospitalizados/Fallecidos"),
+                                                                                   T ~ "Hospitalizado"),
                                           `Estado de seguimiento` == 6 ~ "Concluído por otra razón",
                                           is.na(`Estado de seguimiento`) ~ "Sin estado de seguimiento"),
       `Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Activo","Recuperado","Imposible de contactar",
-                                                                           'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos","Concluído por otra razón",
+                                                                           'Perdido',"Fallecido", "Hospitalizado","Concluído por otra razón",
                                                                            "Sin estado de seguimiento"))
     ) %>%
     select(!ends_with('_s')) %>%
@@ -495,12 +507,24 @@ for (i in c(2:length(meses_inicio))) {
   
   
 }
-rastreo_cases20210414 = read_csv("databases/rastreo_cases20210414.csv",guess_max = 50000)
-reportCases20210414 = read_csv("databases/report_cases20210414.csv", guess_max = 50000)
+reportCases = reportCases %>%
+  mutate(
+    fecha_es = as.Date(fecha_es),
+    fecha_segunda_dosis = as.Date(fecha_segunda_dosis),
+    fecha_s16 = as.Date(fecha_s16),
+    maxDate = as.Date(maxDate)
+  )
+rastreo_cases20210511 = read_csv("databases/rastreo_cases20210511.csv",guess_max = 50000)
+reportCases20210511 = read_csv("databases/report_cases20210511.csv", guess_max = 50000)
 
+reportCases20210511 = reportCases20210511 %>%
+  mutate(
+    fecha_es = as.Date(fecha_es),
+    fecha_s16 = as.Date(fecha_s16)
+  )
 write('Uniendo bases de datos nueva con base de datos anterior',stdout())
-cases_clean = rbind(rastreo_cases20210414, cases_clean)
-reportCases = rbind(reportCases20210414, reportCases)
+cases_clean = bind_rows(rastreo_cases20210511, cases_clean)
+reportCases = bind_rows(reportCases20210511, reportCases)
 write('Exito!',stdout())
 cases_clean = cases_clean %>%
   rename(`Fecha de notificacion` = `Fecha de notificación`,

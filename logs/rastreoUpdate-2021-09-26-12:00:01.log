@@ -1,0 +1,164 @@
+Warning message:
+no DISPLAY variable so Tk is not available 
+<request>
+Options:
+* ssl_verifypeer: FALSE
+Haciendo login...
+Login Exitoso!
+Activando brote de rastreo...
+Brote activado!
+Descargando casos creados desde el 12-05-2021 al 26-05-2021...
+Casos descargados!
+Descargando casos creados desde el 27-05-2021 al 10-06-2021...
+Casos descargados!
+Descargando casos creados desde el 11-06-2021 al 25-06-2021...
+Casos descargados!
+Descargando casos creados desde el 26-06-2021 al 10-07-2021...
+Casos descargados!
+Descargando casos creados desde el 11-07-2021 al 25-07-2021...
+Casos descargados!
+Descargando casos creados desde el 26-07-2021 al 09-08-2021...
+Casos descargados!
+Descargando casos creados desde el 10-08-2021 al 24-08-2021...
+Casos descargados!
+Descargando casos creados desde el 25-08-2021 al 08-09-2021...
+Casos descargados!
+Descargando casos creados desde el 09-09-2021 al 23-09-2021...
+Casos descargados!
+Descargando casos creados desde el 24-09-2021 al 26-09-2021...
+Casos descargados!
+
+── Column specification ────────────────────────────────────────────────────────
+cols(
+  .default = col_character(),
+  `Fecha de notificación` = col_date(format = ""),
+  Edad = col_double(),
+  `Fue Un Contacto` = col_logical(),
+  `Fecha De Convertirse En Caso` = col_date(format = ""),
+  `Fecha de condición` = col_date(format = ""),
+  `Creado En` = col_date(format = ""),
+  `Resultado de la muestra.` = col_double(),
+  `¿Se tomó una muestra respiratoria?` = col_double(),
+  hospitalizado = col_double()
+)
+ℹ Use `spec()` for the full column specifications.
+
+
+── Column specification ────────────────────────────────────────────────────────
+cols(
+  .default = col_double(),
+  `Carné De Identidad` = col_character(),
+  `Creado En` = col_date(format = ""),
+  `Creado Por` = col_character(),
+  Clasificación = col_character(),
+  Teléfono = col_character(),
+  `Estado De Embarazo` = col_character(),
+  fecha_es = col_character(),
+  `Estado de seguimiento` = col_character(),
+  fecha_segunda_dosis = col_logical(),
+  fecha_s16 = col_date(format = ""),
+  comorbilidades = col_character(),
+  fecha_s1 = col_date(format = ""),
+  fecha_s2 = col_date(format = ""),
+  fecha_s3 = col_date(format = ""),
+  fecha_s4 = col_date(format = ""),
+  fecha_s5 = col_date(format = ""),
+  fecha_s6 = col_date(format = ""),
+  fecha_s7 = col_date(format = ""),
+  fecha_s8 = col_date(format = ""),
+  fecha_s9 = col_date(format = "")
+  # ... with 13 more columns
+)
+ℹ Use `spec()` for the full column specifications.
+
+Uniendo bases de datos nueva con base de datos anterior
+Exito!
+Descargando contactos...
+Contactos descargados!
+Descargando seguimientos de contactos...
+Seguimientos descargados!
+Guardando bases de datos...
+Bases de datos guardadas!
+Actualizando tablero...
+Preparing to deploy application...DONE
+Uploading bundle for application: 2687626...DONE
+Deploying bundle: 5074092 for application: 2687626 ...
+Waiting for task: 1017584317
+  building: Parsing manifest
+  building: Building image: 5828870
+  building: Installing system dependencies
+  building: Fetching packages
+################################ Begin Task Log ################################ 
+[2021-09-26T18:34:51.027997724+0000] Execute script: packages/build/units.sh
++ set -e
++ apt-get update -qq
++ apt-get install -y libudunits2-dev
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  libudunits2-0 libudunits2-data
+The following NEW packages will be installed:
+  libudunits2-0 libudunits2-data libudunits2-dev
+0 upgraded, 3 newly installed, 0 to remove and 64 not upgraded.
+Need to get 429 kB of archives.
+After this operation, 1026 kB of additional disk space will be used.
+Get:1 http://us-east-1.ec2.archive.ubuntu.com/ubuntu focal/universe amd64 libudunits2-data all 2.2.26-5 [18.8 kB]
+Get:2 http://us-east-1.ec2.archive.ubuntu.com/ubuntu focal/universe amd64 libudunits2-0 amd64 2.2.26-5 [48.9 kB]
+Get:3 http://us-east-1.ec2.archive.ubuntu.com/ubuntu focal/universe amd64 libudunits2-dev amd64 2.2.26-5 [362 kB]
+debconf: delaying package configuration, since apt-utils is not installed
+Fetched 429 kB in 0s (10.1 MB/s)
+Selecting previously unselected package libudunits2-data.
+(Reading database ... 
+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+(Reading database ... 40%
+(Reading database ... 45%
+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ... 70%
+(Reading database ... 75%
+(Reading database ... 80%
+(Reading database ... 85%
+(Reading database ... 90%
+(Reading database ... 95%
+(Reading database ... 100%
+(Reading database ... 196182 files and directories currently installed.)
+Preparing to unpack .../libudunits2-data_2.2.26-5_all.deb ...
+Unpacking libudunits2-data (2.2.26-5) ...
+Selecting previously unselected package libudunits2-0:amd64.
+Preparing to unpack .../libudunits2-0_2.2.26-5_amd64.deb ...
+Unpacking libudunits2-0:amd64 (2.2.26-5) ...
+Selecting previously unselected package libudunits2-dev:amd64.
+Preparing to unpack .../libudunits2-dev_2.2.26-5_amd64.deb ...
+Unpacking libudunits2-dev:amd64 (2.2.26-5) ...
+Setting up libudunits2-data (2.2.26-5) ...
+Setting up libudunits2-0:amd64 (2.2.26-5) ...
+Setting up libudunits2-dev:amd64 (2.2.26-5) ...
+Processing triggers for libc-bin (2.31-0ubuntu9.2) ...
+[2021-09-26T18:34:54.027012369+0000] Execute script: packages/build/sf.sh
++ set -e
+++ lsb_release -cs
++ OS_CODENAME=focal
++ '[' focal == xenial ']'
++ apt-get update -qq
++ apt-get install -y libudunits2-dev libgdal-dev libgeos-dev libproj-dev
+Reading package lists...
+Building dependency tree...
+Reading state information...
+libgdal-dev is already the newest version (3.0.4+dfsg-1build3).
+libgeos-dev is already the newest version (3.8.0-1build1).
+libgeos-dev set to manually installed.
+libproj-dev is already the newest version (6.3.1-1).
+libudunits2-dev is already the newest version (2.2.26-5).
+0 upgraded, 0 newly installed, 0 to remove and 64 not upgraded.
+################################# End Task Log ################################# 
+Error: Unhandled Exception: Child Task 1017584320 error: Unhandled Exception: HTTP 599: Stream closed
+Ejecución interrumpida

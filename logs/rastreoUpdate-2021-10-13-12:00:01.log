@@ -1,0 +1,773 @@
+Warning message:
+no DISPLAY variable so Tk is not available 
+<request>
+Options:
+* ssl_verifypeer: FALSE
+Haciendo login...
+Login Exitoso!
+Activando brote de rastreo...
+Brote activado!
+Descargando casos creados desde el 12-05-2021 al 26-05-2021...
+Casos descargados!
+Descargando casos creados desde el 27-05-2021 al 10-06-2021...
+Casos descargados!
+Descargando casos creados desde el 11-06-2021 al 25-06-2021...
+Casos descargados!
+Descargando casos creados desde el 26-06-2021 al 10-07-2021...
+Casos descargados!
+Descargando casos creados desde el 11-07-2021 al 25-07-2021...
+Casos descargados!
+Descargando casos creados desde el 26-07-2021 al 09-08-2021...
+Casos descargados!
+Descargando casos creados desde el 10-08-2021 al 24-08-2021...
+Casos descargados!
+Descargando casos creados desde el 25-08-2021 al 08-09-2021...
+Casos descargados!
+Descargando casos creados desde el 09-09-2021 al 23-09-2021...
+Casos descargados!
+Descargando casos creados desde el 24-09-2021 al 08-10-2021...
+Casos descargados!
+Descargando casos creados desde el 09-10-2021 al 13-10-2021...
+Casos descargados!
+
+── Column specification ────────────────────────────────────────────────────────
+cols(
+  .default = col_character(),
+  `Fecha de notificación` = col_date(format = ""),
+  Edad = col_double(),
+  `Fue Un Contacto` = col_logical(),
+  `Fecha De Convertirse En Caso` = col_date(format = ""),
+  `Fecha de condición` = col_date(format = ""),
+  `Creado En` = col_date(format = ""),
+  `Resultado de la muestra.` = col_double(),
+  `¿Se tomó una muestra respiratoria?` = col_double(),
+  hospitalizado = col_double()
+)
+ℹ Use `spec()` for the full column specifications.
+
+
+── Column specification ────────────────────────────────────────────────────────
+cols(
+  .default = col_double(),
+  `Carné De Identidad` = col_character(),
+  `Creado En` = col_date(format = ""),
+  `Creado Por` = col_character(),
+  Clasificación = col_character(),
+  Teléfono = col_character(),
+  `Estado De Embarazo` = col_character(),
+  fecha_es = col_character(),
+  `Estado de seguimiento` = col_character(),
+  fecha_segunda_dosis = col_logical(),
+  fecha_s16 = col_date(format = ""),
+  comorbilidades = col_character(),
+  fecha_s1 = col_date(format = ""),
+  fecha_s2 = col_date(format = ""),
+  fecha_s3 = col_date(format = ""),
+  fecha_s4 = col_date(format = ""),
+  fecha_s5 = col_date(format = ""),
+  fecha_s6 = col_date(format = ""),
+  fecha_s7 = col_date(format = ""),
+  fecha_s8 = col_date(format = ""),
+  fecha_s9 = col_date(format = "")
+  # ... with 13 more columns
+)
+ℹ Use `spec()` for the full column specifications.
+
+Uniendo bases de datos nueva con base de datos anterior
+Exito!
+Descargando contactos...
+Contactos descargados!
+Descargando seguimientos de contactos...
+Seguimientos descargados!
+Guardando bases de datos...
+Bases de datos guardadas!
+Actualizando tablero...
+Preparing to deploy application...DONE
+Uploading bundle for application: 2687626...DONE
+Deploying bundle: 5135749 for application: 2687626 ...
+Waiting for task: 1030050269
+  building: Parsing manifest
+  building: Building image: 5914559
+  building: Installing system dependencies
+  building: Fetching packages
+  building: Installing packages
+  building: Installing files
+  building: Pushing image: 5914559
+  deploying: Starting instances
+  rollforward: Activating new instances
+  terminating: Stopping old instances
+################################ Begin Task Log ################################ 
+[2021-10-13T18:43:23.464467934+0000] Execute script: packages/build/units.sh
++ set -e
++ apt-get update -qq
++ apt-get install -y libudunits2-dev
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  libudunits2-0 libudunits2-data
+The following NEW packages will be installed:
+  libudunits2-0 libudunits2-data libudunits2-dev
+0 upgraded, 3 newly installed, 0 to remove and 77 not upgraded.
+Need to get 429 kB of archives.
+After this operation, 1026 kB of additional disk space will be used.
+Get:1 http://us-east-1.ec2.archive.ubuntu.com/ubuntu focal/universe amd64 libudunits2-data all 2.2.26-5 [18.8 kB]
+Get:2 http://us-east-1.ec2.archive.ubuntu.com/ubuntu focal/universe amd64 libudunits2-0 amd64 2.2.26-5 [48.9 kB]
+Get:3 http://us-east-1.ec2.archive.ubuntu.com/ubuntu focal/universe amd64 libudunits2-dev amd64 2.2.26-5 [362 kB]
+debconf: delaying package configuration, since apt-utils is not installed
+Fetched 429 kB in 0s (15.4 MB/s)
+Selecting previously unselected package libudunits2-data.
+(Reading database ... 
+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+(Reading database ... 40%
+(Reading database ... 45%
+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ... 70%
+(Reading database ... 75%
+(Reading database ... 80%
+(Reading database ... 85%
+(Reading database ... 90%
+(Reading database ... 95%
+(Reading database ... 100%
+(Reading database ... 196182 files and directories currently installed.)
+Preparing to unpack .../libudunits2-data_2.2.26-5_all.deb ...
+Unpacking libudunits2-data (2.2.26-5) ...
+Selecting previously unselected package libudunits2-0:amd64.
+Preparing to unpack .../libudunits2-0_2.2.26-5_amd64.deb ...
+Unpacking libudunits2-0:amd64 (2.2.26-5) ...
+Selecting previously unselected package libudunits2-dev:amd64.
+Preparing to unpack .../libudunits2-dev_2.2.26-5_amd64.deb ...
+Unpacking libudunits2-dev:amd64 (2.2.26-5) ...
+Setting up libudunits2-data (2.2.26-5) ...
+Setting up libudunits2-0:amd64 (2.2.26-5) ...
+Setting up libudunits2-dev:amd64 (2.2.26-5) ...
+Processing triggers for libc-bin (2.31-0ubuntu9.2) ...
+[2021-10-13T18:43:26.301212024+0000] Execute script: packages/build/sf.sh
++ set -e
+++ lsb_release -cs
++ OS_CODENAME=focal
++ '[' focal == xenial ']'
++ apt-get update -qq
++ apt-get install -y libudunits2-dev libgdal-dev libgeos-dev libproj-dev
+Reading package lists...
+Building dependency tree...
+Reading state information...
+libgdal-dev is already the newest version (3.0.4+dfsg-1build3).
+libgeos-dev is already the newest version (3.8.0-1build1).
+libgeos-dev set to manually installed.
+libproj-dev is already the newest version (6.3.1-1).
+libudunits2-dev is already the newest version (2.2.26-5).
+0 upgraded, 0 newly installed, 0 to remove and 77 not upgraded.
+[2021-10-13T18:43:31.656590626+0000] Installing R package: yaml (2.2.1)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘yaml’ ...
+* DONE (yaml)
+[2021-10-13T18:43:31.847270777+0000] Installing R package: xtable (1.8-4)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘xtable’ ...
+* DONE (xtable)
+[2021-10-13T18:43:32.038727461+0000] Installing R package: xml2 (1.3.2)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘xml2’ ...
+* DONE (xml2)
+[2021-10-13T18:43:32.252128228+0000] Installing R package: xfun (0.22)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘xfun’ ...
+* DONE (xfun)
+[2021-10-13T18:43:32.436254085+0000] Installing R package: writexl (1.4.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘writexl’ ...
+* DONE (writexl)
+[2021-10-13T18:43:32.642606035+0000] Installing R package: withr (2.4.1)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘withr’ ...
+* DONE (withr)
+[2021-10-13T18:43:32.819628933+0000] Installing R package: viridisLite (0.3.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘viridisLite’ ...
+* DONE (viridisLite)
+[2021-10-13T18:43:32.984527519+0000] Installing R package: utf8 (1.2.1)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘utf8’ ...
+* DONE (utf8)
+[2021-10-13T18:43:33.169625050+0000] Installing R package: tinytex (0.31)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘tinytex’ ...
+* DONE (tinytex)
+[2021-10-13T18:43:33.335746294+0000] Installing R package: sys (3.4)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘sys’ ...
+* DONE (sys)
+[2021-10-13T18:43:33.521016159+0000] Installing R package: stringi (1.5.3)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘stringi’ ...
+* DONE (stringi)
+[2021-10-13T18:43:33.868696185+0000] Installing R package: sourcetools (0.1.7)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘sourcetools’ ...
+* DONE (sourcetools)
+[2021-10-13T18:43:34.072443706+0000] Installing R package: rstudioapi (0.13)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘rstudioapi’ ...
+* DONE (rstudioapi)
+[2021-10-13T18:43:34.262506779+0000] Installing R package: rlang (0.4.10)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘rlang’ ...
+* DONE (rlang)
+[2021-10-13T18:43:34.494075642+0000] Installing R package: rappdirs (0.3.3)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘rappdirs’ ...
+* DONE (rappdirs)
+[2021-10-13T18:43:34.661327493+0000] Installing R package: ps (1.6.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘ps’ ...
+* DONE (ps)
+[2021-10-13T18:43:34.848039021+0000] Installing R package: proxy (0.4-25)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘proxy’ ...
+* DONE (proxy)
+[2021-10-13T18:43:35.031924436+0000] Installing R package: png (0.1-7)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘png’ ...
+* DONE (png)
+[2021-10-13T18:43:35.202299259+0000] Installing R package: pkgconfig (2.0.3)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘pkgconfig’ ...
+* DONE (pkgconfig)
+[2021-10-13T18:43:35.364316847+0000] Installing R package: mime (0.10)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘mime’ ...
+* DONE (mime)
+[2021-10-13T18:43:35.526268034+0000] Installing R package: markdown (1.1)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘markdown’ ...
+* DONE (markdown)
+[2021-10-13T18:43:35.716033361+0000] Installing R package: magrittr (2.0.1)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘magrittr’ ...
+* DONE (magrittr)
+[2021-10-13T18:43:35.901557154+0000] Installing R package: purrr (0.3.4)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘purrr’ ...
+* DONE (purrr)
+[2021-10-13T18:43:36.093592473+0000] Installing R package: leaflet.providers (1.9.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘leaflet.providers’ ...
+* DONE (leaflet.providers)
+[2021-10-13T18:43:36.257567124+0000] Installing R package: lazyeval (0.2.2)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘lazyeval’ ...
+* DONE (lazyeval)
+[2021-10-13T18:43:36.435554239+0000] Installing R package: lattice (0.20-40)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘lattice’ ...
+* DONE (lattice)
+[2021-10-13T18:43:36.653750807+0000] Installing R package: nlme (3.1-144)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘nlme’ ...
+* DONE (nlme)
+[2021-10-13T18:43:36.919809599+0000] Installing R package: sp (1.4-5)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘sp’ ...
+* DONE (sp)
+[2021-10-13T18:43:37.158385352+0000] Installing R package: zoo (1.8-9)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘zoo’ ...
+* DONE (zoo)
+[2021-10-13T18:43:37.370284196+0000] Installing R package: labeling (0.4.2)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘labeling’ ...
+* DONE (labeling)
+[2021-10-13T18:43:37.535951851+0000] Installing R package: jsonlite (1.7.2)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘jsonlite’ ...
+* DONE (jsonlite)
+[2021-10-13T18:43:37.732815292+0000] Installing R package: isoband (0.2.4)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘isoband’ ...
+* DONE (isoband)
+[2021-10-13T18:43:38.234887303+0000] Installing R package: highr (0.8)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘highr’ ...
+* DONE (highr)
+[2021-10-13T18:43:38.403813444+0000] Installing R package: gtable (0.3.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘gtable’ ...
+* DONE (gtable)
+[2021-10-13T18:43:38.624229495+0000] Installing R package: gridExtra (2.3)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘gridExtra’ ...
+* DONE (gridExtra)
+[2021-10-13T18:43:38.846254276+0000] Installing R package: glue (1.4.2)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘glue’ ...
+* DONE (glue)
+[2021-10-13T18:43:39.053721925+0000] Installing R package: lifecycle (1.0.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘lifecycle’ ...
+* DONE (lifecycle)
+[2021-10-13T18:43:39.241785439+0000] Installing R package: stringr (1.4.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘stringr’ ...
+* DONE (stringr)
+[2021-10-13T18:43:39.429067840+0000] Installing R package: snakecase (0.11.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘snakecase’ ...
+* DONE (snakecase)
+[2021-10-13T18:43:39.605552210+0000] Installing R package: generics (0.1.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘generics’ ...
+* DONE (generics)
+[2021-10-13T18:43:39.768719626+0000] Installing R package: fs (1.5.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘fs’ ...
+* DONE (fs)
+[2021-10-13T18:43:39.987272463+0000] Installing R package: fastmap (1.1.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘fastmap’ ...
+* DONE (fastmap)
+[2021-10-13T18:43:40.172657569+0000] Installing R package: farver (2.1.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘farver’ ...
+* DONE (farver)
+[2021-10-13T18:43:40.513191764+0000] Installing R package: fansi (0.4.2)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘fansi’ ...
+* DONE (fansi)
+[2021-10-13T18:43:40.696369680+0000] Installing R package: evaluate (0.14)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘evaluate’ ...
+* DONE (evaluate)
+[2021-10-13T18:43:40.864956030+0000] Installing R package: knitr (1.31)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘knitr’ ...
+* DONE (knitr)
+[2021-10-13T18:43:41.176508171+0000] Installing R package: ellipsis (0.3.1)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘ellipsis’ ...
+* DONE (ellipsis)
+[2021-10-13T18:43:41.341765722+0000] Installing R package: vctrs (0.3.7)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘vctrs’ ...
+* DONE (vctrs)
+[2021-10-13T18:43:41.609397947+0000] Installing R package: hms (1.0.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘hms’ ...
+* DONE (hms)
+[2021-10-13T18:43:41.783148271+0000] Installing R package: tidyselect (1.1.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘tidyselect’ ...
+* DONE (tidyselect)
+[2021-10-13T18:43:41.960422435+0000] Installing R package: digest (0.6.27)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘digest’ ...
+* DONE (digest)
+[2021-10-13T18:43:42.158806390+0000] Installing R package: data.table (1.14.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘data.table’ ...
+* DONE (data.table)
+[2021-10-13T18:43:42.506645846+0000] Installing R package: curl (4.3)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘curl’ ...
+* DONE (curl)
+[2021-10-13T18:43:42.733603734+0000] Installing R package: crayon (1.4.1)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘crayon’ ...
+* DONE (crayon)
+[2021-10-13T18:43:42.899906005+0000] Installing R package: cpp11 (0.2.7)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘cpp11’ ...
+* DONE (cpp11)
+[2021-10-13T18:43:43.096955999+0000] Installing R package: systemfonts (1.0.1)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘systemfonts’ ...
+* DONE (systemfonts)
+[2021-10-13T18:43:43.436010911+0000] Installing R package: svglite (2.0.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘svglite’ ...
+* DONE (svglite)
+[2021-10-13T18:43:43.668691739+0000] Installing R package: commonmark (1.7)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘commonmark’ ...
+* DONE (commonmark)
+[2021-10-13T18:43:43.878488754+0000] Installing R package: colorspace (2.0-0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘colorspace’ ...
+* DONE (colorspace)
+[2021-10-13T18:43:44.212002623+0000] Installing R package: munsell (0.5.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘munsell’ ...
+* DONE (munsell)
+[2021-10-13T18:43:44.396188311+0000] Installing R package: clipr (0.7.1)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘clipr’ ...
+* DONE (clipr)
+[2021-10-13T18:43:44.564079303+0000] Installing R package: cli (2.4.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘cli’ ...
+* DONE (cli)
+[2021-10-13T18:43:44.754831768+0000] Installing R package: pillar (1.6.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘pillar’ ...
+* DONE (pillar)
+[2021-10-13T18:43:44.990646070+0000] Installing R package: tibble (3.1.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘tibble’ ...
+* DONE (tibble)
+[2021-10-13T18:43:45.219517795+0000] Installing R package: forcats (0.5.1)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘forcats’ ...
+* DONE (forcats)
+[2021-10-13T18:43:45.402607010+0000] Installing R package: cachem (1.0.4)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘cachem’ ...
+* DONE (cachem)
+[2021-10-13T18:43:45.566586081+0000] Installing R package: bitops (1.0-7)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘bitops’ ...
+* DONE (bitops)
+[2021-10-13T18:43:45.728781064+0000] Installing R package: caTools (1.18.2)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘caTools’ ...
+* DONE (caTools)
+[2021-10-13T18:43:45.904287454+0000] Installing R package: base64enc (0.1-3)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘base64enc’ ...
+* DONE (base64enc)
+[2021-10-13T18:43:46.068299692+0000] Installing R package: htmltools (0.5.1.1)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘htmltools’ ...
+* DONE (htmltools)
+[2021-10-13T18:43:46.241782692+0000] Installing R package: htmlwidgets (1.5.3)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘htmlwidgets’ ...
+* DONE (htmlwidgets)
+[2021-10-13T18:43:46.423363911+0000] Installing R package: jquerylib (0.1.3)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘jquerylib’ ...
+* DONE (jquerylib)
+[2021-10-13T18:43:46.639087745+0000] Installing R package: rmarkdown (2.7)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘rmarkdown’ ...
+* DONE (rmarkdown)
+[2021-10-13T18:43:47.149754862+0000] Installing R package: askpass (1.1)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘askpass’ ...
+* DONE (askpass)
+[2021-10-13T18:43:47.314582615+0000] Installing R package: openssl (1.4.3)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘openssl’ ...
+* DONE (openssl)
+[2021-10-13T18:43:47.582055986+0000] Installing R package: Rcpp (1.0.6)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘Rcpp’ ...
+* DONE (Rcpp)
+[2021-10-13T18:43:48.425636365+0000] Installing R package: lubridate (1.7.10)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘lubridate’ ...
+* DONE (lubridate)
+[2021-10-13T18:43:48.724181259+0000] Installing R package: raster (3.4-5)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘raster’ ...
+* DONE (raster)
+[2021-10-13T18:43:49.288968893+0000] Installing R package: units (0.7-1)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘units’ ...
+* DONE (units)
+[2021-10-13T18:43:49.570648104+0000] Installing R package: RColorBrewer (1.1-2)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘RColorBrewer’ ...
+* DONE (RColorBrewer)
+[2021-10-13T18:43:49.736998947+0000] Installing R package: R6 (2.5.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘R6’ ...
+* DONE (R6)
+[2021-10-13T18:43:49.904376795+0000] Installing R package: crosstalk (1.1.1)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘crosstalk’ ...
+* DONE (crosstalk)
+[2021-10-13T18:43:50.161085359+0000] Installing R package: dplyr (1.0.5)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘dplyr’ ...
+* DONE (dplyr)
+[2021-10-13T18:43:50.401308624+0000] Installing R package: tidyr (1.1.3)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘tidyr’ ...
+* DONE (tidyr)
+[2021-10-13T18:43:50.637045179+0000] Installing R package: janitor (2.1.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘janitor’ ...
+* DONE (janitor)
+[2021-10-13T18:43:50.819343999+0000] Installing R package: httr (1.4.2)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘httr’ ...
+* DONE (httr)
+[2021-10-13T18:43:51.022029521+0000] Installing R package: processx (3.5.1)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘processx’ ...
+* DONE (processx)
+[2021-10-13T18:43:51.213655531+0000] Installing R package: callr (3.6.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘callr’ ...
+* DONE (callr)
+[2021-10-13T18:43:51.390316004+0000] Installing R package: webshot (0.5.2)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘webshot’ ...
+* DONE (webshot)
+[2021-10-13T18:43:51.573221195+0000] Installing R package: sass (0.3.1)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘sass’ ...
+* DONE (sass)
+[2021-10-13T18:43:51.850623356+0000] Installing R package: bslib (0.2.4)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘bslib’ ...
+* DONE (bslib)
+[2021-10-13T18:43:52.381333745+0000] Installing R package: scales (1.1.1)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘scales’ ...
+* DONE (scales)
+[2021-10-13T18:43:52.573858991+0000] Installing R package: selectr (0.4-2)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘selectr’ ...
+* DONE (selectr)
+[2021-10-13T18:43:52.758276292+0000] Installing R package: rvest (1.0.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘rvest’ ...
+* DONE (rvest)
+[2021-10-13T18:43:52.948341593+0000] Installing R package: kableExtra (1.3.4)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘kableExtra’ ...
+* DONE (kableExtra)
+[2021-10-13T18:43:53.237556279+0000] Installing R package: Matrix (1.2-18)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘Matrix’ ...
+* DONE (Matrix)
+[2021-10-13T18:43:53.672268358+0000] Installing R package: mgcv (1.8-31)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘mgcv’ ...
+* DONE (mgcv)
+[2021-10-13T18:43:53.965768620+0000] Installing R package: MASS (7.3-51.5)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘MASS’ ...
+* DONE (MASS)
+[2021-10-13T18:43:54.195166576+0000] Installing R package: class (7.3-15)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘class’ ...
+* DONE (class)
+[2021-10-13T18:43:54.404932410+0000] Installing R package: e1071 (1.7-6)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘e1071’ ...
+* DONE (e1071)
+[2021-10-13T18:43:54.606863627+0000] Installing R package: ggplot2 (3.3.3)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘ggplot2’ ...
+* DONE (ggplot2)
+[2021-10-13T18:43:54.910830625+0000] Installing R package: viridis (0.5.1)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘viridis’ ...
+* DONE (viridis)
+[2021-10-13T18:43:55.150123013+0000] Installing R package: leaflet (2.0.4.1)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘leaflet’ ...
+* DONE (leaflet)
+[2021-10-13T18:43:55.485305874+0000] Installing R package: KernSmooth (2.23-16)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘KernSmooth’ ...
+* DONE (KernSmooth)
+[2021-10-13T18:43:55.692840777+0000] Installing R package: classInt (0.4-3)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘classInt’ ...
+* DONE (classInt)
+[2021-10-13T18:43:55.880729095+0000] Installing R package: DBI (1.1.1)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘DBI’ ...
+* DONE (DBI)
+[2021-10-13T18:43:56.090971042+0000] Installing R package: sf (0.9-8)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘sf’ ...
+* DONE (sf)
+[2021-10-13T18:43:56.897335302+0000] Installing R package: BH (1.75.0-0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘BH’ ...
+* DONE (BH)
+[2021-10-13T18:44:05.965888572+0000] Installing R package: later (1.1.0.1)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘later’ ...
+* DONE (later)
+[2021-10-13T18:44:06.229238920+0000] Installing R package: promises (1.2.0.1)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘promises’ ...
+* DONE (promises)
+[2021-10-13T18:44:06.502760642+0000] Installing R package: DT (0.18)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘DT’ ...
+* DONE (DT)
+[2021-10-13T18:44:06.943619043+0000] Installing R package: httpuv (1.5.5)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘httpuv’ ...
+* DONE (httpuv)
+[2021-10-13T18:44:07.571869259+0000] Installing R package: plotly (4.9.3)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘plotly’ ...
+* DONE (plotly)
+[2021-10-13T18:44:08.020453176+0000] Installing R package: shiny (1.6.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘shiny’ ...
+* DONE (shiny)
+[2021-10-13T18:44:08.615867722+0000] Installing R package: shinycustomloader (0.9.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘shinycustomloader’ ...
+* DONE (shinycustomloader)
+[2021-10-13T18:44:08.802708492+0000] Installing R package: shinydashboard (0.7.1)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘shinydashboard’ ...
+* DONE (shinydashboard)
+[2021-10-13T18:44:09.002584486+0000] Installing R package: readr (1.4.0)
+* installing to library ‘/opt/R/3.6.3/lib/R/library’
+* installing *binary* package ‘readr’ ...
+* DONE (readr)
+Generating locales (this might take a while)...
+  es_ES.UTF-8... done
+Generation complete.
+[2021-10-13T18:44:14.104989786+0000] Creating dir /srv/connect/apps/DashboardRastreo
+[2021-10-13T18:44:14.108065878+0000] Creating dir /srv/connect/apps/DashboardRastreo/data
+[2021-10-13T18:44:14.110925804+0000] Copying file data/.DS_Store
+[2021-10-13T18:44:14.113894593+0000] Copying file data/rastreo_cases.csv
+[2021-10-13T18:44:14.130334375+0000] Copying file data/rastreo_contacts.csv
+[2021-10-13T18:44:14.135336537+0000] Copying file data/rastreo_followups.csv
+[2021-10-13T18:44:14.141650020+0000] Copying file data/report_cases.csv
+[2021-10-13T18:44:14.167815038+0000] Copying file global.R
+[2021-10-13T18:44:14.170663966+0000] Creating dir /srv/connect/apps/DashboardRastreo/packrat
+[2021-10-13T18:44:14.173453756+0000] Creating dir /srv/connect/apps/DashboardRastreo/packrat/desc
+[2021-10-13T18:44:14.176199270+0000] Copying file packrat/desc/askpass
+[2021-10-13T18:44:14.179096482+0000] Copying file packrat/desc/base64enc
+[2021-10-13T18:44:14.181965430+0000] Copying file packrat/desc/BH
+[2021-10-13T18:44:14.184780870+0000] Copying file packrat/desc/bitops
+[2021-10-13T18:44:14.187608112+0000] Copying file packrat/desc/bslib
+[2021-10-13T18:44:14.190453293+0000] Copying file packrat/desc/cachem
+[2021-10-13T18:44:14.193298918+0000] Copying file packrat/desc/callr
+[2021-10-13T18:44:14.196145143+0000] Copying file packrat/desc/caTools
+[2021-10-13T18:44:14.198958069+0000] Copying file packrat/desc/class
+[2021-10-13T18:44:14.201797145+0000] Copying file packrat/desc/classInt
+[2021-10-13T18:44:14.204598622+0000] Copying file packrat/desc/cli
+[2021-10-13T18:44:14.207361381+0000] Copying file packrat/desc/clipr
+[2021-10-13T18:44:14.210141051+0000] Copying file packrat/desc/colorspace
+[2021-10-13T18:44:14.212973146+0000] Copying file packrat/desc/commonmark
+[2021-10-13T18:44:14.215742028+0000] Copying file packrat/desc/cpp11
+[2021-10-13T18:44:14.218494298+0000] Copying file packrat/desc/crayon
+[2021-10-13T18:44:14.221281769+0000] Copying file packrat/desc/crosstalk
+[2021-10-13T18:44:14.224220067+0000] Copying file packrat/desc/curl
+[2021-10-13T18:44:14.226987340+0000] Copying file packrat/desc/data.table
+[2021-10-13T18:44:14.229797386+0000] Copying file packrat/desc/DBI
+[2021-10-13T18:44:14.232593354+0000] Copying file packrat/desc/digest
+[2021-10-13T18:44:14.235360751+0000] Copying file packrat/desc/dplyr
+[2021-10-13T18:44:14.238122653+0000] Copying file packrat/desc/DT
+[2021-10-13T18:44:14.240897899+0000] Copying file packrat/desc/e1071
+[2021-10-13T18:44:14.243655659+0000] Copying file packrat/desc/ellipsis
+[2021-10-13T18:44:14.246404325+0000] Copying file packrat/desc/evaluate
+[2021-10-13T18:44:14.249156413+0000] Copying file packrat/desc/fansi
+[2021-10-13T18:44:14.251889246+0000] Copying file packrat/desc/farver
+[2021-10-13T18:44:14.254587237+0000] Copying file packrat/desc/fastmap
+[2021-10-13T18:44:14.257332568+0000] Copying file packrat/desc/forcats
+[2021-10-13T18:44:14.260096611+0000] Copying file packrat/desc/fs
+[2021-10-13T18:44:14.262846158+0000] Copying file packrat/desc/generics
+[2021-10-13T18:44:14.265597236+0000] Copying file packrat/desc/ggplot2
+[2021-10-13T18:44:14.268380863+0000] Copying file packrat/desc/glue
+[2021-10-13T18:44:14.271101661+0000] Copying file packrat/desc/gridExtra
+[2021-10-13T18:44:14.273850348+0000] Copying file packrat/desc/gtable
+[2021-10-13T18:44:14.276593211+0000] Copying file packrat/desc/highr
+[2021-10-13T18:44:14.279419918+0000] Copying file packrat/desc/hms
+[2021-10-13T18:44:14.282205775+0000] Copying file packrat/desc/htmltools
+[2021-10-13T18:44:14.284987124+0000] Copying file packrat/desc/htmlwidgets
+[2021-10-13T18:44:14.287757115+0000] Copying file packrat/desc/httpuv
+[2021-10-13T18:44:14.290479174+0000] Copying file packrat/desc/httr
+[2021-10-13T18:44:14.293225262+0000] Copying file packrat/desc/isoband
+[2021-10-13T18:44:14.295975818+0000] Copying file packrat/desc/janitor
+[2021-10-13T18:44:14.298733292+0000] Copying file packrat/desc/jquerylib
+[2021-10-13T18:44:14.301462493+0000] Copying file packrat/desc/jsonlite
+[2021-10-13T18:44:14.304226318+0000] Copying file packrat/desc/kableExtra
+[2021-10-13T18:44:14.306923616+0000] Copying file packrat/desc/KernSmooth
+[2021-10-13T18:44:14.309749820+0000] Copying file packrat/desc/knitr
+[2021-10-13T18:44:14.312566013+0000] Copying file packrat/desc/labeling
+[2021-10-13T18:44:14.315287539+0000] Copying file packrat/desc/later
+[2021-10-13T18:44:14.318071496+0000] Copying file packrat/desc/lattice
+[2021-10-13T18:44:14.320838844+0000] Copying file packrat/desc/lazyeval
+[2021-10-13T18:44:14.323594888+0000] Copying file packrat/desc/leaflet
+[2021-10-13T18:44:14.326320136+0000] Copying file packrat/desc/leaflet.providers
+[2021-10-13T18:44:14.329080929+0000] Copying file packrat/desc/lifecycle
+[2021-10-13T18:44:14.331826537+0000] Copying file packrat/desc/lubridate
+[2021-10-13T18:44:14.334545039+0000] Copying file packrat/desc/magrittr
+[2021-10-13T18:44:14.337281147+0000] Copying file packrat/desc/markdown
+[2021-10-13T18:44:14.340058884+0000] Copying file packrat/desc/MASS
+[2021-10-13T18:44:14.342788069+0000] Copying file packrat/desc/Matrix
+[2021-10-13T18:44:14.345523603+0000] Copying file packrat/desc/mgcv
+[2021-10-13T18:44:14.348322852+0000] Copying file packrat/desc/mime
+[2021-10-13T18:44:14.351014541+0000] Copying file packrat/desc/munsell
+[2021-10-13T18:44:14.353768780+0000] Copying file packrat/desc/nlme
+[2021-10-13T18:44:14.356487645+0000] Copying file packrat/desc/openssl
+[2021-10-13T18:44:14.359340723+0000] Copying file packrat/desc/pillar
+[2021-10-13T18:44:14.362100477+0000] Copying file packrat/desc/pkgconfig
+[2021-10-13T18:44:14.364877337+0000] Copying file packrat/desc/plotly
+[2021-10-13T18:44:14.367606063+0000] Copying file packrat/desc/png
+[2021-10-13T18:44:14.370332521+0000] Copying file packrat/desc/processx
+[2021-10-13T18:44:14.373080953+0000] Copying file packrat/desc/promises
+[2021-10-13T18:44:14.375817053+0000] Copying file packrat/desc/proxy
+[2021-10-13T18:44:14.378560342+0000] Copying file packrat/desc/ps
+[2021-10-13T18:44:14.381315923+0000] Copying file packrat/desc/purrr
+[2021-10-13T18:44:14.384004388+0000] Copying file packrat/desc/R6
+[2021-10-13T18:44:14.386741315+0000] Copying file packrat/desc/rappdirs
+[2021-10-13T18:44:14.389518147+0000] Copying file packrat/desc/raster
+[2021-10-13T18:44:14.392271318+0000] Copying file packrat/desc/RColorBrewer
+[2021-10-13T18:44:14.394980769+0000] Copying file packrat/desc/Rcpp
+[2021-10-13T18:44:14.397722631+0000] Copying file packrat/desc/readr
+[2021-10-13T18:44:14.400439123+0000] Copying file packrat/desc/rlang
+[2021-10-13T18:44:14.403174791+0000] Copying file packrat/desc/rmarkdown
+[2021-10-13T18:44:14.405947840+0000] Copying file packrat/desc/rstudioapi
+[2021-10-13T18:44:14.408712530+0000] Copying file packrat/desc/rvest
+[2021-10-13T18:44:14.411469197+0000] Copying file packrat/desc/sass
+[2021-10-13T18:44:14.414185197+0000] Copying file packrat/desc/scales
+[2021-10-13T18:44:14.417011348+0000] Copying file packrat/desc/selectr
+[2021-10-13T18:44:14.419766207+0000] Copying file packrat/desc/sf
+[2021-10-13T18:44:14.422500266+0000] Copying file packrat/desc/shiny
+[2021-10-13T18:44:14.425266967+0000] Copying file packrat/desc/shinycustomloader
+[2021-10-13T18:44:14.428022300+0000] Copying file packrat/desc/shinydashboard
+[2021-10-13T18:44:14.430745707+0000] Copying file packrat/desc/snakecase
+[2021-10-13T18:44:14.433459988+0000] Copying file packrat/desc/sourcetools
+[2021-10-13T18:44:14.436190915+0000] Copying file packrat/desc/sp
+[2021-10-13T18:44:14.438917984+0000] Copying file packrat/desc/stringi
+[2021-10-13T18:44:14.441666404+0000] Copying file packrat/desc/stringr
+[2021-10-13T18:44:14.444397352+0000] Copying file packrat/desc/svglite
+[2021-10-13T18:44:14.447103199+0000] Copying file packrat/desc/sys
+[2021-10-13T18:44:14.449903059+0000] Copying file packrat/desc/systemfonts
+[2021-10-13T18:44:14.452663568+0000] Copying file packrat/desc/tibble
+[2021-10-13T18:44:14.455400006+0000] Copying file packrat/desc/tidyr
+[2021-10-13T18:44:14.458139494+0000] Copying file packrat/desc/tidyselect
+[2021-10-13T18:44:14.460874975+0000] Copying file packrat/desc/tinytex
+[2021-10-13T18:44:14.463558604+0000] Copying file packrat/desc/units
+[2021-10-13T18:44:14.466323569+0000] Copying file packrat/desc/utf8
+[2021-10-13T18:44:14.469059204+0000] Copying file packrat/desc/vctrs
+[2021-10-13T18:44:14.471783873+0000] Copying file packrat/desc/viridis
+[2021-10-13T18:44:14.474497276+0000] Copying file packrat/desc/viridisLite
+[2021-10-13T18:44:14.477247296+0000] Copying file packrat/desc/webshot
+[2021-10-13T18:44:14.479994657+0000] Copying file packrat/desc/withr
+[2021-10-13T18:44:14.482737498+0000] Copying file packrat/desc/writexl
+[2021-10-13T18:44:14.485481928+0000] Copying file packrat/desc/xfun
+[2021-10-13T18:44:14.488213311+0000] Copying file packrat/desc/xml2
+[2021-10-13T18:44:14.490909712+0000] Copying file packrat/desc/xtable
+[2021-10-13T18:44:14.493631451+0000] Copying file packrat/desc/yaml
+[2021-10-13T18:44:14.496311087+0000] Copying file packrat/desc/zoo
+[2021-10-13T18:44:14.499018685+0000] Copying file packrat/packrat.lock
+[2021-10-13T18:44:14.501773327+0000] Copying file server.R
+[2021-10-13T18:44:14.504593397+0000] Copying file ui.R
+################################# End Task Log ################################# 
+Error: Unhandled Exception: Child Task 1030051404 error: Unhandled Exception: HTTP 599: Timeout during request
+Ejecución interrumpida

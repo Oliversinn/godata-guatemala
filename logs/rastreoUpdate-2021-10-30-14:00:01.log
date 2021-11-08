@@ -1,0 +1,111 @@
+Warning message:
+no DISPLAY variable so Tk is not available 
+<request>
+Options:
+* ssl_verifypeer: FALSE
+Haciendo login...
+Login Exitoso!
+Activando brote de rastreo...
+Brote activado!
+Descargando casos creados desde el 12-05-2021 al 26-05-2021...
+Casos descargados!
+Descargando casos creados desde el 27-05-2021 al 10-06-2021...
+Casos descargados!
+Descargando casos creados desde el 11-06-2021 al 25-06-2021...
+Casos descargados!
+Descargando casos creados desde el 26-06-2021 al 10-07-2021...
+Casos descargados!
+Descargando casos creados desde el 11-07-2021 al 25-07-2021...
+Casos descargados!
+Descargando casos creados desde el 26-07-2021 al 09-08-2021...
+Casos descargados!
+Descargando casos creados desde el 10-08-2021 al 24-08-2021...
+Casos descargados!
+Descargando casos creados desde el 25-08-2021 al 08-09-2021...
+Casos descargados!
+Descargando casos creados desde el 09-09-2021 al 23-09-2021...
+Casos descargados!
+Descargando casos creados desde el 24-09-2021 al 08-10-2021...
+Casos descargados!
+Descargando casos creados desde el 09-10-2021 al 23-10-2021...
+Casos descargados!
+Descargando casos creados desde el 24-10-2021 al 30-10-2021...
+Casos descargados!
+
+── Column specification ────────────────────────────────────────────────────────
+cols(
+  .default = col_character(),
+  `Fecha de notificación` = col_date(format = ""),
+  Edad = col_double(),
+  `Fue Un Contacto` = col_logical(),
+  `Fecha De Convertirse En Caso` = col_date(format = ""),
+  `Fecha de condición` = col_date(format = ""),
+  `Creado En` = col_date(format = ""),
+  `Resultado de la muestra.` = col_double(),
+  `¿Se tomó una muestra respiratoria?` = col_double(),
+  hospitalizado = col_double()
+)
+ℹ Use `spec()` for the full column specifications.
+
+
+── Column specification ────────────────────────────────────────────────────────
+cols(
+  .default = col_double(),
+  `Carné De Identidad` = col_character(),
+  `Creado En` = col_date(format = ""),
+  `Creado Por` = col_character(),
+  Clasificación = col_character(),
+  Teléfono = col_character(),
+  `Estado De Embarazo` = col_character(),
+  fecha_es = col_character(),
+  `Estado de seguimiento` = col_character(),
+  fecha_segunda_dosis = col_logical(),
+  fecha_s16 = col_date(format = ""),
+  comorbilidades = col_character(),
+  fecha_s1 = col_date(format = ""),
+  fecha_s2 = col_date(format = ""),
+  fecha_s3 = col_date(format = ""),
+  fecha_s4 = col_date(format = ""),
+  fecha_s5 = col_date(format = ""),
+  fecha_s6 = col_date(format = ""),
+  fecha_s7 = col_date(format = ""),
+  fecha_s8 = col_date(format = ""),
+  fecha_s9 = col_date(format = "")
+  # ... with 13 more columns
+)
+ℹ Use `spec()` for the full column specifications.
+
+Uniendo bases de datos nueva con base de datos anterior
+Exito!
+Descargando contactos...
+Error: Can't subset columns that don't exist.
+✖ Column `Fecha de notificación` doesn't exist.
+Backtrace:
+     █
+  1. ├─`%>%`(...)
+  2. ├─dplyr::rename(...)
+  3. ├─dplyr::mutate(...)
+  4. ├─dplyr::select(...)
+  5. └─dplyr:::select.data.frame(...)
+  6.   └─tidyselect::eval_select(expr(c(...)), .data)
+  7.     └─tidyselect:::eval_select_impl(...)
+  8.       ├─tidyselect:::with_subscript_errors(...)
+  9.       │ ├─base::tryCatch(...)
+ 10.       │ │ └─base:::tryCatchList(expr, classes, parentenv, handlers)
+ 11.       │ │   └─base:::tryCatchOne(expr, names, parentenv, handlers[[1L]])
+ 12.       │ │     └─base:::doTryCatch(return(expr), name, parentenv, handler)
+ 13.       │ └─tidyselect:::instrument_base_errors(expr)
+ 14.       │   └─base::withCallingHandlers(...)
+ 15.       └─tidyselect:::vars_select_eval(...)
+ 16.         └─tidyselect:::walk_data_tree(expr, data_mask, context_mask)
+ 17.           └─tidyselect:::eval_c(expr, data_mask, context_mask)
+ 18.             └─tidyselect:::reduce_sels(node, data_mask, context_mask, init = init)
+ 19.               └─tidyselect:::walk_data_tree(new, data_mask, context_mask)
+ 20.                 └─tidyselect:::as_indices_sel_impl(...)
+ 21.                   └─tidyselect:::as_indices_impl(x, vars, strict = strict)
+ 22.                     └─tidyselect:::chr_as_locations(x, vars)
+ 23.                       └─vctrs::vec_as_location(x, n = length(vars), names = vars)
+ 24.                         └─(function () ...
+ 25.                           └─vctrs:::stop_subscript_oob(...)
+ 26.                             └─vctrs:::stop_subscript(...)
+Ejecución interrumpida

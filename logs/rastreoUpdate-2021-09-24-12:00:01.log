@@ -1,0 +1,28 @@
+Warning message:
+no DISPLAY variable so Tk is not available 
+<request>
+Options:
+* ssl_verifypeer: FALSE
+Haciendo login...
+Login Exitoso!
+Activando brote de rastreo...
+Brote activado!
+Descargando casos creados desde el 15-04-2021 al 29-04-2021...
+Casos descargados!
+Descargando casos creados desde el 30-04-2021 al 14-05-2021...
+Error: Problem with `mutate()` input `Estado de seguimiento`.
+✖ factor level [7] is duplicated
+ℹ Input `Estado de seguimiento` is `factor(...)`.
+Backtrace:
+     █
+  1. ├─`%>%`(...)
+  2. ├─dplyr::rename(...)
+  3. ├─dplyr::mutate(...)
+  4. ├─dplyr:::mutate.data.frame(...)
+  5. │ └─dplyr:::mutate_cols(.data, ...)
+  6. │   ├─base::withCallingHandlers(...)
+  7. │   └─mask$eval_all_mutate(quo)
+  8. ├─base::factor(...)
+  9. └─base::.handleSimpleError(...)
+ 10.   └─dplyr:::h(simpleError(msg, call))
+Ejecución interrumpida

@@ -25,6 +25,7 @@ library(data.table)
 
 
 Sys.setenv(TZ='America/Guatemala')
-Sys.setlocale("LC_ALL","es_ES")
+Sys.setlocale("LC_ALL","es_GT.utf8")
 options(shiny.maxRequestSize = 30*1024^2)
-
+write(system("locale -a", intern = TRUE),stdout())
+default_locale()

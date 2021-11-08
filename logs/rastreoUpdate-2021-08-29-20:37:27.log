@@ -1,0 +1,14 @@
+<request>
+Options:
+* ssl_verifypeer: FALSE
+Haciendo login...
+Login Exitoso!
+Activando brote de rastreo...
+Brote activado!
+Descargando casos creados desde el 15-04-2021 al 29-04-2021...
+
+
+Error in curl::curl_fetch_memory(url, handle = handle) : 
+  Operation was aborted by an application callback
+Calls: GET ... request_fetch -> request_fetch.write_memory -> <Anonymous>
+Ejecución interrumpida

@@ -1,0 +1,11 @@
+name: DashboardRastreo
+title: DashboardRastreo
+username:
+account: gtmvigilanciacovid
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2687626
+bundleId: 5215929
+url: https://gtmvigilanciacovid.shinyapps.io/DashboardRastreo/
+when: 1636094035.01748
+lastSyncTime: 1636094035.01752

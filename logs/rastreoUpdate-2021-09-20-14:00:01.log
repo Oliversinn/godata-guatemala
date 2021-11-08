@@ -1,0 +1,99 @@
+Warning message:
+no DISPLAY variable so Tk is not available 
+<request>
+Options:
+* ssl_verifypeer: FALSE
+Haciendo login...
+Login Exitoso!
+Activando brote de rastreo...
+Brote activado!
+Descargando casos creados desde el 15-04-2021 al 29-04-2021...
+Casos descargados!
+Descargando casos creados desde el 30-04-2021 al 14-05-2021...
+Casos descargados!
+Descargando casos creados desde el 15-05-2021 al 29-05-2021...
+Casos descargados!
+Descargando casos creados desde el 30-05-2021 al 13-06-2021...
+Casos descargados!
+Descargando casos creados desde el 14-06-2021 al 28-06-2021...
+Casos descargados!
+Descargando casos creados desde el 29-06-2021 al 13-07-2021...
+Casos descargados!
+Descargando casos creados desde el 14-07-2021 al 28-07-2021...
+Casos descargados!
+Descargando casos creados desde el 29-07-2021 al 12-08-2021...
+Casos descargados!
+Descargando casos creados desde el 13-08-2021 al 27-08-2021...
+Casos descargados!
+Descargando casos creados desde el 28-08-2021 al 11-09-2021...
+Casos descargados!
+Descargando casos creados desde el 12-09-2021 al 20-09-2021...
+Casos descargados!
+
+── Column specification ────────────────────────────────────────────────────────
+cols(
+  .default = col_character(),
+  `Fecha de notificación` = col_date(format = ""),
+  Edad = col_double(),
+  `Fue Un Contacto` = col_logical(),
+  `Fecha De Convertirse En Caso` = col_date(format = ""),
+  `Fecha de condición` = col_date(format = ""),
+  `Creado En` = col_date(format = ""),
+  `Resultado de la muestra.` = col_double(),
+  `¿Se tomó una muestra respiratoria?` = col_double(),
+  hospitalizado = col_double()
+)
+ℹ Use `spec()` for the full column specifications.
+
+
+── Column specification ────────────────────────────────────────────────────────
+cols(
+  .default = col_double(),
+  `Carné De Identidad` = col_character(),
+  `Creado En` = col_date(format = ""),
+  `Creado Por` = col_character(),
+  Clasificación = col_character(),
+  Teléfono = col_character(),
+  `Estado De Embarazo` = col_character(),
+  fecha_es = col_character(),
+  `Estado de seguimiento` = col_character(),
+  fecha_segunda_dosis = col_logical(),
+  fecha_s16 = col_character(),
+  comorbilidades = col_character(),
+  fecha_s1 = col_date(format = ""),
+  fecha_s2 = col_date(format = ""),
+  fecha_s3 = col_date(format = ""),
+  fecha_s4 = col_date(format = ""),
+  fecha_s5 = col_date(format = ""),
+  fecha_s6 = col_date(format = ""),
+  fecha_s7 = col_date(format = ""),
+  fecha_s8 = col_date(format = ""),
+  fecha_s9 = col_date(format = "")
+  # ... with 8 more columns
+)
+ℹ Use `spec()` for the full column specifications.
+
+Uniendo bases de datos nueva con base de datos anterior
+Exito!
+Descargando contactos...
+Contactos descargados!
+Descargando seguimientos de contactos...
+Seguimientos descargados!
+Guardando bases de datos...
+Bases de datos guardadas!
+Actualizando tablero...
+Preparing to deploy application...DONE
+Uploading bundle for application: 2687626...DONE
+Deploying bundle: 5053425 for application: 2687626 ...
+Waiting for task: 1013579073
+  building: Parsing manifest
+  building: Building image: 5800405
+  building: Installing system dependencies
+  building: Fetching packages
+  building: Installing packages
+  building: Installing files
+  building: Pushing image: 5800405
+  deploying: Starting instances
+  rollforward: Activating new instances
+  terminating: Stopping old instances
+Application successfully deployed to https://gtmvigilanciacovid.shinyapps.io/DashboardRastreo/
