@@ -60,7 +60,7 @@ shinyServer(function(input, output, session) {
     ############################################################################
     colorVector = c("MASCULINO" = "#1f77b4", "FEMENINO" = "#ff7f0e", "SIN DATOS" = "#7f7f7f")
     colorPlotly = c("#1f77b4", "#ff7f0e", "#7f7f7f")
-    ggplotColors = c('Activo'="#1f77b4",'Recuperado'="#ff7f0e", 'Imposible de contactar'='#d62728', 'Perdido'='#8c564b','Hospitalizado'='#e377c2', 'Fallecido'='#9467bd', 'Hospitalizados/Fallecidos'='#2ca02c', 'Concluído por otra razón'='#7f7f7f', 'Sin estado de seguimiento'='#bcbd22')
+    ggplotColors = c('Bajo seguimiento'="#1f77b4",'Recuperado'="#ff7f0e", 'Imposible de contactar'='#d62728', 'Perdido'='#8c564b','Hospitalizado'='#e377c2', 'Fallecido'='#9467bd', 'Hospitalizados/Fallecidos'='#2ca02c', 'Concluído por otra razón'='#7f7f7f', 'Sin estado de seguimiento'='#bcbd22')
     donaColors = c("#1f77b4","#ff7f0e", '#2ca02c', '#d62728', '#8c564b', '#9467bd', '#e377c2', '#7f7f7f', '#bcbd22')
     
     # TABLA REACTIVE DE CASOS RASTREADOS ACUMULADOS
@@ -85,7 +85,7 @@ shinyServer(function(input, output, session) {
                    if(input$ClasificacionFilter != 'TODOS')  (Clasificacion == input$ClasificacionFilter | `¿Se tomo una muestra respiratoria?` == 3) else TRUE,
                    #if(input$unidadNotificadoraFilter != 'TODOS')  (`Clinicas Temporales` == input$unidadNotificadoraFilter) else TRUE,
                    `Creado En` >= format(input$fechaReporte[1]) & `Creado En` <= format(input$fechaReporte[2]),
-                   `Estado de seguimiento` == 'Activo',
+                   `Estado de seguimiento` == 'Bajo seguimiento',
                    Clasificacion != 'NO ES UN CASO (DESCARTADO)',
                    Clasificacion != 'SOSPECHOSO E')
     })
@@ -660,7 +660,7 @@ shinyServer(function(input, output, session) {
             tally() %>%
             mutate(n = ifelse(`Creado En` %in% rastreoCases_reactive()$`Creado En`, n, 0 ),
                    `Estado de seguimiento` = ifelse(is.na(`Estado de seguimiento`),'Sin estado de seguimiento', `Estado de seguimiento`),
-                   `Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Activo","Recuperado","Imposible de contactar",
+                   `Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Bajo seguimiento","Recuperado","Imposible de contactar",
                                                                                         'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos","Concluído por otra razón",
                                                                                         "Sin estado de seguimiento")))
     })
@@ -733,7 +733,7 @@ shinyServer(function(input, output, session) {
             tally() %>%
             mutate(n = ifelse(`Creado En` %in% rastreoCases_reactive()$`Creado En`, n, 0 ),
                    `Estado de seguimiento` = ifelse(is.na(`Estado de seguimiento`),'Sin estado de seguimiento', `Estado de seguimiento`),
-                   `Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Activo","Recuperado","Imposible de contactar",
+                   `Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Bajo seguimiento","Recuperado","Imposible de contactar",
                                                                                         'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos","Concluído por otra razón",
                                                                                         "Sin estado de seguimiento")))
     })
@@ -798,7 +798,7 @@ shinyServer(function(input, output, session) {
     casosEstadosDeSeguimiento_reactive = reactive({
         estadosDeSeguimiento = rastreoCases_reactive() %>%
             complete(`Estado de seguimiento` = factor(`Estado de seguimiento`, 
-                                                      levels = c("Activo","Recuperado","Imposible de contactar",
+                                                      levels = c("Bajo seguimiento","Recuperado","Imposible de contactar",
                                                                  'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos","Concluído por otra razón",
                                                                  "Sin estado de seguimiento"))) %>%
             select(`Estado de seguimiento`) %>%
@@ -863,7 +863,7 @@ shinyServer(function(input, output, session) {
     casosContactableEstadosDeSeguimiento_reactive = reactive({
         estadosDeSeguimiento = rastreoCases_reactive() %>%
             filter(Telefono == 'CONTACTABLE') %>%
-            complete(`Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Activo","Recuperado","Imposible de contactar",
+            complete(`Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Bajo seguimiento","Recuperado","Imposible de contactar",
                                                                                           'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos","Concluído por otra razón",
                                                                                           "Sin estado de seguimiento"))) %>%
             select(`Estado de seguimiento`) %>%
@@ -928,7 +928,7 @@ shinyServer(function(input, output, session) {
     #### PIE DE ESTADOS DE SEGUIMIENTOS DE CASOS
     output$rastreoCasesEstadoDeSeguimientoDona = renderPlotly({
         enCuarentena = rastreoCases_reactive() %>%
-            complete(`Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Activo","Recuperado","Imposible de contactar",
+            complete(`Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Bajo seguimiento","Recuperado","Imposible de contactar",
                                                                                           'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos","Concluído por otra razón",
                                                                                           "Sin estado de seguimiento"))) %>%
             select(`Estado de seguimiento`) %>%
@@ -948,7 +948,7 @@ shinyServer(function(input, output, session) {
                       type = 'pie',
                       hole = 0.6,
                       sort = F,
-                      marker = list(colors=factor(c("Activo","Recuperado","Imposible de contactar",
+                      marker = list(colors=factor(c("Bajo seguimiento","Recuperado","Imposible de contactar",
                                                     'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos","Concluído por otra razón",
                                                     "Sin estado de seguimiento"), labels = donaColors))) %>%
             layout(legend = list(orientation = 'h'),
@@ -960,7 +960,7 @@ shinyServer(function(input, output, session) {
     output$rastreoCasesContactableEstadoDeSeguimientoDona = renderPlotly({
         enCuarentena = rastreoCases_reactive() %>%
             filter(Telefono == 'CONTACTABLE') %>%
-            complete(`Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Activo","Recuperado","Imposible de contactar",
+            complete(`Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Bajo seguimiento","Recuperado","Imposible de contactar",
                                                                                           'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos","Concluído por otra razón",
                                                                                           "Sin estado de seguimiento"))) %>%
             select(`Estado de seguimiento`) %>%
@@ -980,7 +980,7 @@ shinyServer(function(input, output, session) {
                       type = 'pie',
                       hole = 0.6,
                       sort = FALSE,
-                      marker = list(colors=factor(c("Activo","Recuperado","Imposible de contactar",
+                      marker = list(colors=factor(c("Bajo seguimiento","Recuperado","Imposible de contactar",
                                                     'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos","Concluído por otra razón",
                                                     "Sin estado de seguimiento"), labels = donaColors))) %>%
             layout(title = ~paste('Estados de Seguimiento<br><sup>(N = ',
@@ -1506,35 +1506,42 @@ shinyServer(function(input, output, session) {
 
     output$reporteCases = renderDataTable({
         fecha = as.character(format(input$fechaReporte[2],'%d/%m/%Y'))
-
         casosNuevos = reportCases_reactive() %>%
-            req(input$fechaReporte[2]) %>%
             filter(
+                case_when(format(as.Date(input$fechaReporte[2]),'%a') == 'Mon' ~ `Creado En` == as.Date(input$fechaReporte[2]) | `Creado En` == as.Date(input$fechaReporte[2])-1,
+                          T ~ `Creado En` == as.Date(input$fechaReporte[2])),
+                Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                Clasificacion != 'SOSPECHOSO E'
+            ) %>%
+            distinct(`Carne De Identidad`)
+        
+        totalNuevos = nrow(casosNuevos)
+        
+        casosNuevosContactables = reportCases_reactive() %>%
+            filter(
+                case_when(format(as.Date(input$fechaReporte[2]),'%a') == 'Mon' ~ `Creado En` == as.Date(input$fechaReporte[2]) | `Creado En` == as.Date(input$fechaReporte[2])-1,
+                          T ~ `Creado En` == as.Date(input$fechaReporte[2])),
                 Clasificacion != 'NO ES UN CASO (DESCARTADO)',
                 Clasificacion != 'SOSPECHOSO E',
-                case_when(format(as.Date(input$fechaReporte[2]),'%a') == 'Mon' ~ `Creado En` == as.Date(input$fechaReporte[2]) | `Creado En` == as.Date(input$fechaReporte[2])-1,
-                        T ~ `Creado En` == as.Date(input$fechaReporte[2]))
-            )
-
-        casosNuevosContactables = casosNuevos %>%
-        filter(
-            Telefono == 'CONTACTABLE',
-            `Estado de seguimiento` != "Imposible de contactar"
-        )
+                Telefono == 'CONTACTABLE',
+                `Estado de seguimiento` != "Imposible de contactar"
+            )  %>%
+            distinct(`Carne De Identidad`)
         
-        casosNuevosConfirmados = casosNuevos %>%
+        totalCasosNuevosContactables = nrow(casosNuevosContactables)
+        
+        porcentajeCasosNuevosContactables = paste(as.character(round((totalCasosNuevosContactables/totalNuevos)*100,1)),"%", sep='')
+        
+        casosNuevosConfirmados = reportCases_reactive() %>%
             filter(
-                Clasificacion == "CONFIRMADO" | `¿Se tomo una muestra respiratoria?` == 3
+                case_when(format(as.Date(input$fechaReporte[2]),'%a') == 'Mon' ~ `Creado En` == as.Date(input$fechaReporte[2]) | `Creado En` == as.Date(input$fechaReporte[2])-1,
+                          T ~ `Creado En` == as.Date(input$fechaReporte[2])),
+                Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                Clasificacion != 'SOSPECHOSO E',
+                Clasificacion == "CONFIRMADO" | `¿Se tomo una muestra respiratoria?` == "Confirmado por autoreporte (aplica si resultado fue positivo)"
             ) %>%
             nrow()
-
-        porcentajeCasosNuevosContactables = paste(as.character(round((nrow(casosNuevosContactables)/nrow(casosNuevos))*100,1)),"%", sep='')
-
-        casosConSeguimientoRealizado = reportCases_reactive() %>%
-            filter(
-                maxDate == Sys.Date()
-            ) %>%
-            nrow()
+        
         
         casosSinEstado = reportCases_reactive() %>%
             filter(
@@ -1542,82 +1549,264 @@ shinyServer(function(input, output, session) {
                 Clasificacion != 'SOSPECHOSO E',
                 Telefono == 'CONTACTABLE',
                 `Estado de seguimiento` == 'Sin estado de seguimiento',
-            )
+            ) %>%
+            distinct(`Carne De Identidad`) 
+        
+        totalCasosSinEstado = nrow(casosSinEstado)
         
         casosActivos = reportCases_reactive() %>%
-          filter(
-            Clasificacion != 'NO ES UN CASO (DESCARTADO)',
-            Clasificacion != 'SOSPECHOSO E',
-            `Estado de seguimiento` == 'Activo'
-          )
-
+            filter(
+                Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                Clasificacion != 'SOSPECHOSO E',
+                `Estado de seguimiento` == 'Bajo seguimiento'
+            ) %>%
+            distinct(`Carne De Identidad`)
+        
+        totalCasosActivos = nrow(casosActivos)
+        
         casosSeguimientoRealizado = reportCases_reactive() %>%
             filter(
                 Clasificacion != 'NO ES UN CASO (DESCARTADO)',
                 Clasificacion != 'SOSPECHOSO E',
-                maxDate == Sys.Date()
-            )
-
+                fecha_seguimiento == as.Date(input$fechaReporte[2]) #fecha del filtro
+            ) %>%
+            distinct(`Carne De Identidad`)
+        
         casosDelDia = casosNuevosContactables %>%
             bind_rows(casosSinEstado) %>%
             bind_rows(casosActivos) %>%
             bind_rows(casosSeguimientoRealizado) %>%
-            distinct()
-
-        casosNoRespuesta = casosDelDia %>%
+            distinct(`Carne De Identidad`)
+        
+        totalCasosDelDia = nrow(casosDelDia)
+        
+        casosConSeguimientoRealizado = reportCases_reactive() %>%
             filter(
-                maxDate == Sys.Date(),
-                ultimoSeguimiento == 2,
-                ultimoPorque == 3 |
-                ultimoPorque == 1
-            ) %>%
-            nrow()
-
-        casosNoContactable = casosDelDia %>%
-            filter(
-                maxDate == Sys.Date(),
-                ultimoSeguimiento == 2,
-                ultimoPorque == 6
+                fecha_seguimiento == as.Date(input$fechaReporte[2]) #fecha del filtro
             ) %>%
             nrow()
         
-        casosRechazoSeguimiento = casosDelDia %>%
+        casosNoRespuesta = reportCases_reactive() %>%
             filter(
-                maxDate == Sys.Date(),
-                ultimoSeguimiento == 2,
-                ultimoPorque == 2
-            ) %>%
-            nrow()
-
-        casosNoOtraRazon = casosDelDia %>%
-            filter(
-                maxDate == Sys.Date(),
-                ultimoSeguimiento == 2,
-                ultimoPorque == 4 |
-                ultimoPorque == 7
+                fecha_seguimiento == as.Date(input$fechaReporte[2]),
+                seguimiento == "No se realizó" |
+                    seguimiento == "No se realizó ",
+                porque == "No entró la llamada al número registrado" |
+                    porque == "No entro la llamada al número registrado" |
+                    porque == "No entró la llamada  al número registrado" |
+                    porque == "No respondió la llamada"
             ) %>%
             nrow()
         
-
-        casosConSeguimientoLogrado = casosDelDia %>%
+        casosNoContactable = reportCases_reactive() %>%
             filter(
-                maxDate == Sys.Date(),
-                ultimoSeguimiento == 1
+                fecha_seguimiento == as.Date(input$fechaReporte[2]),
+                seguimiento == "No se realizó" |
+                    seguimiento == "No se realizó ",
+                porque == "Número de telefono incorrecto" |
+                    porque == "Número de teléfono incorrecto" |
+                    porque == "Número de teléfono incorrecto " 
             ) %>%
             nrow()
-
-        porcentajeCasosConSeguimiento = paste(as.character(round((casosConSeguimientoLogrado/nrow(casosDelDia))*100,0)),'%',sep='')
-
+        
+        casosRechazoSeguimiento = reportCases_reactive() %>%
+            filter(
+                fecha_seguimiento == as.Date(input$fechaReporte[2]),
+                seguimiento == "No se realizó" |
+                    seguimiento == "No se realizó ",
+                porque == "REspondió pero rechazo seguimiento" |
+                    porque == "Respondió pero rechazó seguimiento" |
+                    porque == "Respondió pero rechazo seguimiento" |
+                    porque == "Respondió pero rechazo el seguimiento" |
+                    porque == "Respondió pero rechazo seguimiento " 
+            ) %>%
+            nrow()
+        
+        casosNoOtraRazon = reportCases_reactive() %>%
+            filter(
+                fecha_seguimiento == as.Date(input$fechaReporte[2]),
+                seguimiento == "No se realizó" |
+                    seguimiento == "No se realizó ",
+                porque ==  "Se inició seguimiento pero se perdió la comunicación" |
+                    porque == "Se inicio seguimiento pero se perdió la comunicación" |
+                    porque == "Se inició seguimiento pero se pedió la comunicación" |
+                    porque == "Se inició seguimiento pero se perdió comunicación" |
+                    porque == "Otro" 
+            ) %>%
+            nrow()
+        
+        
+        casosConSeguimientoLogrado = reportCases_reactive() %>%
+            filter(
+                fecha_seguimiento == as.Date(input$fechaReporte[2]),
+                seguimiento == "Se realizó" |
+                    seguimiento == "Si se realizó",
+            ) %>%
+            nrow()
+        
+        porcentajeCasosConSeguimiento = paste(as.character(round((casosConSeguimientoRealizado/totalCasosDelDia)*100,0)),'%',sep='')
+        
         casosNoDioTiempo = nrow(casosDelDia) - casosConSeguimientoLogrado - casosNoOtraRazon - casosNoContactable - casosNoRespuesta - casosRechazoSeguimiento
-
-        reporteCases = matrix(c(fecha, nrow(casosNuevos), nrow(casosNuevosContactables), porcentajeCasosNuevosContactables, casosNuevosConfirmados,
-                                    nrow(casosDelDia), casosConSeguimientoRealizado, casosNoRespuesta, casosNoContactable, casosRechazoSeguimiento, casosNoOtraRazon, 
-                                    casosConSeguimientoLogrado, porcentajeCasosConSeguimiento, casosNoDioTiempo),ncol = 1,byrow = TRUE)
-
+        
+        reporteCases = matrix(c(fecha, totalNuevos, totalCasosNuevosContactables, porcentajeCasosNuevosContactables, casosNuevosConfirmados,
+                                totalCasosDelDia, casosConSeguimientoRealizado, casosNoRespuesta, casosNoContactable, casosRechazoSeguimiento, casosNoOtraRazon, 
+                                casosConSeguimientoLogrado, porcentajeCasosConSeguimiento, casosNoDioTiempo),ncol = 1,byrow = TRUE)
+        
+        for(i in 1:4){
+            fecha = as.character(format(input$fechaReporte[2]-i,'%d/%m/%Y'))
+            casosNuevos = reportCases_reactive() %>%
+                filter(
+                    case_when(format(as.Date(input$fechaReporte[2])-i,'%a') == 'Mon' ~ `Creado En` == as.Date(input$fechaReporte[2])-i | `Creado En` == as.Date(input$fechaReporte[2])-i-1,
+                              T ~ `Creado En` == as.Date(input$fechaReporte[2])-i),
+                    Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                    Clasificacion != 'SOSPECHOSO E'
+                ) %>%
+                distinct(`Carne De Identidad`)
+            
+            totalNuevos = nrow(casosNuevos)
+            
+            casosNuevosContactables = reportCases_reactive() %>%
+                filter(
+                    case_when(format(as.Date(input$fechaReporte[2])-i,'%a') == 'Mon' ~ `Creado En` == as.Date(input$fechaReporte[2])-i | `Creado En` == as.Date(input$fechaReporte[2])-i-1,
+                              T ~ `Creado En` == as.Date(input$fechaReporte[2])-i),
+                    Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                    Clasificacion != 'SOSPECHOSO E',
+                    Telefono == 'CONTACTABLE',
+                    `Estado de seguimiento` != "Imposible de contactar"
+                )  %>%
+                distinct(`Carne De Identidad`)
+            
+            totalCasosNuevosContactables = nrow(casosNuevosContactables)
+            
+            porcentajeCasosNuevosContactables = paste(as.character(round((totalCasosNuevosContactables/totalNuevos)*100,1)),"%", sep='')
+            
+            casosNuevosConfirmados = reportCases_reactive() %>%
+                filter(
+                    case_when(format(as.Date(input$fechaReporte[2])-i,'%a') == 'Mon' ~ `Creado En` == as.Date(input$fechaReporte[2])-i | `Creado En` == as.Date(input$fechaReporte[2])-i-1,
+                              T ~ `Creado En` == as.Date(input$fechaReporte[2])-i),
+                    Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                    Clasificacion != 'SOSPECHOSO E',
+                    Clasificacion == "CONFIRMADO" | `¿Se tomo una muestra respiratoria?` == "Confirmado por autoreporte (aplica si resultado fue positivo)"
+                ) %>%
+                nrow()
+            
+            
+            casosSinEstado = reportCases_reactive() %>%
+                filter(
+                    Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                    Clasificacion != 'SOSPECHOSO E',
+                    Telefono == 'CONTACTABLE',
+                    `Estado de seguimiento` == 'Sin estado de seguimiento',
+                ) %>%
+                distinct(`Carne De Identidad`) 
+            
+            totalCasosSinEstado = nrow(casosSinEstado)
+            
+            casosActivos = reportCases_reactive() %>%
+                filter(
+                    Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                    Clasificacion != 'SOSPECHOSO E',
+                    `Estado de seguimiento` == 'Bajo seguimiento'
+                ) %>%
+                distinct(`Carne De Identidad`)
+            
+            totalCasosActivos = nrow(casosActivos)
+            
+            casosSeguimientoRealizado = reportCases_reactive() %>%
+                filter(
+                    Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                    Clasificacion != 'SOSPECHOSO E',
+                    fecha_seguimiento == as.Date(input$fechaReporte[2])-i #fecha del filtro
+                ) %>%
+                distinct(`Carne De Identidad`)
+            
+            casosDelDia = casosNuevosContactables %>%
+                bind_rows(casosSinEstado) %>%
+                bind_rows(casosActivos) %>%
+                bind_rows(casosSeguimientoRealizado) %>%
+                distinct(`Carne De Identidad`)
+            
+            totalCasosDelDia = nrow(casosDelDia)
+            
+            casosConSeguimientoRealizado = reportCases_reactive() %>%
+                filter(
+                    fecha_seguimiento == as.Date(input$fechaReporte[2])-i #fecha del filtro
+                ) %>%
+                nrow()
+            
+            casosNoRespuesta = reportCases_reactive() %>%
+                filter(
+                    fecha_seguimiento == as.Date(input$fechaReporte[2])-i,
+                    seguimiento == "No se realizó" |
+                        seguimiento == "No se realizó ",
+                    porque == "No entró la llamada al número registrado" |
+                        porque == "No entro la llamada al número registrado" |
+                        porque == "No entró la llamada  al número registrado" |
+                        porque == "No respondió la llamada"
+                ) %>%
+                nrow()
+            
+            casosNoContactable = reportCases_reactive() %>%
+                filter(
+                    fecha_seguimiento == as.Date(input$fechaReporte[2])-i,
+                    seguimiento == "No se realizó" |
+                        seguimiento == "No se realizó ",
+                    porque == "Número de telefono incorrecto" |
+                        porque == "Número de teléfono incorrecto" |
+                        porque == "Número de teléfono incorrecto " 
+                ) %>%
+                nrow()
+            
+            casosRechazoSeguimiento = reportCases_reactive() %>%
+                filter(
+                    fecha_seguimiento == as.Date(input$fechaReporte[2])-i,
+                    seguimiento == "No se realizó" |
+                        seguimiento == "No se realizó ",
+                    porque == "REspondió pero rechazo seguimiento" |
+                        porque == "Respondió pero rechazó seguimiento" |
+                        porque == "Respondió pero rechazo seguimiento" |
+                        porque == "Respondió pero rechazo el seguimiento" |
+                        porque == "Respondió pero rechazo seguimiento " 
+                ) %>%
+                nrow()
+            
+            casosNoOtraRazon = reportCases_reactive() %>%
+                filter(
+                    fecha_seguimiento == as.Date(input$fechaReporte[2])-i,
+                    seguimiento == "No se realizó" |
+                        seguimiento == "No se realizó ",
+                    porque ==  "Se inició seguimiento pero se perdió la comunicación" |
+                        porque == "Se inicio seguimiento pero se perdió la comunicación" |
+                        porque == "Se inició seguimiento pero se pedió la comunicación" |
+                        porque == "Se inició seguimiento pero se perdió comunicación" |
+                        porque == "Otro" 
+                ) %>%
+                nrow()
+            
+            
+            casosConSeguimientoLogrado = reportCases_reactive() %>%
+                filter(
+                    fecha_seguimiento == as.Date(input$fechaReporte[2])-i,
+                    seguimiento == "Se realizó" |
+                        seguimiento == "Si se realizó",
+                ) %>%
+                nrow()
+            
+            porcentajeCasosConSeguimiento = paste(as.character(round((casosConSeguimientoRealizado/totalCasosDelDia)*100,0)),'%',sep='')
+            
+            casosNoDioTiempo = nrow(casosDelDia) - casosConSeguimientoLogrado - casosNoOtraRazon - casosNoContactable - casosNoRespuesta - casosRechazoSeguimiento
+            
+            reporteCasesTemporal = matrix(c(fecha, totalNuevos, totalCasosNuevosContactables, porcentajeCasosNuevosContactables, casosNuevosConfirmados,
+                                            totalCasosDelDia, casosConSeguimientoRealizado, casosNoRespuesta, casosNoContactable, casosRechazoSeguimiento, casosNoOtraRazon, 
+                                            casosConSeguimientoLogrado, porcentajeCasosConSeguimiento, casosNoDioTiempo),ncol = 1,byrow = TRUE)
+            reporteCases = cbind(reporteCasesTemporal ,reporteCases)
+        }
+        
         rownames(reporteCases) = c('Fecha', 'Total de notificaciones nuevas' ,'Notificaciones nuevas contactables por llamada', 'Porcentaje de notificaciones nuevass contactables (%)', 'Casos confirmados nuevos', 'Total casos a contactar en el día',
-                                    'Casos con seguimiento intentado', 'Casos con seguimiento no realizado, no contestó', 'Casos con seguimiento no realizado, número incorrecto',
-                                    'Casos con seguimiento no realizado, rechazó llamada', 'Casos con seguimiento no realizado, no se pudo contactar por otra razón', 'Casos con seguimiento logrado',
-                                    'Porcentaje casos con seguimiento (%)', 'Casos que no dio tiempo llamar o seguimiento no registrado')
+                                   'Casos con seguimiento intentado', 'Casos con seguimiento no realizado, no contestó', 'Casos con seguimiento no realizado, número incorrecto',
+                                   'Casos con seguimiento no realizado, rechazó llamada', 'Casos con seguimiento no realizado, no se pudo contactar por otra razón', 'Casos con seguimiento logrado',
+                                   'Porcentaje casos con seguimiento (%)', 'Casos que no dio tiempo llamar o seguimiento no registrado')
+        
 
          datatable(reporteCases, options = list( pageLength =14), colnames = rep('',ncol(reporteCases)))
 
@@ -1757,11 +1946,109 @@ shinyServer(function(input, output, session) {
         tryCatch(
             {
                 
-                raw_casos <- as.data.frame(read_csv(input$file1$datapath, guess_max = 5000))
+                columnas = c(
+                    `FE107correo_electronico_del_trabajador_que_notifica [MV 1]`  = NA_real_,
+                    Clasificación  = NA_real_,
+                    `Primer Nombre` = NA_real_,
+                    Apellido = NA_real_,
+                    `Direcciones Dirección Línea 1 [1]`   = NA_real_,
+                    `Direcciones Comunidad, aldea o zona [1]`  = NA_real_,
+                    `Direcciones Número De Teléfono [1]`  = NA_real_,
+                    Sexo = NA_real_,
+                    Ocupación = NA_real_,
+                    `Edad Años De Edad` = NA_real_,
+                    `FE113enfermedades_asociadas [MV 1] 1` = NA_real_,
+                    `FE113enfermedades_asociadas [MV 1] 2` = NA_real_,
+                    `FE113enfermedades_asociadas [MV 1] 3` = NA_real_,
+                    `FE113enfermedades_asociadas [MV 1] 4` = NA_real_,
+                    `FE113enfermedades_asociadas [MV 1] 5` = NA_real_,
+                    `FE113enfermedades_asociadas [MV 1] 6` = NA_real_,
+                    `FE113enfermedades_asociadas [MV 1] 7` = NA_real_,
+                    `FE113enfermedades_asociadas [MV 1] 8` = NA_real_,
+                    `FE113enfermedades_asociadas [MV 1] 9` = NA_real_,
+                    `FE113enfermedades_asociadas [MV 1] 10` = NA_real_,
+                    `FE113enfermedades_asociadas [MV 1] 11` = NA_real_,
+                    `FE113enfermedades_asociadas [MV 1] 12` = NA_real_,
+                    `FE11301especifique [MV 1]` = NA_real_,
+                    `Estado De Embarazo` = NA_real_,
+                    `Direcciones Ubicación [1]` = NA_real_,
+                    `Fecha de inicio de síntomas` = NA_real_,
+                    `Fecha de notificación` = NA_real_,
+                    `FE121se_tomo_una_muestra_respiratoria [MV 1]` = NA_real_,
+                    `FE12102fecha_y_hora_de_toma_de_la_muestra [MV 1]` = NA_real_,
+                    `FE12103resultado_de_la_muestra [MV 1]` = NA_real_,
+                    `Dias entre inicio sintomas y visita CBR` = NA_real_,
+                    `Creado En` = NA_real_,
+                    `FE13001fecha_de_hospitalizacion [MV 1]` = NA_real_,
+                    `fecha_s1_s [MV 1]` = NA_real_,
+                    `fecha_s1_n [MV 1]` = NA_real_,
+                    `fecha_s2_s [MV 1]` = NA_real_,
+                    `fecha_s2_n [MV 1]` = NA_real_,
+                    `fecha_s3_s [MV 1]` = NA_real_,
+                    `fecha_s3_n [MV 1]` = NA_real_,
+                    `fecha_s4_s [MV 1]` = NA_real_,
+                    `fecha_s4_n [MV 1]` = NA_real_,
+                    `fecha_s5_s [MV 1]` = NA_real_,
+                    `fecha_s5_n [MV 1]` = NA_real_,
+                    `fecha_s6_s [MV 1]` = NA_real_,
+                    `fecha_s6_n [MV 1]` = NA_real_,
+                    `fecha_s7_s [MV 1]` = NA_real_,
+                    `fecha_s7_n [MV 1]` = NA_real_,
+                    `fecha_s8_s [MV 1]` = NA_real_,
+                    `fecha_s8_n [MV 1]` = NA_real_,
+                    `fecha_s9_s [MV 1]` = NA_real_,
+                    `fecha_s9_n [MV 1]` = NA_real_,
+                    `fecha_s10_s [MV 1]` = NA_real_,
+                    `fecha_s10_n [MV 1]` = NA_real_,
+                    `fecha_s11_s [MV 1]` = NA_real_,
+                    `fecha_s11_n [MV 1]` = NA_real_,
+                    `fecha_s12_s [MV 1]` = NA_real_,
+                    `fecha_s12_n [MV 1]` = NA_real_,
+                    `fecha_s13_s [MV 1]` = NA_real_,
+                    `fecha_s13_n [MV 1]` = NA_real_,
+                    `fecha_s14_s [MV 1]` = NA_real_,
+                    `fecha_s14_n [MV 1]` = NA_real_,
+                    `estado_de_seguimiento_1 [MV 1]` = NA_real_,
+                    `presenta_sintomas [MV 1]` = NA_real_,
+                    `ha_presentado_sintomas_s2 [MV 1]` = NA_real_,
+                    `presenta_sintomas_s3 [MV 1]` = NA_real_,
+                    `presenta_sintomas_s4 [MV 1]` = NA_real_,
+                    `presenta_sintomas_s5 [MV 1]` = NA_real_,
+                    `presenta_sintomas_s6 [MV 1]` = NA_real_,
+                    `presenta_sintomas_s7 [MV 1]` = NA_real_,
+                    `presenta_sintomas_s8 [MV 1]` = NA_real_,
+                    `presenta_sintomas_s9 [MV 1]` = NA_real_,
+                    `presenta_sintomas_s10 [MV 1]` = NA_real_,
+                    `presenta_sintomas_s11 [MV 1]` = NA_real_,
+                    `presenta_sintomas_s12 [MV 1]` = NA_real_,
+                    `presenta_sintomas_s13 [MV 1]` = NA_real_,
+                    `presenta_sintomas_s14 [MV 1]` = NA_real_,
+                    `por_que_1 [MV 1]` = NA_real_,
+                    `por_que_s2 [MV 1]` = NA_real_,
+                    `por_que_s3 [MV 1]` = NA_real_,
+                    `por_que_s4 [MV 1]` = NA_real_,
+                    `por_que_s5 [MV 1]` = NA_real_,
+                    `por_que_s6 [MV 1]` = NA_real_,
+                    `por_que_7 [MV 1]` = NA_real_,
+                    `por_que_s8 [MV 1]` = NA_real_,
+                    `por_que_9 [MV 1]` = NA_real_,
+                    `por_que_s10 [MV 1]` = NA_real_,
+                    `por_que_11 [MV 1]` = NA_real_,
+                    `por_que_s12 [MV 1]` = NA_real_,
+                    `por_que_s13 [MV 1]` = NA_real_,
+                    `por_que_s14 [MV 1]` = NA_real_,
+                    `fecha_es [MV 1]` = NA_real_
+                )
+                
+                
+                
+                raw_casos <- as.data.frame(read_csv(input$file1$datapath, guess_max = 50000))
+                raw_casos = add_column(raw_casos, !!!columnas[setdiff(names(columnas), names(raw_casos))])
+                raw_casos = as.data.frame(raw_casos)
                 raw_casos <- raw_casos %>% mutate(
                     Clasificación = toupper(Clasificación),
-                    FE12102fecha_y_hora_de_toma_de_la_muestra = format(as.Date(raw_casos$FE12102fecha_y_hora_de_toma_de_la_muestra), '%d-%m-%Y'),
-                    FE13001fecha_de_hospitalizacion = format(as.Date(raw_casos$FE13001fecha_de_hospitalizacion), '%d-%m-%Y'),
+                    `FE12102fecha_y_hora_de_toma_de_la_muestra [MV 1]` = format(as.Date(raw_casos$`FE12102fecha_y_hora_de_toma_de_la_muestra [MV 1]`), '%d-%m-%Y'),
+                    `FE13001fecha_de_hospitalizacion [MV 1]` = format(as.Date(raw_casos$`FE13001fecha_de_hospitalizacion [MV 1]`), '%d-%m-%Y'),
                 )
                 
                 
@@ -1777,7 +2064,7 @@ shinyServer(function(input, output, session) {
                         Clasificación != 'SOSPECHOSO E'
                     ) %>%
                     select(
-                        Rastreador = FE107correo_electronico_del_trabajador_que_notifica ,
+                        Rastreador = `FE107correo_electronico_del_trabajador_que_notifica [MV 1]` ,
                         `Clasificación Epi` = Clasificación ,
                         Nombre = `Primer Nombre`,
                         Apellido = Apellido,
@@ -1787,87 +2074,87 @@ shinyServer(function(input, output, session) {
                         Sexo = Sexo,
                         Ocupación = Ocupación,
                         Edad = `Edad Años De Edad`,
-                        E_A1 = `FE113enfermedades_asociadas 1`,
-                        E_A2 = `FE113enfermedades_asociadas 2`,
-                        E_A3 = `FE113enfermedades_asociadas 3`,
-                        E_A4 = `FE113enfermedades_asociadas 4`,
-                        E_A5 = `FE113enfermedades_asociadas 5`,
-                        E_A6 = `FE113enfermedades_asociadas 6`,
-                        E_A7 = `FE113enfermedades_asociadas 7`,
-                        E_A8 = `FE113enfermedades_asociadas 8`,
-                        E_A9 = `FE113enfermedades_asociadas 9`,
-                        E_A10 = `FE113enfermedades_asociadas 10`,
-                        E_A11 = `FE113enfermedades_asociadas 11`,
-                        E_A12 = `FE113enfermedades_asociadas 12`,
-                        E_Aotras =FE11301especifique,
+                        E_A1 = `FE113enfermedades_asociadas [MV 1] 1`,
+                        E_A2 = `FE113enfermedades_asociadas [MV 1] 2`,
+                        E_A3 = `FE113enfermedades_asociadas [MV 1] 3`,
+                        E_A4 = `FE113enfermedades_asociadas [MV 1] 4`,
+                        E_A5 = `FE113enfermedades_asociadas [MV 1] 5`,
+                        E_A6 = `FE113enfermedades_asociadas [MV 1] 6`,
+                        E_A7 = `FE113enfermedades_asociadas [MV 1] 7`,
+                        E_A8 = `FE113enfermedades_asociadas [MV 1] 8`,
+                        E_A9 = `FE113enfermedades_asociadas [MV 1] 9`,
+                        E_A10 = `FE113enfermedades_asociadas [MV 1] 10`,
+                        E_A11 = `FE113enfermedades_asociadas [MV 1] 11`,
+                        E_A12 = `FE113enfermedades_asociadas [MV 1] 12`,
+                        E_Aotras =`FE11301especifique [MV 1]`,
                         `Embarazo` = `Estado De Embarazo`,
                         Unidad_Notificadora = `Direcciones Ubicación [1]`,
                         `Fecha Inicio Sintomas` = `Fecha de inicio de síntomas`,
                         `Fecha primera visita CBR` = `Fecha de notificación`,
-                        `Se tomó muestra` = FE121se_tomo_una_muestra_respiratoria,
-                        `Fecha muestra` = FE12102fecha_y_hora_de_toma_de_la_muestra,
-                        `Resultado muestra` = FE12103resultado_de_la_muestra,
+                        `Se tomó muestra` = `FE121se_tomo_una_muestra_respiratoria [MV 1]`,
+                        `Fecha muestra` = `FE12102fecha_y_hora_de_toma_de_la_muestra [MV 1]`,
+                        `Resultado muestra` = `FE12103resultado_de_la_muestra [MV 1]`,
                         `Dias entre inicio sintomas y visita CBR` = 1,
                         `Fecha ingreso Go.Data` = `Creado En`,
-                        `Fecha hospitalizacion` = `FE13001fecha_de_hospitalizacion`,
-                        fecha_s1_s,
-                        fecha_s1_n,
-                        fecha_s2_s,
-                        fecha_s2_n,
-                        fecha_s3_s,
-                        fecha_s3_n,
-                        fecha_s4_s,
-                        fecha_s4_n,
-                        fecha_s5_s,
-                        fecha_s5_n,
-                        fecha_s6_s,
-                        fecha_s6_n,
-                        fecha_s7_s,
-                        fecha_s7_n,
-                        fecha_s8_s,
-                        fecha_s8_n,
-                        fecha_s9_s,
-                        fecha_s9_n,
-                        fecha_s10_s,
-                        fecha_s10_n,
-                        fecha_s11_s,
-                        fecha_s11_n,
-                        fecha_s12_s,
-                        fecha_s12_n,
-                        fecha_s13_s,
-                        fecha_s13_n,
-                        fecha_s14_s,
-                        fecha_s14_n,
-                        `Estado de seguimiento` = estado_de_seguimiento_1,
-                        hay_sintomas_1 = presenta_sintomas,
-                        hay_sintomas_2 = ha_presentado_sintomas_s2,
-                        hay_sintomas_3 = presenta_sintomas_s3,
-                        hay_sintomas_4 = presenta_sintomas_s4,
-                        hay_sintomas_5 = presenta_sintomas_s5,
-                        hay_sintomas_6 = presenta_sintomas_s6,
-                        hay_sintomas_7 = presenta_sintomas_s7,
-                        hay_sintomas_8 = presenta_sintomas_s8,
-                        hay_sintomas_9 = presenta_sintomas_s9,
-                        hay_sintomas_10 = presenta_sintomas_s10,
-                        hay_sintomas_11 = presenta_sintomas_s11,
-                        hay_sintomas_12 = presenta_sintomas_s12,
-                        hay_sintomas_13 = presenta_sintomas_s13,
-                        hay_sintomas_14 = presenta_sintomas_s14,
-                        por_que_s1 = por_que_1,
-                        por_que_s2 = por_que_s2,
-                        por_que_s3 = por_que_s3,
-                        por_que_s4 = por_que_s4,
-                        por_que_s5 = por_que_s5,
-                        por_que_s6 = por_que_s6,
-                        por_que_s7 = por_que_7,
-                        por_que_s8 = por_que_s8,
-                        por_que_s9 = por_que_9,
-                        por_que_s10 = por_que_s10,
-                        por_que_s11 = por_que_11,
-                        por_que_s12 = por_que_s12,
-                        por_que_s13 = por_que_s13,
-                        por_que_s14 = por_que_s14,
-                        fecha_es,
+                        `Fecha hospitalizacion` = `FE13001fecha_de_hospitalizacion [MV 1]`,
+                        fecha_s1_s = `fecha_s1_s [MV 1]`,
+                        fecha_s1_n= `fecha_s1_n [MV 1]`,
+                        fecha_s2_s = `fecha_s2_s [MV 1]`,
+                        fecha_s2_n = `fecha_s2_n [MV 1]`,
+                        fecha_s3_s = `fecha_s3_s [MV 1]`,
+                        fecha_s3_n = `fecha_s3_n [MV 1]`,
+                        fecha_s4_s = `fecha_s4_s [MV 1]`,
+                        fecha_s4_n = `fecha_s4_n [MV 1]`,
+                        fecha_s5_s = `fecha_s5_s [MV 1]`,
+                        fecha_s5_n = `fecha_s5_n [MV 1]`,
+                        fecha_s6_s = `fecha_s6_s [MV 1]`,
+                        fecha_s6_n = `fecha_s6_n [MV 1]`,
+                        fecha_s7_s = `fecha_s7_s [MV 1]`,
+                        fecha_s7_n = `fecha_s7_n [MV 1]`,
+                        fecha_s8_s = `fecha_s8_s [MV 1]`,
+                        fecha_s8_n = `fecha_s8_n [MV 1]`,
+                        fecha_s9_s = `fecha_s9_s [MV 1]`,
+                        fecha_s9_n = `fecha_s9_n [MV 1]`,
+                        fecha_s10_s = `fecha_s10_s [MV 1]`,
+                        fecha_s10_n = `fecha_s10_n [MV 1]`,
+                        fecha_s11_s = `fecha_s11_s [MV 1]`,
+                        fecha_s11_n = `fecha_s11_n [MV 1]`,
+                        fecha_s12_s = `fecha_s12_s [MV 1]`,
+                        fecha_s12_n = `fecha_s12_n [MV 1]`,
+                        fecha_s13_s = `fecha_s13_s [MV 1]`,
+                        fecha_s13_n = `fecha_s13_n [MV 1]`,
+                        fecha_s14_s = `fecha_s14_s [MV 1]`,
+                        fecha_s14_n = `fecha_s14_n [MV 1]`,
+                        `Estado de seguimiento` = `estado_de_seguimiento_1 [MV 1]`,
+                        hay_sintomas_1 = `presenta_sintomas [MV 1]`,
+                        hay_sintomas_2 = `ha_presentado_sintomas_s2 [MV 1]`,
+                        hay_sintomas_3 = `presenta_sintomas_s3 [MV 1]`,
+                        hay_sintomas_4 = `presenta_sintomas_s4 [MV 1]`,
+                        hay_sintomas_5 = `presenta_sintomas_s5 [MV 1]`,
+                        hay_sintomas_6 = `presenta_sintomas_s6 [MV 1]`,
+                        hay_sintomas_7 = `presenta_sintomas_s7 [MV 1]`,
+                        hay_sintomas_8 = `presenta_sintomas_s8 [MV 1]`,
+                        hay_sintomas_9 = `presenta_sintomas_s9 [MV 1]`,
+                        hay_sintomas_10 = `presenta_sintomas_s10 [MV 1]`,
+                        hay_sintomas_11 = `presenta_sintomas_s11 [MV 1]`,
+                        hay_sintomas_12 = `presenta_sintomas_s12 [MV 1]`,
+                        hay_sintomas_13 = `presenta_sintomas_s13 [MV 1]`,
+                        hay_sintomas_14 = `presenta_sintomas_s14 [MV 1]`,
+                        por_que_s1 = `por_que_1 [MV 1]`,
+                        por_que_s2 = `por_que_s2 [MV 1]`,
+                        por_que_s3 = `por_que_s3 [MV 1]`,
+                        por_que_s4 = `por_que_s4 [MV 1]`,
+                        por_que_s5 = `por_que_s5 [MV 1]`,
+                        por_que_s6 = `por_que_s6 [MV 1]`,
+                        por_que_s7 = `por_que_7 [MV 1]`,
+                        por_que_s8 = `por_que_s8 [MV 1]`,
+                        por_que_s9 = `por_que_9 [MV 1]`,
+                        por_que_s10 = `por_que_s10 [MV 1]`,
+                        por_que_s11 = `por_que_11 [MV 1]`,
+                        por_que_s12 = `por_que_s12 [MV 1]`,
+                        por_que_s13 = `por_que_s13 [MV 1]`,
+                        por_que_s14 = `por_que_s14 [MV 1]`,
+                        fecha_es = `fecha_es [MV 1]`,
                     ) %>%
                     unite(
                         'comorbilidades', c(contains('E_A')),sep = ', ',na.rm = T
