@@ -39,5 +39,5 @@ vignettes/*.pdf
 .Renviron
 .DS_Store
 /logs/*
-DashboardRastreo/data/*
-databases/*
+/DashboardRastreo/data/*
+/databases/*
