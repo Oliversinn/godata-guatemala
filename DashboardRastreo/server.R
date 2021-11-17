@@ -202,7 +202,7 @@ shinyServer(function(input, output, session) {
         casos_activos <- format(casos_activos, decimal.mark=".",big.mark=",",small.mark=".",small.interval=3)
         
         shinydashboard::valueBox(
-            "Activos",
+            "Bajo Seguimiento",
             value = casos_activos,
             icon = icon("virus"),
             color = "yellow"
@@ -214,7 +214,7 @@ shinyServer(function(input, output, session) {
         casos_activos <- format(casos_activos, decimal.mark=".",big.mark=",",small.mark=".",small.interval=3)
         
         shinydashboard::valueBox(
-            "Activos Contactables",
+            "Bajo Seguimiento Contactables",
             value = casos_activos,
             icon = icon("phone"),
             color = "yellow"
@@ -1030,7 +1030,7 @@ shinyServer(function(input, output, session) {
         contactos_activos <- format(contactos_activos, decimal.mark=".",big.mark=",",small.mark=".",small.interval=3)
         
         shinydashboard::valueBox(
-            "Activos",
+            "Bajo Seguimiento",
             value = contactos_activos,
             icon = icon("head-side-mask"),
             color = "yellow"
@@ -1042,7 +1042,7 @@ shinyServer(function(input, output, session) {
         contactos_activos <- format(contactos_activos, decimal.mark=".",big.mark=",",small.mark=".",small.interval=3)
         
         shinydashboard::valueBox(
-            "Activos Contactables",
+            "Bajo seguimiento Contactables",
             value = contactos_activos,
             icon = icon("phone"),
             color = "yellow"
@@ -2231,13 +2231,16 @@ shinyServer(function(input, output, session) {
                         fecha_seguimiento_12 = case_when(is.na(fecha_s12_s) ~ as.Date(fecha_s12_n), T ~ as.Date(fecha_s12_s)),
                         fecha_seguimiento_13 = case_when(is.na(fecha_s13_s) ~ as.Date(fecha_s13_n), T ~ as.Date(fecha_s13_s)),
                         fecha_seguimiento_14 = case_when(is.na(fecha_s14_s) ~ as.Date(fecha_s14_n), T ~ as.Date(fecha_s14_s)),
-                        `Estado de seguimiento` = case_when(`Estado de seguimiento` == 1 ~ "Activo",
-                                                            `Estado de seguimiento` == 2 ~ "Recuperado",
-                                                            `Estado de seguimiento` == 3 ~ "Imposible de contactar",
-                                                            `Estado de seguimiento` == 4 ~ "Perdido",
-                                                            `Estado de seguimiento` == 5 ~ "Hospitalizados/Fallecidos",
-                                                            `Estado de seguimiento` == 6 ~ "Concluído por otra razón",
-                                                            is.na(`Estado de seguimiento`) ~ "Sin estado de seguimiento"),
+                        `Estado de seguimiento` = as.character(`Estado de seguimiento`),
+                        `Estado de seguimiento` = case_when(`Estado de seguimiento` == "Bajo seguimiento" ~ "Bajo seguimiento",
+                                                            `Estado de seguimiento` == "Recuperado" ~ "Recuperado",
+                                                            `Estado de seguimiento` == "Imposible de contactar" ~ "Imposible de contactar",
+                                                            `Estado de seguimiento` == "Perdido durante el seguimiento" ~ "Perdido",
+                                                            `Estado de seguimiento` == "No es posible dar seguimiento domiciliar" ~ case_when(`Clasificación Epi` == "PROBABLE" ~ 'Fallecido',
+                                                                                                                                              T ~ "Hospitalizado"),
+                                                            `Estado de seguimiento` == "Otra razón" ~ "Concluído por otra razón",
+                                                            is.na(`Estado de seguimiento`) ~ "Sin estado de seguimiento",
+                                                            `Estado de seguimiento` == "" ~ "Sin estado de seguimiento"),
                         `seguimiento_1_resultado` = case_when(
                             hay_sintomas_1 == 1 ~ 'Sintomático',
                             hay_sintomas_1 == 2 ~ 'Asintomático',

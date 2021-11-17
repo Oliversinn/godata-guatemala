@@ -109,7 +109,7 @@ shinyUI(dashboardPage(skin = 'blue',
                                         title = 'Definiciones',
                                         tags$ul(
                                           tags$li('Contactable: son los casos para los cuáles se tiene un número de teléfono.'),
-                                          tags$li('Activo: Bajo seguimiento telefónico/aislamiento domiciliario.'),
+                                          tags$li('Bajo seguimiento: Bajo seguimiento telefónico/aislamiento domiciliario.'),
                                           tags$li('Recuperado: Ha cumplido con criterios de recuperación.'),
                                           tags$li('Imposible de contactar: número de teléfono equivocado o no contesta ni una llamada (2 intentos, 2 días seguidos).'),
                                           tags$li('Perdido (durante el seguimiento): contesto alguna llamada pero dejo de contestar (2 intentos, 2 días seguidos) o rechaza (pide) que se le deje de dar seguimiento.'),
@@ -152,11 +152,11 @@ shinyUI(dashboardPage(skin = 'blue',
                                               withLoader(dataTableOutput("rastreoCasesSexoDB"), type = 'html', loader = 'loader5')
                                             ),
                                             tabPanel(
-                                                title = 'Casos Activos por Sexo',
+                                                title = 'Casos bajo seguimiento por Sexo',
                                                 withLoader(plotlyOutput("rastreoCasesActiveSexo"), type = 'html', loader = 'loader5')
                                             ),
                                             tabPanel(
-                                              title = 'Activos - Cuadro de Datos',
+                                              title = 'Bajo seguimiento - Cuadro de Datos',
                                               withLoader(dataTableOutput("rastreoCasesActiveSexoDB"), type = 'html', loader = 'loader5')
                                             )
                                         ),
@@ -171,11 +171,11 @@ shinyUI(dashboardPage(skin = 'blue',
                                               withLoader(dataTableOutput("rastreoCasesEdadDB"), type = 'html', loader = 'loader5')
                                             ),
                                             tabPanel(
-                                                title = 'Casos Activos por Edad',
+                                                title = 'Casos bajo seguimiento por Edad',
                                                 withLoader(plotlyOutput("rastreoCasesActiveEdad"), type = 'html', loader = 'loader5')
                                             ),
                                             tabPanel(
-                                              title = 'Activos - Cuadro de Datos',
+                                              title = 'Bajo seguimiento - Cuadro de Datos',
                                               withLoader(dataTableOutput("rastreoCasesActiveEdadDB"), type = 'html', loader = 'loader5')
                                             )
                                         )
@@ -245,11 +245,11 @@ shinyUI(dashboardPage(skin = 'blue',
                                             withLoader(dataTableOutput("rastreoContactsSexoDB"), type = 'html', loader = 'loader5')
                                           ),
                                           tabPanel(
-                                            title = 'Contactos Activos por Sexo',
+                                            title = 'Contactos bajo seguimiento por Sexo',
                                             withLoader(plotlyOutput("rastreoContactsActiveSexo"), type = 'html', loader = 'loader5')
                                           ),
                                           tabPanel(
-                                            title = 'Activos - Cuadro de Datos',
+                                            title = 'Bajo seguimiento - Cuadro de Datos',
                                             withLoader(dataTableOutput("rastreoContactsActiveSexoDB"), type = 'html', loader = 'loader5')
                                           )
                                         ),
