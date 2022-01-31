@@ -1,7 +1,7 @@
 ###################################################################################################
 url <- "https://godataguatemala.mspas.gob.gt/"                   # <--------------------- insert instance url here, don't forget the slash at end !
 username <- "olivera@mazariegos.gt"                           # <--------------------- insert your username for signing into Go.Data webapp here
-password <- ""                           # <--------------------- insert your password for signing into Go.Data webapp here
+password <- "coviD19@2020"                           # <--------------------- insert your password for signing into Go.Data webapp here
 outbreak_id <- "a44faf32-bf27-4b39-a4fb-b9fcf29ac2d7"   # <--------------------- insert your outbreak ID here
 language_id = 'd86b2070-fad9-4699-8be9-a8ae5cc0edd2'   # <--------------------- insert your language ID here
 ###################################################################################################
@@ -66,8 +66,8 @@ write('Brote activado!',stdout())
 #meses_final[length(meses)] = Sys.Date()
 
 
-meses_inicio = seq(from=as.Date("2021-05-12"), to=Sys.Date(), by=15)
-meses_final = c(seq(from=as.Date("2021-05-26"), to=Sys.Date(), by=15),Sys.Date())
+meses_inicio = seq(from=as.Date("2021-11-22"), to=Sys.Date(), by=15)
+meses_final = c(seq(from=as.Date("2021-12-06"), to=Sys.Date(), by=15),Sys.Date())
 
 #meses_inicio = seq(from=as.Date("2020-08-12"), to=as.Date("2020-12-31"), by='month')
 #meses_inicio = c(meses_inicio, seq(from=as.Date("2021-01-01"), to=as.Date("2021-05-11"), by=15))
@@ -186,7 +186,7 @@ cases_clean = cases %>%
                                                                               'Perdido',"Fallecido", "Hospitalizado","Concluído por otra razón",
                                                                               "Sin estado de seguimiento")),
          `Direcciones Comunidad, aldea o zona [1]` = as.character(`Direcciones Comunidad, aldea o zona [1]`)) %>%
-  rename(`Fecha de notificación` = `Date of reporting`,
+  rename(`Fecha de notificacion` = `Date of reporting`,
          Edad = `Años Años De Edad`,
          Teléfono = `Direcciones Número De Teléfono [1]`,
          Condicion = `Condición del Paciente`,
@@ -195,6 +195,7 @@ cases_clean = cases %>%
 ### Manipulació inicial para analizar los seguimientos de casos
 reportCases = cases %>%
   select(
+    `Fecha de notificacion` = Fecha.de.notificación,
     `Carné De Identidad` = ID,
     `Creado En` = Creado.En,
     Clasificación,
@@ -386,6 +387,7 @@ for(i in 2:20) {
 ### información de los casos utilizada en los reportes
 caseInfo = reportCases %>%
   select(
+    `Fecha de notificacion`,
     `Carné De Identidad`,
     `Estado de seguimiento`,
     fecha_es,
@@ -393,6 +395,7 @@ caseInfo = reportCases %>%
     Clasificación
   ) %>%
   mutate(
+    `Fecha de notificacion` = as.Date(as.POSIXlt(as.character(`Fecha de notificacion`),format = "%F")),
     fecha_es = as.Date(as.POSIXlt(as.character(fecha_es),format='%F'))
   )
 ### Unir la informacion de los casos con la informacion de sus seguimientos
@@ -509,7 +512,7 @@ for (i in c(2:length(meses_inicio))) {
                                                                                 'Perdido',"Fallecido", "Hospitalizado","Concluído por otra razón",
                                                                                 "Sin estado de seguimiento")),
            `Direcciones Comunidad, aldea o zona [1]` = as.character(`Direcciones Comunidad, aldea o zona [1]`)) %>%
-    rename(`Fecha de notificación` = `Date of reporting`,
+    rename(`Fecha de notificacion` = `Date of reporting`,
            Edad = `Años Años De Edad`,
            Teléfono = `Direcciones Número De Teléfono [1]`,
            Condicion = `Condición del Paciente`,
@@ -517,6 +520,7 @@ for (i in c(2:length(meses_inicio))) {
   
   reportCases2 =  cases %>%
     select(
+      `Fecha de notificacion` = Fecha.de.notificación,
       `Carné De Identidad` = ID,
       `Creado En` = Creado.En,
       Clasificación,
@@ -708,6 +712,7 @@ for (i in c(2:length(meses_inicio))) {
   ### información de los casos utilizada en los reportes
   caseInfo2 = reportCases2 %>%
     select(
+      `Fecha de notificacion`,
       `Carné De Identidad`,
       `Estado de seguimiento`,
       fecha_es,
@@ -715,6 +720,7 @@ for (i in c(2:length(meses_inicio))) {
       Clasificación
     ) %>%
     mutate(
+      `Fecha de notificacion` = as.Date(as.POSIXlt(as.character(`Fecha de notificacion`),format = "%F")),
       fecha_es = as.Date(as.POSIXlt(as.character(fecha_es),format='%F'))
     )
   ### Unir la informacion de los casos con la informacion de sus seguimientos
@@ -728,7 +734,7 @@ for (i in c(2:length(meses_inicio))) {
   
 }
 
-
+seguimientos = seguimientos %>% filter(!is.na(seguimiento), seguimiento != '')
 
 ###########################################################################################
 ###########################################################################################
@@ -737,8 +743,8 @@ for (i in c(2:length(meses_inicio))) {
 ###########################################################################################
 ###########################################################################################
 
-rastreo_cases20210511 = read_csv("databases/rastreo_cases20210511.csv",guess_max = 50000)
-seguimientos20210511 = read_csv("databases/report_cases20210511.csv", guess_max = 50000) %>% mutate(fecha_es = as.Date(fecha_es))
+rastreo_cases20210511 = read_csv("databases/rastreo_cases20211121.csv",guess_max = 50000)
+seguimientos20210511 = read_csv("databases/report_cases20211121.csv", guess_max = 50000) %>% mutate(fecha_es = as.Date(fecha_es))
 
 write('Uniendo bases de datos nueva con base de datos anterior',stdout())
 cases_clean = bind_rows(rastreo_cases20210511, cases_clean)
@@ -746,8 +752,7 @@ seguimientos = bind_rows(seguimientos20210511, seguimientos)
 seguimientos = left_join(seguimientos, cases_clean %>% select(`Carné De Identidad`, `Creado En`, `¿Se tomó una muestra respiratoria?`, area_salud, dms))
 write('Exito!',stdout())
 cases_clean = cases_clean %>%
-  rename(`Fecha de notificacion` = `Fecha de notificación`,
-         Clasificacion = Clasificación,
+  rename(Clasificacion = Clasificación,
          `Fecha de condicion` = `Fecha de condición`,
          `Direcciones Ubicacion [1]` = `Direcciones Ubicación [1]`,
          `Direcciones Ubicacion [1] Localizacion Geografica De Nivel [3]` = `Direcciones Ubicación [1] Localización Geográfica De Nivel [3]`,
@@ -759,7 +764,10 @@ seguimientos = seguimientos %>%
   rename(`¿Se tomo una muestra respiratoria?` =  `¿Se tomó una muestra respiratoria?`,
          Telefono = Teléfono,
          `Carne De Identidad` = `Carné De Identidad`,
-         Clasificacion = Clasificación)
+         Clasificacion = Clasificación) %>%
+  filter(
+    !is.na(seguimiento)
+  )
 
 #seguimientos = seguimientos %>%
 #  rename(`¿Se tomó una muestra respiratoria?` = `¿Se tomo una muestra respiratoria?`,
@@ -870,6 +878,9 @@ contacts_clean = contacts %>%
 
 write('Contactos descargados!', stdout())
 
+rastreo_contactsOld = read_csv('DashboardRastreo/data/rastreo_contacts20211121.csv', guess_max = 50000) %>% select(!ID)
+contacts_clean = rbind(contacts_clean, rastreo_contactsOld, use.names=F)
+
 contacts_clean = contacts_clean %>%
   rename(`Fecha de notificacion` = `Fecha de notificación`,
          Ocupacion = Ocupación,
@@ -882,7 +893,7 @@ contacts_clean = contacts_clean %>%
 #specify date ranges, for follow up filters
 date_now <- format(Sys.time(), "%Y-%m-%dT23:59:59.999Z")                  
 date_5d_ago <- format((Sys.Date()-30), "%Y-%m-%dT23:59:59.999Z")
-date_start = "2020-08-12T00:00:00.000Z"
+date_start = "2021-11-22T00:00:00.000Z"
 
 
 
@@ -916,6 +927,9 @@ followups <- GET(paste0(url,"api/export-logs/",request_id,"/download?access_toke
 write('Seguimientos descargados!', stdout())
 followups = followups %>%
   select(ID, `Creado En` = Creado.En, `Estado`)
+
+followupsOld = read_csv('DashboardRastreo/data/rastreo_followups20211121.csv', guess_max = 50000)
+followups = rbind(followupsOld, followups)
 
 write('Guardando bases de datos...',stdout())
 write_excel_csv(cases_clean,'./databases/rastreo_cases.csv')

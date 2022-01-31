@@ -69,10 +69,11 @@ shinyServer(function(input, output, session) {
             req(input$DASFilter,input$fechaReporte[1],input$fechaReporte[2],input$ClasificacionFilter, input$DMSFilter) %>%
             filter(if(input$DASFilter != 'TODOS')  (area_salud %like% input$DASFilter) else TRUE,
                    if(input$DMSFilter != 'TODOS')  (dms %like% input$DMSFilter) else TRUE,
-                   if(input$ClasificacionFilter != 'TODOS')  (Clasificacion == input$ClasificacionFilter | `¿Se tomo una muestra respiratoria?` == 3) else TRUE,
+                   if(input$ClasificacionFilter != 'TODOS')  (Clasificacion == input$ClasificacionFilter | `¿Se tomo una muestra respiratoria?` == "Confirmado por autoreporte (aplica si resultado fue positivo)") else TRUE,
                    #if(input$unidadNotificadoraFilter != 'TODOS')  (`Clinicas Temporales` == input$unidadNotificadoraFilter) else TRUE,
                    `Creado En` >= format(input$fechaReporte[1]) & `Creado En` <= format(input$fechaReporte[2]),
-                   Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                   `Fecha de notificacion` >= format(input$fechaNotificacion[1]) & `Fecha de notificacion` <= format(input$fechaNotificacion[2]),
+                   Clasificacion != '' & (dms != 'DMS CHIQUIMULA' | dms != 'DMS JOCOTAN' | dms != 'DMS SAN SEBASTIAN' | dms != 'DMS SAN FELIPE'),
                    Clasificacion != 'SOSPECHOSO E') 
     })
     
@@ -82,11 +83,12 @@ shinyServer(function(input, output, session) {
             req(input$DASFilter,input$fechaReporte[1],input$fechaReporte[2],input$ClasificacionFilter) %>%
             filter(if(input$DASFilter != 'TODOS')  (area_salud %like% input$DASFilter) else TRUE,
                    if(input$DMSFilter != 'TODOS')  (dms %like% input$DMSFilter) else TRUE,
-                   if(input$ClasificacionFilter != 'TODOS')  (Clasificacion == input$ClasificacionFilter | `¿Se tomo una muestra respiratoria?` == 3) else TRUE,
+                   if(input$ClasificacionFilter != 'TODOS')  (Clasificacion == input$ClasificacionFilter | `¿Se tomo una muestra respiratoria?` == "Confirmado por autoreporte (aplica si resultado fue positivo)") else TRUE,
                    #if(input$unidadNotificadoraFilter != 'TODOS')  (`Clinicas Temporales` == input$unidadNotificadoraFilter) else TRUE,
                    `Creado En` >= format(input$fechaReporte[1]) & `Creado En` <= format(input$fechaReporte[2]),
+                   `Fecha de notificacion` >= format(input$fechaNotificacion[1]) & `Fecha de notificacion` <= format(input$fechaNotificacion[2]),
                    `Estado de seguimiento` == 'Bajo seguimiento',
-                   Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                   Clasificacion != '',
                    Clasificacion != 'SOSPECHOSO E')
     })
     
@@ -95,10 +97,11 @@ shinyServer(function(input, output, session) {
             req(input$DASFilter,input$fechaReporte[1],input$fechaReporte[2],input$ClasificacionFilter, input$DMSFilter) %>%
             filter(if(input$DASFilter != 'TODOS')  (area_salud %like% input$DASFilter) else TRUE,
                    if(input$DMSFilter != 'TODOS')  (dms %like% input$DMSFilter) else TRUE,
-                   if(input$ClasificacionFilter != 'TODOS')  (Clasificacion == input$ClasificacionFilter | `¿Se tomo una muestra respiratoria?` == 3) else TRUE,
+                   if(input$ClasificacionFilter != 'TODOS')  (Clasificacion == input$ClasificacionFilter | `¿Se tomo una muestra respiratoria?` == "Confirmado por autoreporte (aplica si resultado fue positivo)") else TRUE,
                    #if(input$unidadNotificadoraFilter != 'TODOS')  (`Clinicas Temporales` == input$unidadNotificadoraFilter) else TRUE,
                    `Creado En` >= format(input$fechaReporte[1]) & `Creado En` <= format(input$fechaReporte[2]),
-                   Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                   `Fecha de notificacion` >= format(input$fechaNotificacion[1]) & `Fecha de notificacion` <= format(input$fechaNotificacion[2]),
+                   Clasificacion != '',
                    Clasificacion != 'SOSPECHOSO E') 
     })
     
@@ -148,7 +151,8 @@ shinyServer(function(input, output, session) {
             filter(if(input$DASFilter != 'TODOS')  (area_salud %like% input$DASFilter) else TRUE,
                    if(input$DMSFilter != 'TODOS')  (dms %like% input$DMSFilter) else TRUE,
                    `Caso relacionado` %in% unique(rastreoCases_reactive()$`Carne De Identidad`),
-                   `Creado En` >= format(input$fechaReporte[1]) & `Creado En` <= format(input$fechaReporte[2]))
+                   `Creado En` >= format(input$fechaReporte[1]) & `Creado En` <= format(input$fechaReporte[2]),
+                   `Fecha de notificacion` >= format(input$fechaNotificacion[1]) & `Fecha de notificacion` <= format(input$fechaNotificacion[2]))
     })
 
     # TABLA REACTIVE DE CONTACTOS RASTREADOS ACTIVOS
@@ -159,6 +163,7 @@ shinyServer(function(input, output, session) {
                    if(input$DMSFilter != 'TODOS')  (dms %like% input$DMSFilter) else TRUE,
                    `Caso relacionado` %in% unique(rastreoCases_reactive()$`Carne De Identidad`),
                    `Creado En` >= format(input$fechaReporte[1]) & `Creado En` <= format(input$fechaReporte[2]),
+                   `Fecha de notificacion` >= format(input$fechaNotificacion[1]) & `Fecha de notificacion` <= format(input$fechaNotificacion[2]),
                    `Status final de seguimiento` == 'Bajo Seguimiento') 
     })
     
@@ -1393,13 +1398,13 @@ shinyServer(function(input, output, session) {
         
         casosAcumulados = rastreoCases_reactive() %>%
             filter(
-                Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                Clasificacion != '',
                 Clasificacion != 'SOSPECHOSO E') %>%
             nrow()
 
         casosAcumuladosContactables = rastreoCases_reactive() %>%
             filter(
-                Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                Clasificacion != '',
                 Clasificacion != 'SOSPECHOSO E',
                 `Telefono` == "CONTACTABLE" 
                 ) %>%
@@ -1407,24 +1412,24 @@ shinyServer(function(input, output, session) {
         
         confirmadosEnCentroRespiratorio = rastreoCases_reactive() %>%
             filter(
-                Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                Clasificacion != '',
                 Clasificacion != 'SOSPECHOSO E',
-                `Resultado de la muestra.` == 1) %>%
+                `Resultado de la muestra.` == "Positivo") %>%
             nrow()
 
         confirmadosAutoreporte = rastreoCases_reactive() %>%
             filter(
-                Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                Clasificacion != '',
                 Clasificacion != 'SOSPECHOSO E',
-                `¿Se tomo una muestra respiratoria?` == 3
+                `¿Se tomo una muestra respiratoria?` == "Confirmado por autoreporte (aplica si resultado fue positivo)"
                 ) %>%
             nrow()
 
         confirmadosParaRastreo = rastreoCases_reactive() %>%
             filter(
-                Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                Clasificacion != '',
                 Clasificacion != 'SOSPECHOSO E',
-                `¿Se tomo una muestra respiratoria?` == 3 | `Resultado de la muestra.` == 1
+                `¿Se tomo una muestra respiratoria?` == "Confirmado por autoreporte (aplica si resultado fue positivo)" | `Resultado de la muestra.` == "Positivo"
                 ) %>%
             nrow()
 
@@ -1434,36 +1439,36 @@ shinyServer(function(input, output, session) {
         
         tamizadosEnCentroRespiratorio = rastreoCases_reactive() %>%
             filter(
-                Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                Clasificacion != '',
                 Clasificacion != 'SOSPECHOSO E',
-                `¿Se tomo una muestra respiratoria?` == 1) %>%
+                `¿Se tomo una muestra respiratoria?` == 'Si') %>%
             nrow()
         
         positividad = paste(as.character(round((confirmadosEnCentroRespiratorio/tamizadosEnCentroRespiratorio)*100,1)),'%',sep='')
         
         casosPorNexoEpidemiologico = rastreoCases_reactive() %>%
             filter(
-                Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                Clasificacion != '',
                 Clasificacion != 'SOSPECHOSO E',
                 (`Fue Un Contacto` == TRUE) | `Clasificacion` == "CONFIRMADO POR NEXO EPIDEMIOLÓGICO") %>%
             nrow()
         
         casosElegiblesRastreoContactos = rastreoCases_reactive() %>%
             filter(
-                Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                Clasificacion != '',
                 Clasificacion != 'SOSPECHOSO E', 
-                `¿Se tomo una muestra respiratoria?` == 3 |
-                `Resultado de la muestra.` == 1,
+                `¿Se tomo una muestra respiratoria?` == "Confirmado por autoreporte (aplica si resultado fue positivo)" |
+                `Resultado de la muestra.` == "Positivo",
                 `Telefono` == "CONTACTABLE",
                 `Estado de seguimiento` != "Imposible de contactar") %>%
             nrow()
 
         casosNoElegiblesRastreoContactos = rastreoCases_reactive() %>%
             filter(
-                Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                Clasificacion != '',
                 Clasificacion != 'SOSPECHOSO E',
                 `¿Se tomo una muestra respiratoria?` == 3 |
-                `Resultado de la muestra.` == 1,
+                `Resultado de la muestra.` == "Positivo",
                 `Telefono` != "CONTACTABLE" |
                 `Estado de seguimiento` == "Imposible de contactar") %>%
             nrow()
@@ -1472,9 +1477,9 @@ shinyServer(function(input, output, session) {
         
         casosLlamadosParaContactos = rastreoCases_reactive() %>%
             filter(
-                Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                Clasificacion != '',
                 Clasificacion != 'SOSPECHOSO E',
-                `Resultado de la muestra.` == 1,
+                `Resultado de la muestra.` == "Positivo",
                 `Telefono` == "CONTACTABLE",
                 `Estado de seguimiento` != "Imposible de contactar") %>%
             select(starts_with('Seguimiento')) %>%
@@ -1510,7 +1515,7 @@ shinyServer(function(input, output, session) {
             filter(
                 case_when(format(as.Date(input$fechaReporte[2]),'%a') == 'Mon' ~ `Creado En` == as.Date(input$fechaReporte[2]) | `Creado En` == as.Date(input$fechaReporte[2])-1,
                           T ~ `Creado En` == as.Date(input$fechaReporte[2])),
-                Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                Clasificacion != '',
                 Clasificacion != 'SOSPECHOSO E'
             ) %>%
             distinct(`Carne De Identidad`)
@@ -1521,7 +1526,7 @@ shinyServer(function(input, output, session) {
             filter(
                 case_when(format(as.Date(input$fechaReporte[2]),'%a') == 'Mon' ~ `Creado En` == as.Date(input$fechaReporte[2]) | `Creado En` == as.Date(input$fechaReporte[2])-1,
                           T ~ `Creado En` == as.Date(input$fechaReporte[2])),
-                Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                Clasificacion != '',
                 Clasificacion != 'SOSPECHOSO E',
                 Telefono == 'CONTACTABLE',
                 `Estado de seguimiento` != "Imposible de contactar"
@@ -1536,16 +1541,17 @@ shinyServer(function(input, output, session) {
             filter(
                 case_when(format(as.Date(input$fechaReporte[2]),'%a') == 'Mon' ~ `Creado En` == as.Date(input$fechaReporte[2]) | `Creado En` == as.Date(input$fechaReporte[2])-1,
                           T ~ `Creado En` == as.Date(input$fechaReporte[2])),
-                Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                Clasificacion != '',
                 Clasificacion != 'SOSPECHOSO E',
                 Clasificacion == "CONFIRMADO" | `¿Se tomo una muestra respiratoria?` == "Confirmado por autoreporte (aplica si resultado fue positivo)"
             ) %>%
+            distinct(`Carne De Identidad`) %>%
             nrow()
         
         
         casosSinEstado = reportCases_reactive() %>%
             filter(
-                Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                Clasificacion != '',
                 Clasificacion != 'SOSPECHOSO E',
                 Telefono == 'CONTACTABLE',
                 `Estado de seguimiento` == 'Sin estado de seguimiento',
@@ -1556,7 +1562,7 @@ shinyServer(function(input, output, session) {
         
         casosActivos = reportCases_reactive() %>%
             filter(
-                Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                Clasificacion != '',
                 Clasificacion != 'SOSPECHOSO E',
                 `Estado de seguimiento` == 'Bajo seguimiento'
             ) %>%
@@ -1566,7 +1572,7 @@ shinyServer(function(input, output, session) {
         
         casosSeguimientoRealizado = reportCases_reactive() %>%
             filter(
-                Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                Clasificacion != '',
                 Clasificacion != 'SOSPECHOSO E',
                 fecha_seguimiento == as.Date(input$fechaReporte[2]) #fecha del filtro
             ) %>%
@@ -1652,13 +1658,13 @@ shinyServer(function(input, output, session) {
                                 totalCasosDelDia, casosConSeguimientoRealizado, casosNoRespuesta, casosNoContactable, casosRechazoSeguimiento, casosNoOtraRazon, 
                                 casosConSeguimientoLogrado, porcentajeCasosConSeguimiento, casosNoDioTiempo),ncol = 1,byrow = TRUE)
         
-        for(i in 1:4){
+        for(i in 1:6){
             fecha = as.character(format(input$fechaReporte[2]-i,'%d/%m/%Y'))
             casosNuevos = reportCases_reactive() %>%
                 filter(
                     case_when(format(as.Date(input$fechaReporte[2])-i,'%a') == 'Mon' ~ `Creado En` == as.Date(input$fechaReporte[2])-i | `Creado En` == as.Date(input$fechaReporte[2])-i-1,
                               T ~ `Creado En` == as.Date(input$fechaReporte[2])-i),
-                    Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                    Clasificacion != '',
                     Clasificacion != 'SOSPECHOSO E'
                 ) %>%
                 distinct(`Carne De Identidad`)
@@ -1669,7 +1675,7 @@ shinyServer(function(input, output, session) {
                 filter(
                     case_when(format(as.Date(input$fechaReporte[2])-i,'%a') == 'Mon' ~ `Creado En` == as.Date(input$fechaReporte[2])-i | `Creado En` == as.Date(input$fechaReporte[2])-i-1,
                               T ~ `Creado En` == as.Date(input$fechaReporte[2])-i),
-                    Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                    Clasificacion != '',
                     Clasificacion != 'SOSPECHOSO E',
                     Telefono == 'CONTACTABLE',
                     `Estado de seguimiento` != "Imposible de contactar"
@@ -1684,16 +1690,17 @@ shinyServer(function(input, output, session) {
                 filter(
                     case_when(format(as.Date(input$fechaReporte[2])-i,'%a') == 'Mon' ~ `Creado En` == as.Date(input$fechaReporte[2])-i | `Creado En` == as.Date(input$fechaReporte[2])-i-1,
                               T ~ `Creado En` == as.Date(input$fechaReporte[2])-i),
-                    Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                    Clasificacion != '',
                     Clasificacion != 'SOSPECHOSO E',
                     Clasificacion == "CONFIRMADO" | `¿Se tomo una muestra respiratoria?` == "Confirmado por autoreporte (aplica si resultado fue positivo)"
                 ) %>%
+                distinct(`Carne De Identidad`) %>%
                 nrow()
             
             
             casosSinEstado = reportCases_reactive() %>%
                 filter(
-                    Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                    Clasificacion != '',
                     Clasificacion != 'SOSPECHOSO E',
                     Telefono == 'CONTACTABLE',
                     `Estado de seguimiento` == 'Sin estado de seguimiento',
@@ -1704,7 +1711,7 @@ shinyServer(function(input, output, session) {
             
             casosActivos = reportCases_reactive() %>%
                 filter(
-                    Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                    Clasificacion != '',
                     Clasificacion != 'SOSPECHOSO E',
                     `Estado de seguimiento` == 'Bajo seguimiento'
                 ) %>%
@@ -1714,7 +1721,7 @@ shinyServer(function(input, output, session) {
             
             casosSeguimientoRealizado = reportCases_reactive() %>%
                 filter(
-                    Clasificacion != 'NO ES UN CASO (DESCARTADO)',
+                    Clasificacion != '',
                     Clasificacion != 'SOSPECHOSO E',
                     fecha_seguimiento == as.Date(input$fechaReporte[2])-i #fecha del filtro
                 ) %>%
@@ -1808,7 +1815,7 @@ shinyServer(function(input, output, session) {
                                    'Porcentaje casos con seguimiento (%)', 'Casos que no dio tiempo llamar o seguimiento no registrado')
         
 
-         datatable(reporteCases, options = list( pageLength =14), colnames = rep('',ncol(reporteCases)))
+         DT::datatable(reporteCases, options = list( pageLength =14, scrollX = TRUE), colnames = rep('',ncol(reporteCases)))
 
         
     })
@@ -1823,7 +1830,7 @@ shinyServer(function(input, output, session) {
                 case_when(format(as.Date(input$fechaReporte[2] , "%d/%m/%Y"), '%a') == "Mon" ~ `Creado En` == input$fechaReporte[2] | `Creado En` == input$fechaReporte[2]-1,
                           T ~ `Creado En` == input$fechaReporte[2]),
                 `Clasificacion` == "CONFIRMADO" |
-                `¿Se tomo una muestra respiratoria?` == 3
+                `¿Se tomo una muestra respiratoria?` == "Confirmado por autoreporte (aplica si resultado fue positivo)"
             )
 
         casosElegiblesContactosContactables = casosElegiblesContactos %>%
@@ -1868,7 +1875,7 @@ shinyServer(function(input, output, session) {
                                     nrow(contactosNuevos), contactosCuarentenaPorLlamar, contactosPorLlamar, contactosNoRespuesta,
                                     contactosSeguimientoLogrado, porcentajeContactosSeguimiento, contactosNoDioTiempo),ncol = 1,byrow = TRUE)
 
-        for (i in c(1:4)) {
+        for (i in c(1:6)) {
             fecha = as.character(format(input$fechaReporte[2]-i,'%d/%m/%Y'))
 
             casosElegiblesContactos = rastreoCases_reactive() %>%
@@ -1876,7 +1883,7 @@ shinyServer(function(input, output, session) {
                     case_when(format(as.Date(input$fechaReporte[2]-i, "%d/%m/%Y"), '%a') == "Mon" ~ `Creado En` == input$fechaReporte[2]-i | `Creado En` == input$fechaReporte[2]-i-1,
                               T ~ `Creado En` == input$fechaReporte[2]-i),
                     `Clasificacion` == "CONFIRMADO" |
-                    `¿Se tomo una muestra respiratoria?` == 3
+                    `¿Se tomo una muestra respiratoria?` == "Confirmado por autoreporte (aplica si resultado fue positivo)"
                 )
 
             casosElegiblesContactosContactables = casosElegiblesContactos %>%
@@ -1932,7 +1939,7 @@ shinyServer(function(input, output, session) {
                                 'Porcentaje de contactos con seguimiento (%)', 'Contactos que no dio tiempo llamar o seguimiento no registrado')
 
         
-        datatable(reporteContacts, options = list( pageLength =11), colnames = rep('',ncol(reporteContacts)))
+        datatable(reporteContacts, options = list( pageLength =11, scrollX = TRUE), colnames = rep('',ncol(reporteContacts)))
 
 
          
@@ -2060,7 +2067,7 @@ shinyServer(function(input, output, session) {
                         Clasificación = toupper(Clasificación),
                     ) %>%
                     filter(
-                        Clasificación != 'NO ES UN CASO (DESCARTADO)',
+                        Clasificación != '',
                         Clasificación != 'SOSPECHOSO E'
                     ) %>%
                     select(
@@ -2090,7 +2097,7 @@ shinyServer(function(input, output, session) {
                         `Embarazo` = `Estado De Embarazo`,
                         Unidad_Notificadora = `Direcciones Ubicación [1]`,
                         `Fecha Inicio Sintomas` = `Fecha de inicio de síntomas`,
-                        `Fecha primera visita CBR` = `Fecha de notificación`,
+                        `Fecha de notificación` = `Fecha de notificación`,
                         `Se tomó muestra` = `FE121se_tomo_una_muestra_respiratoria [MV 1]`,
                         `Fecha muestra` = `FE12102fecha_y_hora_de_toma_de_la_muestra [MV 1]`,
                         `Resultado muestra` = `FE12103resultado_de_la_muestra [MV 1]`,
@@ -2176,46 +2183,46 @@ shinyServer(function(input, output, session) {
                         comorbilidades = gsub('2', 'Enfermedad Pulmonar Obstructiva Crónica', comorbilidades),
                         comorbilidades = gsub('1', 'Diabetes Mellitus', comorbilidades),
                         `Embarazo` = substr(`Embarazo`, start = 1, stop = 2),
-                        `Fecha primera visita CBR` = as.Date(`Fecha primera visita CBR`),
-                        `Se tomó muestra` = case_when(
-                            as.character(`Se tomó muestra`) == "1" ~ 'Si',
-                            as.character(`Se tomó muestra`) == "2" ~ 'No',
-                            as.character(`Se tomó muestra`) == "3" ~ 'Autoreporte'),
-                        `Resultado muestra` = case_when(
-                            `Resultado muestra` == 1 ~ 'Positiva',
-                            `Resultado muestra` == 2 ~ 'Negativa',
-                            `Resultado muestra` == 3 ~ 'Autoreporte'),
-                        `Dias entre inicio sintomas y visita CBR` = as.Date(`Fecha primera visita CBR`, '%d-%m-%Y') - as.Date(`Fecha Inicio Sintomas`, '%d-%m-%Y'),
+                        `Fecha de notificación` = as.Date(`Fecha de notificación`),
+                        #`Se tomó muestra` = case_when(
+                        #    as.character(`Se tomó muestra`) == "1" ~ 'Si',
+                        #    as.character(`Se tomó muestra`) == "2" ~ 'No',
+                        #    as.character(`Se tomó muestra`) == "3" ~ 'Autoreporte'),
+                        #`Resultado muestra` = case_when(
+                        #    `Resultado muestra` == 1 ~ 'Positiva',
+                        #    `Resultado muestra` == 2 ~ 'Negativa',
+                        #    `Resultado muestra` == 3 ~ 'Autoreporte'),
+                        `Dias entre inicio sintomas y notificación` = as.Date(`Fecha de notificación`, '%d-%m-%Y') - as.Date(`Fecha Inicio Sintomas`, '%d-%m-%Y'),
                         `Fecha ingreso Go.Data` = as.Date(`Fecha ingreso Go.Data`),
-                        fecha_s1_s = as.Date(fecha_s1_s),
-                        fecha_s1_n = as.Date(fecha_s1_n),
-                        fecha_s2_s = as.Date(fecha_s2_s),
-                        fecha_s2_n = as.Date(fecha_s2_n),
-                        fecha_s3_s = as.Date(fecha_s3_s),
-                        fecha_s3_n = as.Date(fecha_s3_n),
-                        fecha_s4_s = as.Date(fecha_s4_s),
-                        fecha_s4_n = as.Date(fecha_s4_n),
-                        fecha_s5_s = as.Date(fecha_s5_s),
-                        fecha_s5_n = as.Date(fecha_s5_n),
-                        fecha_s6_s = as.Date(fecha_s6_s),
-                        fecha_s6_n = as.Date(fecha_s6_n),
-                        fecha_s7_s = as.Date(fecha_s7_s),
-                        fecha_s7_n = as.Date(fecha_s7_n),
-                        fecha_s8_s = as.Date(fecha_s8_s),
-                        fecha_s8_n = as.Date(fecha_s8_n),
-                        fecha_s9_s = as.Date(fecha_s9_s),
-                        fecha_s9_n = as.Date(fecha_s9_n),
-                        fecha_s10_s = as.Date(fecha_s10_s),
-                        fecha_s10_n = as.Date(fecha_s10_n),
-                        fecha_s11_s = as.Date(fecha_s11_s),
-                        fecha_s11_n = as.Date(fecha_s11_n),
-                        fecha_s12_s = as.Date(fecha_s12_s),
-                        fecha_s12_n = as.Date(fecha_s12_n),
-                        fecha_s13_s = as.Date(fecha_s13_s),
-                        fecha_s13_n = as.Date(fecha_s13_n),
-                        fecha_s14_s = as.Date(fecha_s14_s),
-                        fecha_s14_n = as.Date(fecha_s14_n),
-                        fecha_es = as.Date(fecha_es),
+                        fecha_s1_s = as.Date(as.POSIXlt(as.character(fecha_s1_s),format = "%F")),
+                        fecha_s1_n = as.Date(as.POSIXlt(as.character(fecha_s1_n),format = "%F")),
+                        fecha_s2_s = as.Date(as.POSIXlt(as.character(fecha_s2_s),format = "%F")),
+                        fecha_s2_n = as.Date(as.POSIXlt(as.character(fecha_s2_n),format = "%F")),
+                        fecha_s3_s = as.Date(as.POSIXlt(as.character(fecha_s3_s),format = "%F")),
+                        fecha_s3_n = as.Date(as.POSIXlt(as.character(fecha_s3_n),format = "%F")),
+                        fecha_s4_s = as.Date(as.POSIXlt(as.character(fecha_s4_s),format = "%F")),
+                        fecha_s4_n = as.Date(as.POSIXlt(as.character(fecha_s4_n),format = "%F")),
+                        fecha_s5_s = as.Date(as.POSIXlt(as.character(fecha_s5_s),format = "%F")),
+                        fecha_s5_n = as.Date(as.POSIXlt(as.character(fecha_s5_n),format = "%F")),
+                        fecha_s6_s = as.Date(as.POSIXlt(as.character(fecha_s6_s),format = "%F")),
+                        fecha_s6_n = as.Date(as.POSIXlt(as.character(fecha_s6_n),format = "%F")),
+                        fecha_s7_s = as.Date(as.POSIXlt(as.character(fecha_s7_s),format = "%F")),
+                        fecha_s7_n = as.Date(as.POSIXlt(as.character(fecha_s7_n),format = "%F")),
+                        fecha_s8_s = as.Date(as.POSIXlt(as.character(fecha_s8_s),format = "%F")),
+                        fecha_s8_n = as.Date(as.POSIXlt(as.character(fecha_s8_n),format = "%F")),
+                        fecha_s9_s = as.Date(as.POSIXlt(as.character(fecha_s9_s),format = "%F")),
+                        fecha_s9_n = as.Date(as.POSIXlt(as.character(fecha_s9_n),format = "%F")),
+                        fecha_s10_s = as.Date(as.POSIXlt(as.character(fecha_s10_s),format = "%F")),
+                        fecha_s10_n = as.Date(as.POSIXlt(as.character(fecha_s10_n),format = "%F")),
+                        fecha_s11_s = as.Date(as.POSIXlt(as.character(fecha_s11_s),format = "%F")),
+                        fecha_s11_n = as.Date(as.POSIXlt(as.character(fecha_s11_n),format = "%F")),
+                        fecha_s12_s = as.Date(as.POSIXlt(as.character(fecha_s12_s),format = "%F")),
+                        fecha_s12_n = as.Date(as.POSIXlt(as.character(fecha_s12_n),format = "%F")),
+                        fecha_s13_s = as.Date(as.POSIXlt(as.character(fecha_s13_s),format = "%F")),
+                        fecha_s13_n = as.Date(as.POSIXlt(as.character(fecha_s13_n),format = "%F")),
+                        fecha_s14_s = as.Date(as.POSIXlt(as.character(fecha_s14_s),format = "%F")),
+                        fecha_s14_n = as.Date(as.POSIXlt(as.character(fecha_s14_n),format = "%F")),
+                        fecha_es = as.Date(as.POSIXlt(as.character(fecha_es),format = "%F")),
                         
                         fecha_seguimiento_1 = case_when(is.na(fecha_s1_s) ~ as.Date(fecha_s1_n), T ~ as.Date(fecha_s1_s)),
                         fecha_seguimiento_2 = case_when(is.na(fecha_s2_s) ~ as.Date(fecha_s2_n), T ~ as.Date(fecha_s2_s)),
@@ -2242,166 +2249,166 @@ shinyServer(function(input, output, session) {
                                                             is.na(`Estado de seguimiento`) ~ "Sin estado de seguimiento",
                                                             `Estado de seguimiento` == "" ~ "Sin estado de seguimiento"),
                         `seguimiento_1_resultado` = case_when(
-                            hay_sintomas_1 == 1 ~ 'Sintomático',
-                            hay_sintomas_1 == 2 ~ 'Asintomático',
-                            por_que_s1 == 1  ~ "No respondió",
-                            por_que_s1 == 2 ~ "Rechazó",
-                            por_que_s1 == 3 ~ "No entró llamada",
-                            por_que_s1 == 4 ~ "Conexión perdida",
-                            por_que_s1 == 5 ~ "No intentada",
-                            por_que_s1 == 6 ~ "Num incorrecto",
-                            por_que_s1 == 7 ~ "Otro"
+                            hay_sintomas_1 == "Si" ~ 'Sintomático',
+                            hay_sintomas_1 == "No (asintomatico)" ~ 'Asintomático',
+                            por_que_s1 == "No respondió la llamada"  ~ "No respondió",
+                            por_que_s1 == "REspondió pero rechazo seguimiento"  ~ "Rechazó",
+                            por_que_s1 == "No entró la llamada al número registrado"  ~ "No entró llamada",
+                            por_que_s1 == "Se inició seguimiento pero se perdió la comunicación" ~ "Conexión perdida",
+                            por_que_s1 == 'No intentada/ no dió tiempo' ~ "No intentada",
+                            por_que_s1 == "Número de telefono incorrecto" ~ "Num incorrecto",
+                            por_que_s1 == "Otro" ~ "Otro"
                         ),
                         `seguimiento_2_resultado` = case_when(
-                            hay_sintomas_2 == '1' ~ 'Sintomatico',
-                            hay_sintomas_2 == '2' ~ 'Asintomatico',
-                            por_que_s2 == '1' ~ "No respondió",
-                            por_que_s2 == '2' ~ "Rechazó",
-                            por_que_s2 == '3' ~ "No entró llamada",
-                            por_que_s2 == '4' ~ "Conexión perdida",
-                            por_que_s2 == '5' ~ "No intentada",
-                            por_que_s2 == '6' ~ "Num incorrecto",
-                            por_que_s2 == '7' ~ "Otro"
+                            hay_sintomas_2 == 'Si' ~ 'Sintomatico',
+                            hay_sintomas_2 == "No (asintomático)" ~ 'Asintomatico',
+                            por_que_s2 == 'No respondió la llamada' ~ "No respondió",
+                            por_que_s2 == 'Respondió pero rechazó seguimiento' ~ "Rechazó",
+                            por_que_s2 == 'No entro la llamada al número registrado' ~ "No entró llamada",
+                            por_que_s2 == 'Se inicio seguimiento pero se perdió la comunicación' ~ "Conexión perdida",
+                            por_que_s2 == 'No intentada/no dio tiempo' ~ "No intentada",
+                            por_que_s2 == 'Número de telefono incorrecto' ~ "Num incorrecto",
+                            por_que_s2 == 'Otro' ~ "Otro"
                         ),
                         `seguimiento_3_resultado` = case_when(
-                            hay_sintomas_3 == '1' ~ 'Sintomatico',
-                            hay_sintomas_3 == '2' ~ 'Asintomatico',
-                            por_que_s3 == '1' ~ "No respondió",
-                            por_que_s3 == '2' ~ "Rechazó",
-                            por_que_s3 == '3' ~ "No entró llamada",
-                            por_que_s3 == '4' ~ "Conexión perdida",
-                            por_que_s3 == '5' ~ "No intentada",
-                            por_que_s3 == '6' ~ "Num incorrecto",
-                            por_que_s3 == '7' ~ "Otro"
+                            hay_sintomas_3 == 'Si' ~ 'Sintomatico',
+                            hay_sintomas_3 == "No (asintómatico)" ~ 'Asintomatico',
+                            por_que_s3 == 'No respondió la llamada' ~ "No respondió",
+                            por_que_s3 == 'Respondió pero rechazo seguimiento' ~ "Rechazó",
+                            por_que_s3 == 'No entró la llamada al número registrado' ~ "No entró llamada",
+                            por_que_s3 == 'Se inició seguimiento pero se perdió la comunicación' ~ "Conexión perdida",
+                            por_que_s3 == 'No intentada/no dio tiempo' ~ "No intentada",
+                            por_que_s3 == 'Número de teléfono incorrecto' ~ "Num incorrecto",
+                            por_que_s3 == 'Otro' ~ "Otro"
                         ),
                         `seguimiento_4_resultado` = case_when(
-                            hay_sintomas_4 == '1' ~ 'Sintomatico',
-                            hay_sintomas_4 == '2' ~ 'Asintomatico',
-                            por_que_s4 == '1' ~ "No respondió",
-                            por_que_s4 == '2' ~ "Rechazó",
-                            por_que_s4 == '3' ~ "No entró llamada",
-                            por_que_s4 == '4' ~ "Conexión perdida",
-                            por_que_s4 == '5' ~ "No intentada",
-                            por_que_s4 == '6' ~ "Num incorrecto",
-                            por_que_s4 == '7' ~ "Otro"
+                            hay_sintomas_4 == 'Si' ~ 'Sintomatico',
+                            hay_sintomas_4 == "No (asintomático)" ~ 'Asintomatico',
+                            por_que_s4 == 'No respondió la llamada' ~ "No respondió",
+                            por_que_s4 == 'Respondió pero rechazo seguimiento' ~ "Rechazó",
+                            por_que_s4 == 'No entró la llamada al número registrado' ~ "No entró llamada",
+                            por_que_s4 == 'Se inició seguimiento pero se perdió la comunicación' ~ "Conexión perdida",
+                            por_que_s4 == 'No intentada/ no dio tiempo' ~ "No intentada",
+                            por_que_s4 == 'Número de teléfono incorrecto' ~ "Num incorrecto",
+                            por_que_s4 == 'Otro' ~ "Otro"
                         ),
                         `seguimiento_5_resultado` = case_when(
-                            hay_sintomas_5 == '1' ~ 'Sintomatico',
-                            hay_sintomas_5 == '2' ~ 'Asintomatico',
-                            por_que_s5 == '1' ~ "No respondió",
-                            por_que_s5 == '2' ~ "Rechazó",
-                            por_que_s5 == '3' ~ "No entró llamada",
-                            por_que_s5 == '4' ~ "Conexión perdida",
-                            por_que_s5 == '5' ~ "No intentada",
-                            por_que_s5 == '6' ~ "Num incorrecto",
-                            por_que_s5 == '7' ~ "Otro"
+                            hay_sintomas_5 == 'Si' ~ 'Sintomatico',
+                            hay_sintomas_5 == "No (asintomatico)" ~ 'Asintomatico',
+                            por_que_s5 == 'No respondió la llamada' ~ "No respondió",
+                            por_que_s5 == 'Respondió pero rechazo seguimiento' ~ "Rechazó",
+                            por_que_s5 == 'No entró la llamada al número registrado' ~ "No entró llamada",
+                            por_que_s5 == 'Se inició seguimiento pero se perdió la comunicación' ~ "Conexión perdida",
+                            por_que_s5 == 'No intentada/no dio tiempo' ~ "No intentada",
+                            por_que_s5 == 'Número de teléfono incorrecto' ~ "Num incorrecto",
+                            por_que_s5 == 'Otro' ~ "Otro"
                         ),
                         `seguimiento_6_resultado` = case_when(
-                            hay_sintomas_6 == '1' ~ 'Sintomatico',
-                            hay_sintomas_6 == '2' ~ 'Asintomatico',
-                            por_que_s6 == '1' ~ "No respondió",
-                            por_que_s6 == '2' ~ "Rechazó",
-                            por_que_s6 == '3' ~ "No entró llamada",
-                            por_que_s6 == '4' ~ "Conexión perdida",
-                            por_que_s6 == '5' ~ "No intentada",
-                            por_que_s6 == '6' ~ "Num incorrecto",
-                            por_que_s6 == '7' ~ "Otro"
+                            hay_sintomas_6 == 'Sí' ~ 'Sintomatico',
+                            hay_sintomas_6 == "No (asintomáticos)" ~ 'Asintomatico',
+                            por_que_s6 == 'No respondió la llamada' ~ "No respondió",
+                            por_que_s6 == 'Respondió pero rechazo seguimiento' ~ "Rechazó",
+                            por_que_s6 == 'No entró la llamada al número registrado' ~ "No entró llamada",
+                            por_que_s6 == 'Se inició seguimiento pero se perdió la comunicación' ~ "Conexión perdida",
+                            por_que_s6 == 'No intentada/no dio tiempo' ~ "No intentada",
+                            por_que_s6 == 'Número de telefono incorrecto' ~ "Num incorrecto",
+                            por_que_s6 == 'Otro' ~ "Otro"
                         ),
                         
                         `seguimiento_7_resultado` = case_when(
-                            hay_sintomas_7 == '1' ~ 'Sintomatico',
-                            hay_sintomas_7 == '2' ~ 'Asintomatico',
-                            por_que_s7 == '1' ~ "No respondió",
-                            por_que_s7 == '2' ~ "Rechazó",
-                            por_que_s7 == '3' ~ "No entró llamada",
-                            por_que_s7 == '4' ~ "Conexión perdida",
-                            por_que_s7 == '5' ~ "No intentada",
-                            por_que_s7 == '6' ~ "Num incorrecto",
-                            por_que_s7 == '7' ~ "Otro"
+                            hay_sintomas_7 == 'Si' ~ 'Sintomatico',
+                            hay_sintomas_7 == "No" ~ 'Asintomatico',
+                            por_que_s7 == 'No respondió la llamada' ~ "No respondió",
+                            por_que_s7 == 'Respondió pero rechazo seguimiento' ~ "Rechazó",
+                            por_que_s7 == 'No entro la llamada al número registrado' ~ "No entró llamada",
+                            por_que_s7 == 'Se inició seguimiento pero se perdió la comunicación' ~ "Conexión perdida",
+                            por_que_s7 == 'No intentada/no dio tiempo' ~ "No intentada",
+                            por_que_s7 == 'Número de telefono incorrecto' ~ "Num incorrecto",
+                            por_que_s7 == 'Otro' ~ "Otro"
                         ),
                         
                         `seguimiento_8_resultado` = case_when(
-                            hay_sintomas_8 == '1' ~ 'Sintomatico',
-                            hay_sintomas_8 == '2' ~ 'Asintomatico',
-                            por_que_s8 == '1' ~ "No respondió",
-                            por_que_s8 == '2' ~ "Rechazó",
-                            por_que_s8 == '3' ~ "No entró llamada",
-                            por_que_s8 == '4' ~ "Conexión perdida",
-                            por_que_s8 == '5' ~ "No intentada",
-                            por_que_s8 == '6' ~ "Num incorrecto",
-                            por_que_s8 == '7' ~ "Otro"
+                            hay_sintomas_8 == 'Sí' ~ 'Sintomatico',
+                            hay_sintomas_8 == "No" ~ 'Asintomatico',
+                            por_que_s8 == 'No respondió la llamada' ~ "No respondió",
+                            por_que_s8 == 'Respondió pero rechazo seguimiento' ~ "Rechazó",
+                            por_que_s8 == 'No entró la llamada al número registrado' ~ "No entró llamada",
+                            por_que_s8 == 'Se inició seguimiento pero se perdió la comunicación' ~ "Conexión perdida",
+                            por_que_s8 == 'No intentada / no dio tiempo' ~ "No intentada",
+                            por_que_s8 == 'Número de teléfono incorrecto' ~ "Num incorrecto",
+                            por_que_s8 == 'Otro' ~ "Otro"
                         ),
                         
                         `seguimiento_9_resultado` = case_when(
-                            hay_sintomas_9 == '1' ~ 'Sintomatico',
-                            hay_sintomas_9 == '2' ~ 'Asintomatico',
-                            por_que_s9 == '1' ~ "No respondió",
-                            por_que_s9 == '2' ~ "Rechazó",
-                            por_que_s9 == '3' ~ "No entró llamada",
-                            por_que_s9 == '4' ~ "Conexión perdida",
-                            por_que_s9 == '5' ~ "No intentada",
-                            por_que_s9 == '6' ~ "Num incorrecto",
-                            por_que_s9 == '7' ~ "Otro"
+                            hay_sintomas_9 == 'Si' ~ 'Sintomatico',
+                            hay_sintomas_9 == "No (asintomático)" ~ 'Asintomatico',
+                            por_que_s9 == 'No respondió la llamada' ~ "No respondió",
+                            por_que_s9 == 'Respondió pero rechazo seguimiento' ~ "Rechazó",
+                            por_que_s9 == 'No entró la llamada al número registrado' ~ "No entró llamada",
+                            por_que_s9 == 'Se inició seguimiento pero se perdió la comunicación' ~ "Conexión perdida",
+                            por_que_s9 == 'No intentada/no dio tiempo' ~ "No intentada",
+                            por_que_s9 == 'Número de teléfono incorrecto' ~ "Num incorrecto",
+                            por_que_s9 == 'Otro' ~ "Otro"
                         ),
                         
                         `seguimiento_10_resultado` = case_when(
-                            hay_sintomas_10 == '1' ~ 'Sintomatico',
-                            hay_sintomas_10 == '2' ~ 'Asintomatico',
-                            por_que_s10 == '1' ~ "No respondió",
-                            por_que_s10 == '2' ~ "Rechazó",
-                            por_que_s10 == '3' ~ "No entró llamada",
-                            por_que_s10 == '4' ~ "Conexión perdida",
-                            por_que_s10 == '5' ~ "No intentada",
-                            por_que_s10 == '6' ~ "Num incorrecto",
-                            por_que_s10 == '7' ~ "Otro"
+                            hay_sintomas_10 == 'Sí' ~ 'Sintomatico',
+                            hay_sintomas_10 == "No (asintomático)" ~ 'Asintomatico',
+                            por_que_s10 == 'No respondió la llamada' ~ "No respondió",
+                            por_que_s10 == 'Respondió pero rechazo seguimiento' ~ "Rechazó",
+                            por_que_s10 == 'No entró la llamada al número registrado' ~ "No entró llamada",
+                            por_que_s10 == 'Se inició seguimiento pero se perdió la comunicación' ~ "Conexión perdida",
+                            por_que_s10 == 'No intentada/ no dio tiempo' ~ "No intentada",
+                            por_que_s10 == 'Número de teléfono incorrecto' ~ "Num incorrecto",
+                            por_que_s10 == 'Otro' ~ "Otro"
                         ),
                         
                         `seguimiento_11_resultado` = case_when(
-                            hay_sintomas_11 == '1' ~ 'Sintomatico',
-                            hay_sintomas_11 == '2' ~ 'Asintomatico',
-                            por_que_s11 == '1' ~ "No respondió",
-                            por_que_s11 == '2' ~ "Rechazó",
-                            por_que_s11 == '3' ~ "No entró llamada",
-                            por_que_s11 == '4' ~ "Conexión perdida",
-                            por_que_s11 == '5' ~ "No intentada",
-                            por_que_s11 == '6' ~ "Num incorrecto",
-                            por_que_s11 == '7' ~ "Otro"
+                            hay_sintomas_11 == 'Si' ~ 'Sintomatico',
+                            hay_sintomas_11 == "No" ~ 'Asintomatico',
+                            por_que_s11 == 'No respondió la llamada' ~ "No respondió",
+                            por_que_s11 == 'Respondió pero rechazo seguimiento' ~ "Rechazó",
+                            por_que_s11 == 'No entro la llamada al número registrado' ~ "No entró llamada",
+                            por_que_s11 == 'Se inició seguimiento pero se perdió la comunicación' ~ "Conexión perdida",
+                            por_que_s11 == 'No intentada/no dio tiempo' ~ "No intentada",
+                            por_que_s11 == 'Número de teléfono incorrecto' ~ "Num incorrecto",
+                            por_que_s11 == 'Otro' ~ "Otro"
                         ),
                         
                         `seguimiento_12_resultado` = case_when(
-                            hay_sintomas_12 == '1' ~ 'Sintomatico',
-                            hay_sintomas_12 == '2' ~ 'Asintomatico',
-                            por_que_s12 == '1' ~ "No respondió",
-                            por_que_s12 == '2' ~ "Rechazó",
-                            por_que_s12 == '3' ~ "No entró llamada",
-                            por_que_s12 == '4' ~ "Conexión perdida",
-                            por_que_s12 == '5' ~ "No intentada",
-                            por_que_s12 == '6' ~ "Num incorrecto",
-                            por_que_s12 == '7' ~ "Otro"
+                            hay_sintomas_12 == 'Sí' ~ 'Sintomatico',
+                            hay_sintomas_12 == "No (asintomático)" ~ 'Asintomatico',
+                            por_que_s12 == 'No respondió la llamada' ~ "No respondió",
+                            por_que_s12 == 'Respondió pero rechazo seguimiento' ~ "Rechazó",
+                            por_que_s12 == 'No entró la llamada al número registrado' ~ "No entró llamada",
+                            por_que_s12 == 'Se inició seguimiento pero se perdió la comunicación' ~ "Conexión perdida",
+                            por_que_s12 == 'No intentada/ no dio tiempo' ~ "No intentada",
+                            por_que_s12 == 'Número de teléfono incorrecto' ~ "Num incorrecto",
+                            por_que_s12 == 'Otro' ~ "Otro"
                         ),
                         
                         `seguimiento_13_resultado` = case_when(
-                            hay_sintomas_13 == '1' ~ 'Sintomatico',
-                            hay_sintomas_13 == '2' ~ 'Asintomatico',
-                            por_que_s13 == '1' ~ "No respondió",
-                            por_que_s13 == '2' ~ "Rechazó",
-                            por_que_s13 == '3' ~ "No entró llamada",
-                            por_que_s13 == '4' ~ "Conexión perdida",
-                            por_que_s13 == '5' ~ "No intentada",
-                            por_que_s13 == '6' ~ "Num incorrecto",
-                            por_que_s13 == '7' ~ "Otro"
+                            hay_sintomas_13 == 'Sí' ~ 'Sintomatico',
+                            hay_sintomas_13 == "No" ~ 'Asintomatico',
+                            por_que_s13 == 'No respondió la llamada' ~ "No respondió",
+                            por_que_s13 == 'Respondió pero rechazo seguimiento' ~ "Rechazó",
+                            por_que_s13 == 'No entró la llamada al número registrado' ~ "No entró llamada",
+                            por_que_s13 == 'Se inició seguimiento pero se perdió la comunicación' ~ "Conexión perdida",
+                            por_que_s13 == 'No intentada/ no dio tiempo' ~ "No intentada",
+                            por_que_s13 == 'Número de teléfono incorrecto' ~ "Num incorrecto",
+                            por_que_s13 == 'Otro' ~ "Otro"
                         ),
                         
                         `seguimiento_14_resultado` = case_when(
-                            hay_sintomas_14 == '1' ~ 'Sintomatico',
-                            hay_sintomas_14 == '2' ~ 'Asintomatico',
-                            por_que_s14 == '1' ~ "No respondió",
-                            por_que_s14 == '2' ~ "Rechazó",
-                            por_que_s14 == '3' ~ "No entró llamada",
-                            por_que_s14 == '4' ~ "Conexión perdida",
-                            por_que_s14 == '5' ~ "No intentada",
-                            por_que_s14 == '6' ~ "Num incorrecto",
-                            por_que_s14 == '7' ~ "Otro"
+                            hay_sintomas_14 == 'Sí' ~ 'Sintomatico',
+                            hay_sintomas_14 == "No" ~ 'Asintomatico',
+                            por_que_s14 == 'No respondió la llamada' ~ "No respondió",
+                            por_que_s14 == 'Respondió pero rechazo seguimiento' ~ "Rechazó",
+                            por_que_s14 == 'No entró la llamada al número registrado' ~ "No entró llamada",
+                            por_que_s14 == 'Se inició seguimiento pero se perdió la comunicación' ~ "Conexión perdida",
+                            por_que_s14 == 'No intentada/No dio tiempo' ~ "No intentada",
+                            por_que_s14 == 'Número de teléfono incorrecto' ~ "Num incorrecto",
+                            por_que_s14 == 'Otro' ~ "Otro"
                         ),
                         
                     ) %>%
@@ -2439,12 +2446,30 @@ shinyServer(function(input, output, session) {
                             !is.na(fecha_seguimiento_1) ~ as.Date(fecha_seguimiento_1),
                             
                         ),
-                        `Delta dias`= `Ultima llamada`- `Fecha Inicio Sintomas`,
+                        `Cantidad de seguimientos` = case_when(
+                          !is.na(fecha_seguimiento_14) ~ 14,
+                          !is.na(fecha_seguimiento_13) ~ 13,
+                          !is.na(fecha_seguimiento_12) ~ 12,
+                          !is.na(fecha_seguimiento_11) ~ 11,
+                          !is.na(fecha_seguimiento_10) ~ 10,
+                          !is.na(fecha_seguimiento_9) ~ 9,
+                          !is.na(fecha_seguimiento_8) ~ 8,
+                          !is.na(fecha_seguimiento_7) ~ 7,
+                          !is.na(fecha_seguimiento_6) ~ 6,
+                          !is.na(fecha_seguimiento_5) ~ 5,
+                          !is.na(fecha_seguimiento_4) ~ 4,
+                          !is.na(fecha_seguimiento_3) ~ 3,
+                          !is.na(fecha_seguimiento_2) ~ 2,
+                          !is.na(fecha_seguimiento_1) ~ 1,
+                          T ~ 0
+                        ),
+                        `Dias entre ultimo seguimiento e inicio de sintomas`= `Ultima llamada`- `Fecha Inicio Sintomas`,
+                        `Dias desde notificación`= Sys.Date() - `Fecha de notificación`,
                         `Fecha Estado de seguimiento` = fecha_es,
                         `Fecha muestra` = format(as.Date(`Fecha muestra`), '%d-%m-%Y'),
                         `Estado de seguimiento` = toupper(`Estado de seguimiento`),
                         distrib_grupo = case_when(
-                            `Estado de seguimiento` == "ACTIVO" ~ 1 ,
+                            `Estado de seguimiento` == "BAJO SEGUIMIENTO" ~ 1 ,
                             `Estado de seguimiento` == "SIN ESTADO DE SEGUIMIENTO" ~ 2 ,
                             T ~ 3
                         ),
@@ -2474,12 +2499,14 @@ shinyServer(function(input, output, session) {
                         'Estado de seguimiento',
                         'Ultima llamada',
                         "Ultimo_resultado",
-                        'Delta dias',
+                        "Cantidad de seguimientos",
+                        'Dias entre ultimo seguimiento e inicio de sintomas',
+                        'Dias desde notificación',
                         'Fecha Estado de seguimiento',
                         'Se tomó muestra',
                         'Fecha muestra',
                         'Resultado muestra',
-                        'Fecha primera visita CBR',
+                        'Fecha de notificación',
                         'Dias entre inicio sintomas y visita CBR',
                         'Fecha ingreso Go.Data',
                         'Fecha hospitalizacion',
