@@ -11,9 +11,9 @@
 rastreo_cases = read_csv("data/rastreo_cases.csv",guess_max = 50000, col_types = cols()) %>%
     mutate(`Creado En` = case_when(`Creado Por` == "3de6d4e6-b00d-4a71-9da1-9e7b8bbf1720" & `Creado En` == as.Date("2021-05-12") ~ `Fecha de notificacion`,
                                    T ~ `Creado En`))
-rastreo_contacts = read_csv("data/rastreo_contacts.csv",guess_max = 50000, col_types = cols())
-rastreo_followups = read_csv("data/rastreo_followups.csv",guess_max = 50000, col_types = cols())
-reportCases = read_csv("data/report_cases.csv", guess_max = 50000, col_types = cols())
+rastreo_contacts = read_csv("data/rastreo_contacts.csv",guess_max = 500000, col_types = cols())
+rastreo_followups = read_csv("data/rastreo_followups.csv",guess_max = 500000, col_types = cols())
+reportCases = read_csv("data/report_cases.csv", guess_max = 500000, col_types = cols())
 
 
 
@@ -655,75 +655,78 @@ shinyServer(function(input, output, session) {
     
     #### cuadro de datos casos rastreados por creado en
     rastreoCasesCreadoEn_reactive = reactive({
-        enCuarentena = rastreoCases_reactive() %>%
-            select(`Creado En`, `Estado de seguimiento`) %>%
-            complete(`Creado En` = seq.Date(min(input$fechaReporte[1]),max(input$fechaReporte[2]), by='day')) %>%
-            group_by(`Creado En`, `Estado de seguimiento`) %>%
-            mutate(`Creado En` = as.Date(`Creado En`, format="%d/%m/%Y")) %>%
-            filter(`Creado En` >= format(input$fechaReporte[1]) & `Creado En` <= format(input$fechaReporte[2])) %>%
-            arrange(`Creado En`) %>%
-            tally() %>%
-            mutate(n = ifelse(`Creado En` %in% rastreoCases_reactive()$`Creado En`, n, 0 ),
-                   `Estado de seguimiento` = ifelse(is.na(`Estado de seguimiento`),'Sin estado de seguimiento', `Estado de seguimiento`),
-                   `Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Bajo seguimiento","Recuperado","Imposible de contactar",
-                                                                                        'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos","Concluído por otra razón",
-                                                                                        "Sin estado de seguimiento")))
+      enCuarentena = rastreoCases_reactive() %>%
+        select(`Creado En`, `Estado de seguimiento`) %>%
+        complete(`Creado En` = seq.Date(min(input$fechaReporte[1]),max(input$fechaReporte[2]), by='day')) %>%
+        group_by(`Creado En`, `Estado de seguimiento`) %>%
+        mutate(`Creado En` = as.Date(`Creado En`, format="%d/%m/%Y")) %>%
+        filter(`Creado En` >= format(input$fechaReporte[1]) & `Creado En` <= format(input$fechaReporte[2])) %>%
+        arrange(`Creado En`) %>%
+        tally() %>%
+        mutate(n = ifelse(`Creado En` %in% rastreoCases_reactive()$`Creado En`, n, 0 ),
+               `Estado de seguimiento` = ifelse(is.na(`Estado de seguimiento`),'Sin estado de seguimiento', `Estado de seguimiento`),
+               `Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Bajo seguimiento","Recuperado","Imposible de contactar",
+                                                                                    'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos","Concluído por otra razón",
+                                                                                    "Sin estado de seguimiento")))
     })
     
     #### plot casos rastreados por Creado En
-    output$rastreoCasesFechaDeNotificacion = renderPlotly({
-        enCuarentena = rastreoCasesCreadoEn_reactive()
-        la_escala = case_when(as.numeric(as.Date(format(input$fechaReporte[2])) - as.Date(format(input$fechaReporte[1]))) <= 31 ~ "1 days",
-                              as.numeric(as.Date(format(input$fechaReporte[2])) - as.Date(format(input$fechaReporte[1]))) <= 61 ~ "2 days",
-                              as.numeric(as.Date(format(input$fechaReporte[2])) - as.Date(format(input$fechaReporte[1]))) <= 120 ~ "7 days",
-                              T ~ "15 days")
-        p = ggplot(enCuarentena, aes(x=`Creado En`, y=n, fill=`Estado de seguimiento`)) +
-            geom_bar(stat="identity") +
-            scale_fill_manual(values = ggplotColors) +
-            labs(x="Fecha", y="No. de Casos")+ 
-            scale_x_date(breaks = la_escala, date_labels = "%d/%m",expand = c(0,0),
-                         limits = c(input$fechaReporte[1]-1,max(enCuarentena$`Creado En`)+1))
-        
-        rm(enCuarentena)
-        
-        ggplotly(p + theme(plot.title = element_text(hjust=0.5,vjust=1),
-                           axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1,),
-                           panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-                           panel.background = element_blank()
-                           ), tooltip = c("n",'Creado En','Estado de seguimiento')) %>%
-            layout(legend = list(orientation = "h",  y = -0.3),
-                    title = list(text = paste0('Seguimiento de casos COVID-19 <br> leve/moderado',
-                                    '<br>',
-                                    '<sup>',
-                                    '(N= ',
-                                    nrow(rastreoCases_reactive()),
-                                    ')',
-                                    '</sup>'), y = 0.95)) %>%
-            plotly::config(locale = "es", displayModeBar=T, modeBarButtons = list(list("resetScale2d", "toImage", 'hoverCompareCartesian', 'hoverClosestCartesian')), displaylogo = F)        
+    output$rastreoCasesFechaDeCreacion = renderPlotly({
+      enCuarentena = rastreoCasesCreadoEn_reactive()
+      la_escala = case_when(as.numeric(as.Date(format(input$fechaReporte[2])) - as.Date(format(input$fechaReporte[1]))) <= 31 ~ "1 days",
+                            as.numeric(as.Date(format(input$fechaReporte[2])) - as.Date(format(input$fechaReporte[1]))) <= 61 ~ "2 days",
+                            as.numeric(as.Date(format(input$fechaReporte[2])) - as.Date(format(input$fechaReporte[1]))) <= 120 ~ "7 days",
+                            T ~ "15 days")
+      p = ggplot(enCuarentena, aes(x=`Creado En`, y=n, fill=`Estado de seguimiento`)) +
+        geom_bar(stat="identity") +
+        scale_fill_manual(values = ggplotColors) +
+        labs(x="Fecha", y="No. de Casos")+ 
+        scale_x_date(breaks = la_escala, date_labels = "%d/%m",expand = c(0,0),
+                     limits = c(input$fechaReporte[1]-1,max(enCuarentena$`Creado En`)+1))
+      
+      rm(enCuarentena)
+      
+      ggplotly(p + theme(plot.title = element_text(hjust=0.5,vjust=1),
+                         axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1,),
+                         panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                         panel.background = element_blank()
+      ), tooltip = c("n",'Creado En','Estado de seguimiento')) %>%
+        layout(legend = list(orientation = "h",  y = -0.3),
+               title = list(text = paste0('Seguimiento de casos COVID-19 <br> leve/moderado',
+                                          '<br>',
+                                          '<sup>',
+                                          '(N= ',
+                                          nrow(rastreoCases_reactive()),
+                                          ')',
+                                          '</sup>'), y = 0.95)) %>%
+        plotly::config(locale = "es", displayModeBar=T, modeBarButtons = list(list("resetScale2d", "toImage", 'hoverCompareCartesian', 'hoverClosestCartesian')), displaylogo = F)        
     })
     
-    output$rastreoCasesFechaDeNotificacionDB = renderDataTable(
-        datatable(
-            rastreoCasesCreadoEn_reactive() %>%
-                adorn_totals('row'),
-            extensions = 'Buttons',
-            options = list(
-                dom = 'Bfrtip',
-                buttons = list(
-                    list(
-                        extend = 'csv',
-                        filename = 'casosPorFechaDeCreadoEn'
-                    ),
-                    list(
-                        extend = 'excel',
-                        filename = 'casosPorFechaDeCreadoEn'
-                    )
-                ),
-                scrollx = T
+    output$rastreoCasesFechaDeCreacionDB = renderDataTable(
+      datatable(
+        rastreoCasesCreadoEn_reactive() %>%
+          adorn_totals('row'),
+        extensions = 'Buttons',
+        options = list(
+          dom = 'Bfrtip',
+          buttons = list(
+            list(
+              extend = 'csv',
+              filename = 'casosPorFechaDeCreadoEn'
+            ),
+            list(
+              extend = 'excel',
+              filename = 'casosPorFechaDeCreadoEn'
             )
+          ),
+          scrollx = T
         )
+      )
     )
     
+    
+    
+
     
     #### cuadro de datos casos contactables rastreados por creado en
     rastreoCasesContactableCreadoEn_reactive = reactive({
@@ -799,6 +802,79 @@ shinyServer(function(input, output, session) {
         )
     )
 
+    ############
+    #### cuadro de datos casos rastreados por creado en
+    rastreoCasesNotificacion_reactive = reactive({
+      enCuarentena = rastreoCases_reactive() %>%
+        select(`Fecha de notificacion`, `Estado de seguimiento`) %>%
+        complete(`Fecha de notificacion` = seq.Date(min(input$fechaReporte[1]),max(input$fechaReporte[2]), by='day')) %>%
+        group_by(`Fecha de notificacion`, `Estado de seguimiento`) %>%
+        mutate(`Fecha de notificacion` = as.Date(`Fecha de notificacion`, format="%d/%m/%Y")) %>%
+        filter(`Fecha de notificacion` >= format(input$fechaReporte[1]) & `Fecha de notificacion` <= format(input$fechaReporte[2])) %>%
+        arrange(`Fecha de notificacion`) %>%
+        tally() %>%
+        mutate(n = ifelse(`Fecha de notificacion` %in% rastreoCases_reactive()$`Fecha de notificacion`, n, 0 ),
+               `Estado de seguimiento` = ifelse(is.na(`Estado de seguimiento`),'Sin estado de seguimiento', `Estado de seguimiento`),
+               `Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Bajo seguimiento","Recuperado","Imposible de contactar",
+                                                                                    'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos","Concluído por otra razón",
+                                                                                    "Sin estado de seguimiento")))
+    })
+    
+    #### plot casos rastreados por Creado En
+    output$rastreoCasesFechaDeNotificacion = renderPlotly({
+      enCuarentena = rastreoCasesNotificacion_reactive()
+      la_escala = case_when(as.numeric(as.Date(format(input$fechaReporte[2])) - as.Date(format(input$fechaReporte[1]))) <= 31 ~ "1 days",
+                            as.numeric(as.Date(format(input$fechaReporte[2])) - as.Date(format(input$fechaReporte[1]))) <= 61 ~ "2 days",
+                            as.numeric(as.Date(format(input$fechaReporte[2])) - as.Date(format(input$fechaReporte[1]))) <= 120 ~ "7 days",
+                            T ~ "15 days")
+      p = ggplot(enCuarentena, aes(x=`Fecha de notificacion`, y=n, fill=`Estado de seguimiento`)) +
+        geom_bar(stat="identity") +
+        scale_fill_manual(values = ggplotColors) +
+        labs(x="Fecha", y="No. de Casos")+ 
+        scale_x_date(breaks = la_escala, date_labels = "%d/%m",expand = c(0,0),
+                     limits = c(input$fechaReporte[1]-1,max(enCuarentena$`Fecha de notificacion`)+1))
+      
+      rm(enCuarentena)
+      
+      ggplotly(p + theme(plot.title = element_text(hjust=0.5,vjust=1),
+                         axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1,),
+                         panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+                         panel.background = element_blank()
+      ), tooltip = c("n",'Creado En','Estado de seguimiento')) %>%
+        layout(legend = list(orientation = "h",  y = -0.3),
+               title = list(text = paste0('Seguimiento de casos COVID-19 <br> leve/moderado',
+                                          '<br>',
+                                          '<sup>',
+                                          '(N= ',
+                                          nrow(rastreoCases_reactive()),
+                                          ')',
+                                          '</sup>'), y = 0.95)) %>%
+        plotly::config(locale = "es", displayModeBar=T, modeBarButtons = list(list("resetScale2d", "toImage", 'hoverCompareCartesian', 'hoverClosestCartesian')), displaylogo = F)        
+    })
+    
+    output$rastreoCasesFechaDeNotificacionDB = renderDataTable(
+      datatable(
+        rastreoCasesNotificacion_reactive() %>%
+          adorn_totals('row'),
+        extensions = 'Buttons',
+        options = list(
+          dom = 'Bfrtip',
+          buttons = list(
+            list(
+              extend = 'csv',
+              filename = 'casosPorFechaDeCreadoEn'
+            ),
+            list(
+              extend = 'excel',
+              filename = 'casosPorFechaDeCreadoEn'
+            )
+          ),
+          scrollx = T
+        )
+      )
+    )
+    
+    
     # DB Distribucion de los Estados de Seguimiento en Casos 
     casosEstadosDeSeguimiento_reactive = reactive({
         estadosDeSeguimiento = rastreoCases_reactive() %>%

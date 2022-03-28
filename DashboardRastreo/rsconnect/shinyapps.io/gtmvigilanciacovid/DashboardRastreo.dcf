@@ -5,9 +5,7 @@ account: gtmvigilanciacovid
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 2687626
-bundleId: 5528068
+bundleId: 5729381
 url: https://gtmvigilanciacovid.shinyapps.io/DashboardRastreo/
-when: 1643662966.73745
-lastSyncTime: 1643662966.73746
-asMultiple: FALSE
-asStatic: FALSE
+when: 1648275744.37818
+lastSyncTime: 1648275744.37822

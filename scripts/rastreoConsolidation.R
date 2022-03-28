@@ -97,7 +97,7 @@ outbreakCases = GET(caseURL)
 request_id = content(outbreakCases)$exportLogId
 export.request.status = get_export_status(url = url, username = username, password = password, request_id = request_id)
 while(export.request.status$statusStep != "LNG_STATUS_STEP_EXPORT_FINISHED") {
-  Sys.sleep(2)
+  Sys.sleep(3)
   export.request.status <- GET(paste0(url,"api/export-logs/",request_id,"?access_token=",get_access_token(url=url, username=username, password=password))) %>%
     content()
   message(paste0("...processed ",export.request.status$processedNo, " of ", export.request.status$totalNo, " records"))
@@ -423,7 +423,7 @@ for (i in c(2:length(meses_inicio))) {
   request_id = content(outbreakCases)$exportLogId
   export.request.status = get_export_status(url = url, username = username, password = password, request_id = request_id)
   while(export.request.status$statusStep != "LNG_STATUS_STEP_EXPORT_FINISHED") {
-    Sys.sleep(2)
+    Sys.sleep(3)
     export.request.status <- GET(paste0(url,"api/export-logs/",request_id,"?access_token=",get_access_token(url=url, username=username, password=password))) %>%
       content()
     message(paste0("...processed ",export.request.status$processedNo, " of ", export.request.status$totalNo, " records"))
@@ -797,7 +797,7 @@ outbreakContacts = GET(contactsURL)
 request_id = content(outbreakContacts)$exportLogId
 export.request.status = get_export_status(url = url, username = username, password = password, request_id = request_id)
 while(export.request.status$statusStep != "LNG_STATUS_STEP_EXPORT_FINISHED") {
-  Sys.sleep(2)
+  Sys.sleep(3)
   export.request.status <- GET(paste0(url,"api/export-logs/",request_id,"?access_token=",get_access_token(url=url, username=username, password=password))) %>%
     content()
   message(paste0("...processed ",export.request.status$processedNo, " of ", export.request.status$totalNo, " records"))
@@ -912,7 +912,7 @@ response_followups <- GET(paste0(
 request_id = content(response_followups)$exportLogId
 export.request.status = get_export_status(url = url, username = username, password = password, request_id = request_id)
 while(export.request.status$statusStep != "LNG_STATUS_STEP_EXPORT_FINISHED") {
-  Sys.sleep(2)
+  Sys.sleep(3)
   export.request.status <- GET(paste0(url,"api/export-logs/",request_id,"?access_token=",get_access_token(url=url, username=username, password=password))) %>%
     content()
   message(paste0("...processed ",export.request.status$processedNo, " of ", export.request.status$totalNo, " records"))
@@ -926,9 +926,11 @@ followups <- GET(paste0(url,"api/export-logs/",request_id,"/download?access_toke
 #followups = data.table(suppressMessages(content(response_followups, guess_max = 50000)))
 write('Seguimientos descargados!', stdout())
 followups = followups %>%
-  select(ID, `Creado En` = Creado.En, `Estado`)
+  select(ID, `Creado En` = Creado.En, `Estado`) %>%
+  mutate(`Creado En` = as.Date(`Creado En`))
 
-followupsOld = read_csv('DashboardRastreo/data/rastreo_followups20211121.csv', guess_max = 50000)
+followupsOld = read_csv('DashboardRastreo/data/rastreo_followups20211121.csv', guess_max = 50000) %>%
+  mutate(`Creado En` = as.Date(`Creado En`))
 followups = rbind(followupsOld, followups)
 
 write('Guardando bases de datos...',stdout())

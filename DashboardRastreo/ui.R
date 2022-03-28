@@ -134,12 +134,20 @@ shinyUI(dashboardPage(skin = 'blue',
                                       tabBox(
                                         width = 12, 
                                         tabPanel(
-                                          title = 'Casos acumulados por fecha de ingreso a Go.Data',
+                                          title = 'Casos acumulados por fecha de Notificación a Go.Data',
                                           withLoader(plotlyOutput('rastreoCasesFechaDeNotificacion'), type = 'html', loader = 'loader5')
                                         ),
                                         tabPanel(
-                                          title = 'Acumulados - Cuadro de Datos',
+                                          title = 'Notificacion - Cuadro de Datos',
                                           withLoader(dataTableOutput("rastreoCasesFechaDeNotificacionDB"), type = 'html', loader = 'loader5')
+                                        ),
+                                        tabPanel(
+                                          title = 'Casos acumulados por fecha de ingreso a Go.Data',
+                                          withLoader(plotlyOutput('rastreoCasesFechaDeCreacion'), type = 'html', loader = 'loader5')
+                                        ),
+                                        tabPanel(
+                                          title = 'Creacion - Cuadro de Datos',
+                                          withLoader(dataTableOutput("rastreoCasesFechaDeCreacionDB"), type = 'html', loader = 'loader5')
                                         ),
                                         tabPanel(
                                           title = 'Casos acumulados contactables por fecha de ingreso a Go.Data',
