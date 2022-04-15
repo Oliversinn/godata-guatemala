@@ -60,8 +60,8 @@ shinyServer(function(input, output, session) {
     ############################################################################
     colorVector = c("MASCULINO" = "#1f77b4", "FEMENINO" = "#ff7f0e", "SIN DATOS" = "#7f7f7f")
     colorPlotly = c("#1f77b4", "#ff7f0e", "#7f7f7f")
-    ggplotColors = c('Bajo seguimiento'="#1f77b4",'Recuperado'="#ff7f0e", 'Imposible de contactar'='#d62728', 'Perdido'='#8c564b','Hospitalizado'='#e377c2', 'Fallecido'='#9467bd', 'Hospitalizados/Fallecidos'='#2ca02c', 'Concluído por otra razón'='#7f7f7f', 'Sin estado de seguimiento'='#bcbd22')
-    donaColors = c("#1f77b4","#ff7f0e", '#2ca02c', '#d62728', '#8c564b', '#9467bd', '#e377c2', '#7f7f7f', '#bcbd22')
+    ggplotColors = c('Bajo seguimiento'="#1f77b4",'Recuperado'="#ff7f0e", 'Imposible de contactar'='#d62728', 'Perdido'='#8c564b','Hospitalizado'='#e377c2', 'Fallecido'='#9467bd', 'Hospitalizados/Fallecidos'='#2ca02c', 'Olvidado'='#33ff00', 'Concluído por otra razón'='#7f7f7f', 'Sin estado de seguimiento'='#bcbd22')
+    donaColors = c("#1f77b4","#ff7f0e", '#2ca02c', '#d62728', '#8c564b', '#9467bd', '#e377c2','#33ff00', '#7f7f7f', '#bcbd22')
     
     # TABLA REACTIVE DE CASOS RASTREADOS ACUMULADOS
     rastreoCases_reactive = reactive({ 
@@ -666,7 +666,7 @@ shinyServer(function(input, output, session) {
         mutate(n = ifelse(`Creado En` %in% rastreoCases_reactive()$`Creado En`, n, 0 ),
                `Estado de seguimiento` = ifelse(is.na(`Estado de seguimiento`),'Sin estado de seguimiento', `Estado de seguimiento`),
                `Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Bajo seguimiento","Recuperado","Imposible de contactar",
-                                                                                    'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos","Concluído por otra razón",
+                                                                                    'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos", 'Olvidado',"Concluído por otra razón",
                                                                                     "Sin estado de seguimiento")))
     })
     
@@ -742,7 +742,7 @@ shinyServer(function(input, output, session) {
             mutate(n = ifelse(`Creado En` %in% rastreoCases_reactive()$`Creado En`, n, 0 ),
                    `Estado de seguimiento` = ifelse(is.na(`Estado de seguimiento`),'Sin estado de seguimiento', `Estado de seguimiento`),
                    `Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Bajo seguimiento","Recuperado","Imposible de contactar",
-                                                                                        'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos","Concluído por otra razón",
+                                                                                        'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos",'Olvidado',"Concluído por otra razón",
                                                                                         "Sin estado de seguimiento")))
     })
 
@@ -816,7 +816,7 @@ shinyServer(function(input, output, session) {
         mutate(n = ifelse(`Fecha de notificacion` %in% rastreoCases_reactive()$`Fecha de notificacion`, n, 0 ),
                `Estado de seguimiento` = ifelse(is.na(`Estado de seguimiento`),'Sin estado de seguimiento', `Estado de seguimiento`),
                `Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Bajo seguimiento","Recuperado","Imposible de contactar",
-                                                                                    'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos","Concluído por otra razón",
+                                                                                    'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos", 'Olvidado',"Concluído por otra razón",
                                                                                     "Sin estado de seguimiento")))
     })
     
@@ -880,7 +880,7 @@ shinyServer(function(input, output, session) {
         estadosDeSeguimiento = rastreoCases_reactive() %>%
             complete(`Estado de seguimiento` = factor(`Estado de seguimiento`, 
                                                       levels = c("Bajo seguimiento","Recuperado","Imposible de contactar",
-                                                                 'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos","Concluído por otra razón",
+                                                                 'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos", 'Olvidado',"Concluído por otra razón",
                                                                  "Sin estado de seguimiento"))) %>%
             select(`Estado de seguimiento`) %>%
             group_by(`Estado de seguimiento`) %>%
@@ -945,7 +945,7 @@ shinyServer(function(input, output, session) {
         estadosDeSeguimiento = rastreoCases_reactive() %>%
             filter(Telefono == 'CONTACTABLE') %>%
             complete(`Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Bajo seguimiento","Recuperado","Imposible de contactar",
-                                                                                          'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos","Concluído por otra razón",
+                                                                                          'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos", 'Olvidado',"Concluído por otra razón",
                                                                                           "Sin estado de seguimiento"))) %>%
             select(`Estado de seguimiento`) %>%
             group_by(`Estado de seguimiento`) %>%
@@ -1010,7 +1010,7 @@ shinyServer(function(input, output, session) {
     output$rastreoCasesEstadoDeSeguimientoDona = renderPlotly({
         enCuarentena = rastreoCases_reactive() %>%
             complete(`Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Bajo seguimiento","Recuperado","Imposible de contactar",
-                                                                                          'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos","Concluído por otra razón",
+                                                                                          'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos", 'Olvidado',"Concluído por otra razón",
                                                                                           "Sin estado de seguimiento"))) %>%
             select(`Estado de seguimiento`) %>%
             group_by(`Estado de seguimiento`) %>%
@@ -1030,7 +1030,7 @@ shinyServer(function(input, output, session) {
                       hole = 0.6,
                       sort = F,
                       marker = list(colors=factor(c("Bajo seguimiento","Recuperado","Imposible de contactar",
-                                                    'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos","Concluído por otra razón",
+                                                    'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos", 'Olvidado',"Concluído por otra razón",
                                                     "Sin estado de seguimiento"), labels = donaColors))) %>%
             layout(legend = list(orientation = 'h'),
                    title = ~paste('Estados de Seguimiento<br><sup>(N = ',nrow(rastreoCases_reactive()),')</sup>'))
@@ -1042,7 +1042,7 @@ shinyServer(function(input, output, session) {
         enCuarentena = rastreoCases_reactive() %>%
             filter(Telefono == 'CONTACTABLE') %>%
             complete(`Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Bajo seguimiento","Recuperado","Imposible de contactar",
-                                                                                          'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos","Concluído por otra razón",
+                                                                                          'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos", 'Olvidado',"Concluído por otra razón",
                                                                                           "Sin estado de seguimiento"))) %>%
             select(`Estado de seguimiento`) %>%
             group_by(`Estado de seguimiento`) %>%
@@ -1062,7 +1062,7 @@ shinyServer(function(input, output, session) {
                       hole = 0.6,
                       sort = FALSE,
                       marker = list(colors=factor(c("Bajo seguimiento","Recuperado","Imposible de contactar",
-                                                    'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos","Concluído por otra razón",
+                                                    'Perdido',"Fallecido", "Hospitalizado", "Hospitalizados/Fallecidos", 'Olvidado',"Concluído por otra razón",
                                                     "Sin estado de seguimiento"), labels = donaColors))) %>%
             layout(title = ~paste('Estados de Seguimiento<br><sup>(N = ',
                                     nrow(rastreoCases_reactive() %>% filter(Telefono=='CONTACTABLE')),

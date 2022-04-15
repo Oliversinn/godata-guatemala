@@ -1,3 +1,4 @@
+print(Sys.time())
 ###################################################################################################
 url <- "https://godataguatemala.mspas.gob.gt/"                   # <--------------------- insert instance url here, don't forget the slash at end !
 username <- "olivera@mazariegos.gt"                           # <--------------------- insert your username for signing into Go.Data webapp here
@@ -172,7 +173,8 @@ cases_clean = cases %>%
          Clasificación = toupper(Clasificación),
          `Creado En` = as.Date(as.POSIXlt(as.character(`Creado En`),format = "%F")),
          `Estado de seguimiento` = as.character(`Estado de seguimiento`),
-         `Estado de seguimiento` = case_when(`Estado de seguimiento` == "Bajo seguimiento" ~ "Bajo seguimiento",
+         `Estado de seguimiento` = case_when(`Estado de seguimiento` == "Bajo seguimiento" ~ ifelse(Sys.Date() - `Date of reporting` < 30, "Bajo seguimiento", 'Olvidado'),
+                                             
                                              `Estado de seguimiento` == "Recuperado" ~ "Recuperado",
                                              `Estado de seguimiento` == "Imposible de contactar" ~ "Imposible de contactar",
                                              `Estado de seguimiento` == "Perdido durante el seguimiento" ~ "Perdido",
@@ -181,9 +183,13 @@ cases_clean = cases %>%
                                                                                       T ~ "Hospitalizado"),
                                              `Estado de seguimiento` == "Otra razón" ~ "Concluído por otra razón",
                                              is.na(`Estado de seguimiento`) ~ "Sin estado de seguimiento",
-                                             `Estado de seguimiento` == "" ~ "Sin estado de seguimiento"),
+                                             `Estado de seguimiento` == "" ~ "Sin estado de seguimiento",
+                                             `Estado de seguimiento` == "Sin estado de seguimiento" ~ ifelse(Clasificación != "NO ES UN CASO (DESCARTADO)", "Sin estado de seguimiento", "Concluído por otra razón"),
+                                             `Estado de seguimiento` == "Sin estado de seguimiento" ~ ifelse(Sys.Date() - `Date of reporting` < 30, "Sin estado de seguimiento", 'Olvidado'),
+                                             
+                                             ),
          `Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Bajo seguimiento","Recuperado","Imposible de contactar",
-                                                                              'Perdido',"Fallecido", "Hospitalizado","Concluído por otra razón",
+                                                                              'Perdido',"Fallecido", "Hospitalizado", 'Olvidado', "Concluído por otra razón",
                                                                               "Sin estado de seguimiento")),
          `Direcciones Comunidad, aldea o zona [1]` = as.character(`Direcciones Comunidad, aldea o zona [1]`)) %>%
   rename(`Fecha de notificacion` = `Date of reporting`,
@@ -250,9 +256,11 @@ reportCases = cases %>%
     `Teléfono` = ifelse(is.na(`Teléfono`),'NO CONTACTABLE','CONTACTABLE'),
     `Creado En` = as.Date(`Creado En`),
     Clasificación = toupper(Clasificación),
+    `Fecha de notificacion` = as.Date(as.POSIXlt(as.character(`Fecha de notificacion`),format = "%F")),
     `Estado de seguimiento` = as.character(`Estado de seguimiento`),
-    `Estado de seguimiento` = case_when(`Estado de seguimiento` == "Bajo seguimiento" ~ "Bajo seguimiento",
+    `Estado de seguimiento` = case_when(`Estado de seguimiento` == "Bajo seguimiento" ~ ifelse(Sys.Date() - `Fecha de notificacion` < 30, "Bajo seguimiento", 'Olvidado') ,
                                         `Estado de seguimiento` == "Recuperado" ~ "Recuperado",
+                                        `Estado de seguimiento` == "Bajo seguimiento" ~ ifelse(Sys.Date() - `Fecha de notificacion` < 30, "Bajo seguimiento", 'Olvidado'),
                                         `Estado de seguimiento` == "Imposible de contactar" ~ "Imposible de contactar",
                                         `Estado de seguimiento` == "Perdido durante el seguimiento" ~ "Perdido",
                                         `Estado de seguimiento` == "No es posible dar seguimiento domiciliar" ~ case_when(Clasificación == "PROBABLE" ~ 'Fallecido',
@@ -260,9 +268,14 @@ reportCases = cases %>%
                                                                                                                           T ~ "Hospitalizado"),
                                         `Estado de seguimiento` == "Otra razón" ~ "Concluído por otra razón",
                                         is.na(`Estado de seguimiento`) ~ "Sin estado de seguimiento",
-                                        `Estado de seguimiento` == "" ~ "Sin estado de seguimiento"),
+                                        `Estado de seguimiento` == "" ~ "Sin estado de seguimiento",
+                                        `Estado de seguimiento` == "Sin estado de seguimiento" ~ ifelse(Clasificación != "NO ES UN CASO (DESCARTADO)", "Sin estado de seguimiento", "Concluído por otra razón"),
+                                        `Estado de seguimiento` == "Sin estado de seguimiento" ~ ifelse(Sys.Date() - `Fecha de notificacion` < 30, "Sin estado de seguimiento", 'Olvidado'),
+                                        
+                                        ),
+    
     `Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Bajo seguimiento","Recuperado","Imposible de contactar",
-                                                                         'Perdido',"Fallecido", "Hospitalizado","Concluído por otra razón",
+                                                                         'Perdido',"Fallecido", "Hospitalizado", 'Olvidado', "Concluído por otra razón",
                                                                          "Sin estado de seguimiento")),
   ) %>%
   select(!ends_with('_s..MV.1.')) %>%
@@ -498,7 +511,8 @@ for (i in c(2:length(meses_inicio))) {
            Clasificación = toupper(Clasificación),
            `Creado En` = as.Date(as.POSIXlt(as.character(`Creado En`),format = "%F")),
            `Estado de seguimiento` = as.character(`Estado de seguimiento`),
-           `Estado de seguimiento` = case_when(`Estado de seguimiento` == "Bajo seguimiento" ~ "Bajo seguimiento",
+           `Estado de seguimiento` = case_when(`Estado de seguimiento` == "Bajo seguimiento" ~ ifelse(Sys.Date() - `Date of reporting` < 30, "Bajo seguimiento", 'Olvidado'),
+                                               
                                                `Estado de seguimiento` == "Recuperado" ~ "Recuperado",
                                                `Estado de seguimiento` == "Imposible de contactar" ~ "Imposible de contactar",
                                                `Estado de seguimiento` == "Perdido durante el seguimiento" ~ "Perdido",
@@ -507,9 +521,13 @@ for (i in c(2:length(meses_inicio))) {
                                                                                                                                  T ~ "Hospitalizado"),
                                                `Estado de seguimiento` == "Otra razón" ~ "Concluído por otra razón",
                                                is.na(`Estado de seguimiento`) ~ "Sin estado de seguimiento",
-                                               `Estado de seguimiento` == "" ~ "Sin estado de seguimiento"),
+                                               `Estado de seguimiento` == "" ~ "Sin estado de seguimiento",
+                                               `Estado de seguimiento` == "Sin estado de seguimiento" ~ ifelse(Clasificación != "NO ES UN CASO (DESCARTADO)", "Sin estado de seguimiento", "Concluído por otra razón"),
+                                               `Estado de seguimiento` == "Sin estado de seguimiento" ~ ifelse(Sys.Date() - `Date of reporting` < 30, "Sin estado de seguimiento", 'Olvidado'),
+                                               
+                                               ),
            `Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Bajo seguimiento","Recuperado","Imposible de contactar",
-                                                                                'Perdido',"Fallecido", "Hospitalizado","Concluído por otra razón",
+                                                                                'Perdido',"Fallecido", "Hospitalizado", 'Olvidado', "Concluído por otra razón",
                                                                                 "Sin estado de seguimiento")),
            `Direcciones Comunidad, aldea o zona [1]` = as.character(`Direcciones Comunidad, aldea o zona [1]`)) %>%
     rename(`Fecha de notificacion` = `Date of reporting`,
@@ -575,8 +593,9 @@ for (i in c(2:length(meses_inicio))) {
       `Teléfono` = ifelse(is.na(`Teléfono`),'NO CONTACTABLE','CONTACTABLE'),
       `Creado En` = as.Date(`Creado En`),
       Clasificación = toupper(Clasificación),
+      `Fecha de notificacion` = as.Date(as.POSIXlt(as.character(`Fecha de notificacion`),format = "%F")),
       `Estado de seguimiento` = as.character(`Estado de seguimiento`),
-      `Estado de seguimiento` = case_when(`Estado de seguimiento` == "Bajo seguimiento" ~ "Bajo seguimiento",
+      `Estado de seguimiento` = case_when(`Estado de seguimiento` == "Bajo seguimiento" ~ ifelse(Sys.Date() - `Fecha de notificacion` < 30, "Bajo seguimiento", 'Olvidado') ,
                                           `Estado de seguimiento` == "Recuperado" ~ "Recuperado",
                                           `Estado de seguimiento` == "Imposible de contactar" ~ "Imposible de contactar",
                                           `Estado de seguimiento` == "Perdido durante el seguimiento" ~ "Perdido",
@@ -585,9 +604,13 @@ for (i in c(2:length(meses_inicio))) {
                                                                                                                             T ~ "Hospitalizado"),
                                           `Estado de seguimiento` == "Otra razón" ~ "Concluído por otra razón",
                                           is.na(`Estado de seguimiento`) ~ "Sin estado de seguimiento",
-                                          `Estado de seguimiento` == "" ~ "Sin estado de seguimiento"),
+                                          `Estado de seguimiento` == "" ~ "Sin estado de seguimiento",
+                                          `Estado de seguimiento` == "Sin estado de seguimiento" ~ ifelse(Clasificación != "NO ES UN CASO (DESCARTADO)", "Sin estado de seguimiento", "Concluído por otra razón"),
+                                          `Estado de seguimiento` == "Sin estado de seguimiento" ~ ifelse(Sys.Date() - `Fecha de notificacion` < 30, "Sin estado de seguimiento", 'Olvidado'),
+                                          
+                                          ),
       `Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Bajo seguimiento","Recuperado","Imposible de contactar",
-                                                                           'Perdido',"Fallecido", "Hospitalizado","Concluído por otra razón",
+                                                                           'Perdido',"Fallecido", "Hospitalizado", 'Olvidado',"Concluído por otra razón",
                                                                            "Sin estado de seguimiento")),
     ) %>%
     select(!ends_with('_s..MV.1.')) %>%
@@ -743,8 +766,27 @@ seguimientos = seguimientos %>% filter(!is.na(seguimiento), seguimiento != '')
 ###########################################################################################
 ###########################################################################################
 
-rastreo_cases20210511 = read_csv("databases/rastreo_cases20211121.csv",guess_max = 50000)
-seguimientos20210511 = read_csv("databases/report_cases20211121.csv", guess_max = 50000) %>% mutate(fecha_es = as.Date(fecha_es))
+rastreo_cases20210511 = read_csv("databases/rastreo_cases20211121.csv",guess_max = 50000) %>%
+  mutate(
+    `Estado de seguimiento` = case_when(`Estado de seguimiento` == "Bajo seguimiento" ~ ifelse(Sys.Date() - `Fecha de notificacion` < 30, "Bajo seguimiento", 'Olvidado'),
+                                        `Estado de seguimiento` == "Sin estado de seguimiento" ~ ifelse(Sys.Date() - `Fecha de notificacion` < 30, "Sin estado de seguimiento", 'Olvidado'),
+                                        `Estado de seguimiento` == "Sin estado de seguimiento" ~ ifelse(Clasificación != "NO ES UN CASO (DESCARTADO)", "Sin estado de seguimiento", "Concluído por otra razón"),
+                                        T ~ `Estado de seguimiento`),
+    `Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Bajo seguimiento","Recuperado","Imposible de contactar",
+                                                                         'Perdido',"Fallecido", "Hospitalizado", 'Olvidado',"Concluído por otra razón",
+                                                                         "Sin estado de seguimiento")),
+  )
+seguimientos20210511 = read_csv("databases/report_cases20211121.csv", guess_max = 50000) %>% 
+  mutate(
+    `Estado de seguimiento` = case_when(`Estado de seguimiento` == "Bajo seguimiento" ~ ifelse(Sys.Date() - `Fecha de notificacion` < 30, "Bajo seguimiento", 'Olvidado'),
+                                        `Estado de seguimiento` == "Sin estado de seguimiento" ~ ifelse(Sys.Date() - `Fecha de notificacion` < 30, "Sin estado de seguimiento", 'Olvidado'),
+                                        `Estado de seguimiento` == "Sin estado de seguimiento" ~ ifelse(Clasificación != "NO ES UN CASO (DESCARTADO)", "Sin estado de seguimiento", "Concluído por otra razón"),
+                                        T ~ `Estado de seguimiento`),
+    `Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Bajo seguimiento","Recuperado","Imposible de contactar",
+                                                                         'Perdido',"Fallecido", "Hospitalizado", 'Olvidado',"Concluído por otra razón",
+                                                                         "Sin estado de seguimiento")),
+    fecha_es = as.Date(fecha_es)
+    )
 
 write('Uniendo bases de datos nueva con base de datos anterior',stdout())
 cases_clean = bind_rows(rastreo_cases20210511, cases_clean)
@@ -758,7 +800,21 @@ cases_clean = cases_clean %>%
          `Direcciones Ubicacion [1] Localizacion Geografica De Nivel [3]` = `Direcciones Ubicación [1] Localización Geográfica De Nivel [3]`,
          `Telefono` = `Teléfono`,
          `¿Se tomo una muestra respiratoria?` = `¿Se tomó una muestra respiratoria?`,
-         `Carne De Identidad` = `Carné De Identidad`)
+         `Carne De Identidad` = `Carné De Identidad`) %>%
+  mutate(
+    `Estado de seguimiento` = as.character(`Estado de seguimiento`),
+    `Estado de seguimiento` = case_when(
+      `Estado de seguimiento` == "Sin estado de seguimiento" ~ case_when(
+        Clasificacion == "NO ES UN CASO (DESCARTADO)" ~ "Concluído por otra razón",
+        Sys.Date() - `Fecha de notificacion` > 30 ~ 'Olvidado',
+        T ~ "Sin estado de seguimiento"
+      ),
+      T ~ `Estado de seguimiento`
+    ),
+    `Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Bajo seguimiento","Recuperado","Imposible de contactar",
+                                                                         'Perdido',"Fallecido", "Hospitalizado", 'Olvidado', "Concluído por otra razón",
+                                                                         "Sin estado de seguimiento"))
+  )
 
 seguimientos = seguimientos %>%
   rename(`¿Se tomo una muestra respiratoria?` =  `¿Se tomó una muestra respiratoria?`,
@@ -767,6 +823,20 @@ seguimientos = seguimientos %>%
          Clasificacion = Clasificación) %>%
   filter(
     !is.na(seguimiento)
+  ) %>%
+  mutate(
+    `Estado de seguimiento` = as.character(`Estado de seguimiento`),
+    `Estado de seguimiento` = case_when(
+      `Estado de seguimiento` == "Sin estado de seguimiento" ~ case_when(
+        Clasificacion == "NO ES UN CASO (DESCARTADO)" ~ "Concluído por otra razón",
+        Sys.Date() - `Fecha de notificacion` > 30 ~ 'Olvidado',
+        T ~ "Sin estado de seguimiento"
+      ),
+      T ~ `Estado de seguimiento`
+    ),
+    `Estado de seguimiento` = factor(`Estado de seguimiento`, levels = c("Bajo seguimiento","Recuperado","Imposible de contactar",
+                                                                         'Perdido',"Fallecido", "Hospitalizado", 'Olvidado', "Concluído por otra razón",
+                                                                         "Sin estado de seguimiento"))
   )
 
 #seguimientos = seguimientos %>%
@@ -950,3 +1020,5 @@ write('Bases de datos guardadas!',stdout())
 
 write('Actualizando tablero...',stdout())
 deployApp(paste(getwd(),'/DashboardRastreo', sep = ''), forceUpdate = TRUE, launch.browser = FALSE)
+print(Sys.time())
+

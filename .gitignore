@@ -41,3 +41,4 @@ vignettes/*.pdf
 /logs/*
 /DashboardRastreo/data/*
 /databases/*
+*DS_Store
