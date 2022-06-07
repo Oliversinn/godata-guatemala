@@ -1,8 +1,8 @@
 print(Sys.time())
 ###################################################################################################
 url <- "https://godataguatemala.mspas.gob.gt/"                   # <--------------------- insert instance url here, don't forget the slash at end !
-username <- "olivera@mazariegos.gt"                           # <--------------------- insert your username for signing into Go.Data webapp here
-password <- "coviD19@2020"                           # <--------------------- insert your password for signing into Go.Data webapp here
+username <- "xxxxxxxxx"                           # <--------------------- insert your username for signing into Go.Data webapp here
+password <- "xxxxxxxxx"                           # <--------------------- insert your password for signing into Go.Data webapp here
 outbreak_id <- "a44faf32-bf27-4b39-a4fb-b9fcf29ac2d7"   # <--------------------- insert your outbreak ID here
 language_id = 'd86b2070-fad9-4699-8be9-a8ae5cc0edd2'   # <--------------------- insert your language ID here
 ###################################################################################################
