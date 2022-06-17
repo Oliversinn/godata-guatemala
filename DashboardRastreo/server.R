@@ -254,7 +254,7 @@ shinyServer(function(input, output, session) {
             select(`Fue Un Contacto`) %>%
             filter(`Fue Un Contacto` == TRUE)
 
-        contactos = round((nrow(casosContactos)/(nrow(contacts)+nrow(casosContactos)))*100, digits = 0)
+        contactos = ifelse(is.na(round((nrow(casosContactos)/(nrow(contacts)+nrow(casosContactos)))*100, digits = 0)), 0, round((nrow(casosContactos)/(nrow(contacts)+nrow(casosContactos)))*100, digits = 0))
         contactos <- format(contactos, decimal.mark=".",big.mark=",",small.mark=".",small.interval=3)
         contactos = paste(as.character(contactos),'%', sep = '')
         
@@ -294,7 +294,7 @@ shinyServer(function(input, output, session) {
             select(`Status final de seguimiento`) %>%
             filter(`Status final de seguimiento` == "Seguimiento Completo")
 
-        contactos = round((nrow(contactsCompleto)/nrow(contacts))*100, digits = 0)
+        contactos = ifelse(is.na(round((nrow(contactsCompleto)/nrow(contacts))*100, digits = 0)), 0, round((nrow(contactsCompleto)/nrow(contacts))*100, digits = 0))
         contactos <- format(contactos, decimal.mark=".",big.mark=",",small.mark=".",small.interval=3)
         contactos = paste(as.character(contactos),'%',sep = '')
         
@@ -1418,7 +1418,7 @@ shinyServer(function(input, output, session) {
     
     output$rastreoContactsRiesgoDB = renderDataTable(
         datatable(
-            enRiesgo() %>%
+            enRiesgo()  %>%
                 adorn_totals('row'),
             extensions = 'Buttons',
             options = list(
@@ -1567,7 +1567,7 @@ shinyServer(function(input, output, session) {
         
         contactosReportados = nrow(rastreoContacts_reactive())
         
-        contactosPorCasoElegible = round(contactosReportados/casosQueReportaronContactos,1)
+        contactosPorCasoElegible = ifelse(  is.na(round(contactosReportados/casosQueReportaronContactos,1)), 0 , round(contactosReportados/casosQueReportaronContactos,1))
         
         contactosPorCasos = round(contactosReportados/confirmadosParaRastreo,1)
         
@@ -1760,7 +1760,7 @@ shinyServer(function(input, output, session) {
             
             totalCasosNuevosContactables = nrow(casosNuevosContactables)
             
-            porcentajeCasosNuevosContactables = paste(as.character(round((totalCasosNuevosContactables/totalNuevos)*100,1)),"%", sep='')
+            porcentajeCasosNuevosContactables = paste(as.character( ifelse(is.na(round((totalCasosNuevosContactables/totalNuevos)*100,1)), 0, round((totalCasosNuevosContactables/totalNuevos)*100,1))   ),"%", sep='')
             
             casosNuevosConfirmados = reportCases_reactive() %>%
                 filter(
@@ -1885,7 +1885,7 @@ shinyServer(function(input, output, session) {
             reporteCases = cbind(reporteCasesTemporal ,reporteCases)
         }
         
-        rownames(reporteCases) = c('Fecha', 'Total de notificaciones nuevas' ,'Notificaciones nuevas contactables por llamada', 'Porcentaje de notificaciones nuevass contactables (%)', 'Casos confirmados nuevos', 'Total casos a contactar en el día',
+        rownames(reporteCases) = c('Fecha', 'Total de notificaciones nuevas' ,'Notificaciones nuevas contactables por llamada', 'Porcentaje de notificaciones nuevas contactables (%)', 'Casos confirmados nuevos', 'Total casos a contactar en el día',
                                    'Casos con seguimiento intentado', 'Casos con seguimiento no realizado, no contestó', 'Casos con seguimiento no realizado, número incorrecto',
                                    'Casos con seguimiento no realizado, rechazó llamada', 'Casos con seguimiento no realizado, no se pudo contactar por otra razón', 'Casos con seguimiento logrado',
                                    'Porcentaje casos con seguimiento (%)', 'Casos que no dio tiempo llamar o seguimiento no registrado')
@@ -1939,7 +1939,7 @@ shinyServer(function(input, output, session) {
                     Estado == "Visto, no bien (con síntomas)") %>%
             nrow()
 
-        porcentajeContactosSeguimiento = paste(as.character(round((contactosSeguimientoLogrado/contactosPorLlamar)*100,0)),'%',sep='')
+        porcentajeContactosSeguimiento = paste(as.character(ifelse(is.na(round((contactosSeguimientoLogrado/contactosPorLlamar)*100,0)), 0, round((contactosSeguimientoLogrado/contactosPorLlamar)*100,0))  ),'%',sep='')
 
         contactosNoDioTiempo = contactosPorLlamar - contactosSeguimientoLogrado - contactosNoRespuesta
 
@@ -1992,8 +1992,8 @@ shinyServer(function(input, output, session) {
                         Estado == "Visto, no bien (con síntomas)") %>%
                 nrow()
 
-            porcentajeContactosSeguimiento = paste(as.character(round((contactosSeguimientoLogrado/contactosPorLlamar)*100,0)),'%',sep='')
-
+            porcentajeContactosSeguimiento = paste(as.character(ifelse(is.na(round((contactosSeguimientoLogrado/contactosPorLlamar)*100,0)), 0, round((contactosSeguimientoLogrado/contactosPorLlamar)*100,0))  ),'%',sep='')
+            
             contactosNoDioTiempo = contactosPorLlamar - contactosSeguimientoLogrado - contactosNoRespuesta
 
             #contactosNoDioTiempo = todayFollowUp %>%
